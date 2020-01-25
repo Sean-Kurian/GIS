@@ -23,24 +23,35 @@
 #include "globalData.h"
 #include "math.h"
 
-bool load_map(std::string /*map_path*/) {
-    bool load_successful = false; //Indicates whether the map has loaded 
+bool load_map(std::string mapPath) {
+    bool loadSuccessful = false; //Indicates whether the map has loaded 
                                   //successfully
-
-    //
-    //Load your map related data structures here
-    //
-
+    loadSuccessful = loadStreetsDatabaseBIN(mapPath);
     
-
-    load_successful = true; //Make sure this is updated to reflect whether
-                            //loading the map succeeded or failed
-
-    return load_successful;
+    if (loadSuccessful) {
+        const unsigned numStreetSegments = getNumStreetSegments();
+        const unsigned numIntersections = getNumIntersections();
+        const unsigned numStreets = getNumStreets();
+        
+        
+    }
+    return loadSuccessful;
 }
 
 void close_map() {
     //Clean-up your map related data structures here
+    
+}
+
+void getSegmentData(const unsigned& numStreetSegments) {
+    
+}
+
+void getIntersectionData(const unsigned& numIntersections) {
+    
+}
+
+void getStreetData(const unsigned& numStreets) {
     
 }
 
