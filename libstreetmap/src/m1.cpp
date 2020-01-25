@@ -21,6 +21,7 @@
 #include "m1.h"
 #include "StreetsDatabaseAPI.h"
 #include "globalData.h"
+#include "math.h"
 
 bool load_map(std::string /*map_path*/) {
     bool load_successful = false; //Indicates whether the map has loaded 
@@ -46,6 +47,11 @@ void close_map() {
 //Returns the distance between two coordinates in meters
 double find_distance_between_two_points(std::pair<LatLon, LatLon> points) {
     
+    double latAvg = DEGREE_TO_RADIAN * ((points.first.lat() + points.second.lat()) / 2.0);   
+    double xDiff = (DEGREE_TO_RADIAN * points.second.lon() * cos(latAvg)) - DEGREE_TO_RADIAN * (points.first.lon() * cos(latAvg)); 
+    double yDiff = DEGREE_TO_RADIAN * (points.second.lat() - points.first.lat()); 
+    
+    return (EARTH_RADIUS_METERS * sqrt(xDiff*xDiff + yDiff*yDiff)); 
 }
 
 //Returns the length of the given street segment in meters
