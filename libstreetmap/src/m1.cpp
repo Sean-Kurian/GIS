@@ -20,6 +20,7 @@
  */
 #include "m1.h"
 #include "StreetsDatabaseAPI.h"
+#include "globalData.h"
 
 bool load_map(std::string /*map_path*/) {
     bool load_successful = false; //Indicates whether the map has loaded 
