@@ -23,6 +23,8 @@
 #include "globalData.h"
 #include "math.h"
 
+#include <set>
+
 MapData gData;
 
 void getSegmentData(const unsigned& numStreetSegments);
