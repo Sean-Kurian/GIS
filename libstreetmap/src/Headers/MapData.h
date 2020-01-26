@@ -30,7 +30,7 @@ public:
 //==============================================================================
 // Accessors
 //==============================================================================
-    const std::vector<int> getIntersectionsOfSteet(const StreetIndex& streetId) const;  
+    const std::vector<int> getIntersectionsOfStreet(const StreetIndex& streetId) const;  
     const std::vector<int> getSegsOfIntersection(const IntersectionIndex& intId) const;
 };
 
