@@ -1,9 +1,14 @@
 #ifndef MAPDATA_H
 #define MAPDATA_H
 
+#include "StreetsDatabaseAPI.h"
+#include <vector>
+#include <string>
+#include <set>
+
 class MapData {
 private:
-    
+    std::vector<std::set<unsigned> > intersectionsOfStreet;
 public:
 //==============================================================================
 // Constructors / Destructors
@@ -13,15 +18,15 @@ public:
 //==============================================================================
 // Initializers
 //==============================================================================
-    
+    void allocStreetVectors(const unsigned& numStreets);
 //==============================================================================
 // Mutators
 //==============================================================================
-    
+    void addIntersectToStreet(const IntersectionIndex& intId, const StreetIndex& streetId);
 //==============================================================================
 // Accessors
 //==============================================================================
-    
+    const std::vector<int> getIntersectionsOfSteet(const StreetIndex& streetId) const;    
 };
 
 #endif /* MAPDATA_H */
