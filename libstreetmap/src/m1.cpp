@@ -33,13 +33,15 @@ bool load_map(std::string mapPath) {
     bool loadSuccessful = loadStreetsDatabaseBIN(mapPath);
     
     if (loadSuccessful) {
-        const unsigned numStreetSegments = getNumStreetSegments();
-        const unsigned numIntersections = getNumIntersections();
         const unsigned numStreets = getNumStreets();
+        const unsigned numSegments = getNumStreetSegments();
+        const unsigned numIntersections = getNumIntersections();
         
-        gData.allocStreetVectors(numStreets);
+        gData.allocStreetVecs(numStreets);
+        gData.allocSegmmentVecs(numSegments);
+        gData.allocIntersectionVecs(numIntersections);
         
-        getSegmentData(numStreetSegments);
+        getSegmentData(numSegments);
     }
     return loadSuccessful;
 }
@@ -54,6 +56,8 @@ void getSegmentData(const unsigned& numStreetSegments) {
     
     for (unsigned SSInd = 0; SSInd < numStreetSegments; ++SSInd) {
         SSData = getInfoStreetSegment(SSInd);
+        
+        
         
         gData.addIntersectToStreet(SSData.from, SSData.streetID);
         gData.addIntersectToStreet(SSData.to, SSData.streetID);
