@@ -15,8 +15,14 @@ MapData::~MapData() {
 //==============================================================================
 // Initializers
 //==============================================================================
-void MapData::allocStreetVectors(const unsigned& numStreets) {
+void MapData::allocStreetVecs(const unsigned& numStreets) {
     intersectionsOfStreet.resize(numStreets);
+}
+void MapData::allocSegmmentVecs(const unsigned& numSegments) {
+    
+}
+void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
+    segsOfIntersection.resize(numIntersections);
 }
 //==============================================================================
 // Mutators

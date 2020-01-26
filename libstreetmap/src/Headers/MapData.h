@@ -8,6 +8,7 @@
 
 class MapData {
 private:
+    std::vector<std::vector<unsigned> > segsOfIntersection;
     std::vector<std::set<unsigned> > intersectionsOfStreet;
 public:
 //==============================================================================
@@ -18,7 +19,9 @@ public:
 //==============================================================================
 // Initializers
 //==============================================================================
-    void allocStreetVectors(const unsigned& numStreets);
+    void allocStreetVecs(const unsigned& numStreets);
+    void allocSegmmentVecs(const unsigned& numSegments);
+    void allocIntersectionVecs(const unsigned& numIntersections);
 //==============================================================================
 // Mutators
 //==============================================================================
