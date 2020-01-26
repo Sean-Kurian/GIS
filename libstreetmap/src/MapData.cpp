@@ -38,10 +38,8 @@ void MapData::addSegToIntersection(const StreetSegmentIndex& segId, const Inters
 //==============================================================================
 const std::vector<int> MapData::getIntersectionsOfSteet(const StreetIndex& streetId) const {
     std::vector<int> intersections;
-    std::set<int>::iterator start = intersectionsOfStreet[streetId].begin();
-    std::set<int>::iterator end = intersectionsOfStreet[streetId].end();
-    for (auto itr = start; itr != end; ++itr)
-        intersections.push_back(*itr);
+    for (int intId : intersectionsOfStreet[streetId])
+        intersections.push_back(intId);
     return intersections;
 }
 const std::vector<int> MapData::getSegsOfIntersection(const IntersectionIndex& intId) const {
