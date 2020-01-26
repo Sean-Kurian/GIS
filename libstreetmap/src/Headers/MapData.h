@@ -4,12 +4,12 @@
 #include "StreetsDatabaseAPI.h"
 #include <vector>
 #include <string>
-#include <set>
+#include <unordered_set>
 
 class MapData {
 private:
     std::vector<std::vector<int> > segsOfIntersection;
-    std::vector<std::set<int> > intersectionsOfStreet;
+    std::vector<std::unordered_set<int> > intersectionsOfStreet;
 public:
 //==============================================================================
 // Constructors / Destructors
