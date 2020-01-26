@@ -36,7 +36,7 @@ void MapData::addSegToIntersection(const StreetSegmentIndex& segId, const Inters
 //==============================================================================
 // Accessors
 //==============================================================================
-const std::vector<int> MapData::getIntersectionsOfSteet(const StreetIndex& streetId) const {
+const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& streetId) const {
     std::vector<int> intersections;
     for (int intId : intersectionsOfStreet[streetId])
         intersections.push_back(intId);
