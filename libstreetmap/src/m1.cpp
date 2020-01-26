@@ -23,28 +23,41 @@
 #include "globalData.h"
 #include "math.h"
 
+MapData gData;
+
+void getSegmentData(const unsigned& numStreetSegments);
+void getIntersectionData(const unsigned& numIntersections);
+void getStreetData(const unsigned& numStreets);
+
 bool load_map(std::string mapPath) {
-    bool loadSuccessful = false; //Indicates whether the map has loaded 
-                                  //successfully
-    loadSuccessful = loadStreetsDatabaseBIN(mapPath);
+    bool loadSuccessful = loadStreetsDatabaseBIN(mapPath);
     
     if (loadSuccessful) {
         const unsigned numStreetSegments = getNumStreetSegments();
         const unsigned numIntersections = getNumIntersections();
         const unsigned numStreets = getNumStreets();
         
+        gData.allocStreetVectors(numStreets);
         
+        getSegmentData(numStreetSegments);
     }
     return loadSuccessful;
 }
 
 void close_map() {
     //Clean-up your map related data structures here
-    
+    closeStreetDatabase();
 }
 
 void getSegmentData(const unsigned& numStreetSegments) {
+    InfoStreetSegment SSData;
     
+    for (unsigned SSInd = 0; SSInd < numStreetSegments; ++SSInd) {
+        SSData = getInfoStreetSegment(SSInd);
+        
+        gData.addIntersectToStreet(SSData.from, SSData.streetID);
+        gData.addIntersectToStreet(SSData.to, SSData.streetID);
+    }
 }
 
 void getIntersectionData(const unsigned& numIntersections) {
@@ -113,7 +126,7 @@ std::vector<int> find_street_segments_of_street(int street_id) {
 
 //Returns all intersections along the a given street
 std::vector<int> find_intersections_of_street(int street_id) {
-    
+    return gData.getIntersectionsOfSteet(street_id);
 }
 
 //Return all intersection ids for two intersecting streets
