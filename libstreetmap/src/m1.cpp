@@ -42,6 +42,7 @@ bool load_map(std::string mapPath) {
         gData.allocIntersectionVecs(numIntersections);
         
         getSegmentData(numSegments);
+        getIntersectionData(numIntersections);
     }
     return loadSuccessful;
 }
@@ -51,13 +52,15 @@ void close_map() {
     closeStreetDatabase();
 }
 
+void getStreetData(const unsigned& numStreets) {
+    
+}
+
 void getSegmentData(const unsigned& numStreetSegments) {
     InfoStreetSegment SSData;
     
-    for (unsigned SSInd = 0; SSInd < numStreetSegments; ++SSInd) {
-        SSData = getInfoStreetSegment(SSInd);
-        
-        
+    for (unsigned segInd = 0; segInd < numStreetSegments; ++segInd) {
+        SSData = getInfoStreetSegment(segInd);
         
         gData.addIntersectToStreet(SSData.from, SSData.streetID);
         gData.addIntersectToStreet(SSData.to, SSData.streetID);
@@ -65,11 +68,13 @@ void getSegmentData(const unsigned& numStreetSegments) {
 }
 
 void getIntersectionData(const unsigned& numIntersections) {
-    
-}
-
-void getStreetData(const unsigned& numStreets) {
-    
+    for (unsigned intInd = 0; intInd < numIntersections; ++intInd) {
+        int numSegs = getIntersectionStreetSegmentCount(intInd);
+        for (unsigned segNum = 0; segNum < numSegs; ++segNum) {
+            StreetSegmentIndex segInd = getIntersectionStreetSegment(intInd, segNum);
+            gData.addSegToIntersection(segInd, intInd);
+        }
+    }
 }
 
 //Returns the distance between two coordinates in meters
@@ -100,7 +105,7 @@ int find_closest_intersection(LatLon my_position) {
 
 //Returns the street segments for the given intersection 
 std::vector<int> find_street_segments_of_intersection(int intersection_id) {
-    
+    return gData.getSegsOfIntersection(intersection_id);
 }
 
 //Returns the street names at the given intersection (includes duplicate street 
