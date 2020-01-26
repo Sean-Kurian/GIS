@@ -8,8 +8,8 @@
 
 class MapData {
 private:
-    std::vector<std::vector<unsigned> > segsOfIntersection;
-    std::vector<std::set<unsigned> > intersectionsOfStreet;
+    std::vector<std::vector<int> > segsOfIntersection;
+    std::vector<std::set<int> > intersectionsOfStreet;
 public:
 //==============================================================================
 // Constructors / Destructors
@@ -26,10 +26,12 @@ public:
 // Mutators
 //==============================================================================
     void addIntersectToStreet(const IntersectionIndex& intId, const StreetIndex& streetId);
+    void addSegToIntersection(const StreetSegmentIndex& segId, const IntersectionIndex& intId);
 //==============================================================================
 // Accessors
 //==============================================================================
-    const std::vector<int> getIntersectionsOfSteet(const StreetIndex& streetId) const;    
+    const std::vector<int> getIntersectionsOfSteet(const StreetIndex& streetId) const;  
+    const std::vector<int> getSegsOfIntersection(const IntersectionIndex& intId) const;
 };
 
 #endif /* MAPDATA_H */
