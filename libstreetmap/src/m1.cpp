@@ -94,7 +94,21 @@ double find_distance_between_two_points(std::pair<LatLon, LatLon> points) {
 
 //Returns the length of the given street segment in meters
 double find_street_segment_length(int street_segment_id) {
-    return 0;
+    InfoStreetSegment seg = getInfoStreetSegment(street_segment_id); 
+    double dist = 0; 
+   
+    if (seg.curvePointCount == 0){
+        return find_distance_between_two_points(getIntersectionPosition(seg.from), getIntersectionPosition(seg.to)); 
+    }
+    
+    dist = dist + find_distance_between_two_points(getIntersectionPosition(seg.from), getStreetSegmentCurvePoint(street_segment_id,0));
+    
+    for (unsigned i = 1; i < seg.curvePointCount; i++){
+        dist = dist + find_distance_between_two_points(getStreetSegmentCurvePoint(street_segment_id,i-1), getStreetSegmentCurvePoint(street_segment_id,i));
+    }
+    
+    dist = dist + find_distance_between_two_points(getStreetSegmentCurvePoint(street_segment_id, seg.curvePointCount - 1), getIntersectionPosition(seg.to)); 
+    return dist; 
 }
 
 //Returns the travel time to drive a street segment in seconds 
