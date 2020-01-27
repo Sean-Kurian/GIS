@@ -42,7 +42,8 @@ bool load_map(std::string mapPath) {
         gData.allocStreetVecs(numStreets);
         gData.allocSegmmentVecs(numSegments);
         gData.allocIntersectionVecs(numIntersections);
-        
+
+        getStreetData(numStreets);
         getSegmentData(numSegments);
         getIntersectionData(numIntersections);
     }
@@ -55,7 +56,9 @@ void close_map() {
 }
 
 void getStreetData(const unsigned& numStreets) {
-    
+    for (unsigned streetInd = 0; streetInd < numStreets; ++streetInd) {
+        gData.addStreetIDtoName(streetInd, getStreetName(streetInd));
+    }
 }
 
 void getSegmentData(const unsigned& numStreetSegments) {
@@ -178,7 +181,7 @@ std::vector<int> find_intersections_of_two_streets(std::pair<int, int> street_id
 //You can choose what to return if the street prefix passed in is an empty (length 0) 
 //string, but your program must not crash if street_prefix is a length 0 string.
 std::vector<int> find_street_ids_from_partial_street_name(std::string street_prefix) {
-    return {};
+    return gData.getStreetIDsFromStreetName(street_prefix);
 }
 
 //Returns the area of the given closed feature in square meters

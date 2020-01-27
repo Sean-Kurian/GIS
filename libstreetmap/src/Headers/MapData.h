@@ -4,16 +4,15 @@
 #include "StreetsDatabaseAPI.h"
 #include <vector>
 #include <string>
-#include <strings.h>
 #include <map>
 #include "mapComparitor.cpp"
 #include <unordered_set>
 
 class MapData {
 private:
-    std::vector<std::vector<int> > segsOfIntersection;
+    std::multimap<std::string, unsigned, mapCaseCompare> IDsOfStreetNames;
     std::vector<std::unordered_set<int> > intersectionsOfStreet;
-    std::multimap<unsigned, std::string, mapCaseCompare> IDsOfStreetNames;
+    std::vector<std::vector<int> > segsOfIntersection;
     
 public:
 //==============================================================================
@@ -30,14 +29,15 @@ public:
 //==============================================================================
 // Mutators
 //==============================================================================
-    
-    void addIntersectToStreet(const IntersectionIndex& intId, const StreetIndex& streetId);
-    void addSegToIntersection(const StreetSegmentIndex& segId, const IntersectionIndex& intId);
+    void addStreetIDtoName(const StreetIndex& streetID, const std::string& streetName);
+    void addIntersectToStreet(const IntersectionIndex& intID, const StreetIndex& streetID);
+    void addSegToIntersection(const StreetSegmentIndex& segID, const IntersectionIndex& intID);
 //==============================================================================
 // Accessors
 //==============================================================================
-    const std::vector<int> getIntersectionsOfStreet(const StreetIndex& streetId) const;  
-    const std::vector<int> getSegsOfIntersection(const IntersectionIndex& intId) const;
+    const std::vector<int> getStreetIDsFromStreetName(std::string name);
+    const std::vector<int> getIntersectionsOfStreet(const StreetIndex& streetID) const;  
+    const std::vector<int> getSegsOfIntersection(const IntersectionIndex& intID) const;
 };
 
 #endif /* MAPDATA_H */
