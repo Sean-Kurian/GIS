@@ -24,6 +24,7 @@
 #include "math.h"
 
 #include <set>
+#include <algorithm>
 
 MapData gData;
 
@@ -144,7 +145,30 @@ bool are_directly_connected(std::pair<int, int> intersection_ids) {
 //from given intersection (hint: you can't travel the wrong way on a 1-way street)
 //the returned vector should NOT contain duplicate intersections
 std::vector<int> find_adjacent_intersections(int intersection_id) {
-    return {};
+    std::set<int> adjacentIntersectionsSet;
+    
+    //Find all the segments attached to the intersection
+    std::vector<int> segmentsOfIntersection = gData.getSegsOfIntersection(intersection_id);
+    
+    //Iterate through each segment
+    for (auto it = segmentsOfIntersection.begin(); it != segmentsOfIntersection.end(); ++it) {
+        //Get the info for the street segment
+        InfoStreetSegment segmentInfo = getInfoStreetSegment(*it);
+        
+        //Avoid adding the given intersection
+        if (segmentInfo.to != intersection_id) {
+            adjacentIntersectionsSet.insert(segmentInfo.to);
+        }
+        
+        //Ensure any from intersections added are not one-way segments as well
+        if (segmentInfo.from != intersection_id && !segmentInfo.oneWay) {
+            adjacentIntersectionsSet.insert(segmentInfo.from);
+        }
+    }
+    
+    //Create a vector to return
+    std::vector<int> adjacentIntersections(adjacentIntersectionsSet.begin(), adjacentIntersectionsSet.end());
+    return adjacentIntersections;
 }
 
 //Returns all street segments for the given street
