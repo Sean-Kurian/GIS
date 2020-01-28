@@ -238,7 +238,24 @@ std::vector<int> find_street_ids_from_partial_street_name(std::string street_pre
 //Assume a non self-intersecting polygon (i.e. no holes)
 //Return 0 if this feature is not a closed polygon.
 double find_feature_area(int feature_id) {
-    return 0;
+    //Ensure feature is a closed polygon, else return 0
+    LatLon firstPoint = getFeaturePoint(0, feature_id);
+    LatLon lastPoint = getFeaturePoint(getFeaturePointCount(feature_id) - 1, feature_id);
+    if (firstPoint.lat() != lastPoint.lat() || firstPoint.lon() != lastPoint.lon()) {
+        return 0;
+    }
+    
+    //Find the area of the feature using the shoelace formula
+    double area = 0;
+    int numPoints = getFeaturePointCount(feature_id);
+    
+    int j = numPoints - 1;
+    for (int i = 0; i < numPoints; ++i) {
+        //LatLon iPosition
+        //double xPositionDiff = find_position_between_two_points(std::make_pair())
+    }
+    
+    return area;
 }
 
 //Returns the length of the OSMWay that has the given OSMID, in meters.
