@@ -120,7 +120,19 @@ double find_street_segment_travel_time(int street_segment_id) {
 
 //Returns the nearest intersection to the given position
 int find_closest_intersection(LatLon my_position) {
-    return 0;
+    //Start by assuming that the 0th intersection is the closest
+    int closestIntersection = 0;
+    double closestDistance = find_distance_between_two_points(std::make_pair(my_position, getIntersectionPosition(0)));
+    
+    //Check each intersection against the 0th intersection to see if it's closer
+    for (int intersectionID = 1; intersectionID < getNumIntersections(); ++intersectionID) {
+        double distance = find_distance_between_two_points(std::make_pair(my_position, getIntersectionPosition(intersectionID)));
+        if (distance < closestDistance) {
+            closestDistance = distance;
+            closestIntersection = intersectionID;
+        }
+    }
+    return closestIntersection;
 }
 
 //Returns the street segments for the given intersection 
