@@ -267,11 +267,26 @@ double find_feature_area(int feature_id) {
     
     int j = numPoints - 1;
     for (int i = 0; i < numPoints; ++i) {
-        //LatLon iPosition
-        //double xPositionDiff = find_position_between_two_points(std::make_pair())
+        
+        //Get two LatLon points from the feature
+        LatLon point1 = getFeaturePoint(i, feature_id);
+        LatLon point2 = getFeaturePoint(j, feature_id);
+        
+        //Compute the difference in x-position and y-position (using functionality from find_distance_between_two_points) according to shoelace formula
+        // (x[j] + x[i]) * (y[j) - y[i])
+        double latAvg = DEGREE_TO_RADIAN * ((point1.lat() + point2.lat()) / 2.0);   
+        double xDiff = (DEGREE_TO_RADIAN * point2.lon() * cos(latAvg)) + DEGREE_TO_RADIAN * (point1.lon() * cos(latAvg)); 
+        xDiff = xDiff * EARTH_RADIUS_METERS;
+        double yDiff = DEGREE_TO_RADIAN * (point2.lat() - point1.lat()); 
+        yDiff = yDiff * EARTH_RADIUS_METERS;
+        
+        //Compute the signed area
+        area += xDiff * yDiff;
+        
+        j = i;
     }
     
-    return area;
+    return abs(area / 2.0);
 }
 
 //Returns the length of the OSMWay that has the given OSMID, in meters.
