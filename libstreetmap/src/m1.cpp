@@ -53,6 +53,7 @@ bool load_map(std::string mapPath) {
 
 void close_map() {
     //Clean-up your map related data structures here
+    gData.clearMapData();
     closeStreetDatabase();
 }
 

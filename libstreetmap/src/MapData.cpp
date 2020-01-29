@@ -9,11 +9,16 @@
 MapData::MapData() {
     
 }
-
 MapData::~MapData() {
-    
+    IDsOfStreetNames.clear();
+    intersectionsOfStreet.clear();
+    segsOfIntersection.clear();
 }
-
+void MapData::clearMapData() {
+    IDsOfStreetNames.clear();
+    intersectionsOfStreet.clear();
+    segsOfIntersection.clear();
+}
 //==============================================================================
 // Initializers
 //==============================================================================
