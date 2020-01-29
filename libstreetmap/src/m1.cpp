@@ -121,7 +121,7 @@ double find_street_segment_length(int street_segment_id) {
 //Returns the travel time to drive a street segment in seconds 
 //(time = distance/speed_limit)
 double find_street_segment_travel_time(int street_segment_id) {
-    return 0;
+    return find_street_segment_length(street_segment_id) / 1000 / getInfoStreetSegment(street_segment_id).speedLimit * 60; 
 }
 
 //Returns the nearest intersection to the given position
@@ -156,7 +156,7 @@ std::vector<std::string> find_street_names_of_intersection(int intersection_id) 
 //street segment (hint: check for 1-way streets too)
 //corner case: an intersection is considered to be connected to itself
 bool are_directly_connected(std::pair<int, int> intersection_ids) {
-    return false;
+    if (intersection_ids.first == intersection_ids.second) return true; 
 }
 
 //Returns all intersections reachable by traveling down one street segment 
