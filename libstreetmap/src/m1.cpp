@@ -102,13 +102,19 @@ double find_street_segment_length(int street_segment_id) {
         return find_distance_between_two_points(std::make_pair(getIntersectionPosition(seg.from), getIntersectionPosition(seg.to))); 
     }
     
-    dist = dist + find_distance_between_two_points(std::make_pair(getIntersectionPosition(seg.from), getStreetSegmentCurvePoint(street_segment_id,0)));
-    
-    for (unsigned i = 0; i < seg.curvePointCount-1; i++){
-        dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(street_segment_id,i), getStreetSegmentCurvePoint(street_segment_id,i+1)));
+    for (unsigned i = 0; i <= seg.curvePointCount; i++){
+        
+        if (i == 0) {
+            dist = dist + find_distance_between_two_points(std::make_pair(getIntersectionPosition(seg.from), getStreetSegmentCurvePoint(street_segment_id,i)));
+        }
+        
+        else if (i == seg.curvePointCount){
+            dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(street_segment_id,seg.curvePointCount-1), getIntersectionPosition(seg.to)));
+        }
+        else{
+            dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(street_segment_id,i-1), getStreetSegmentCurvePoint(street_segment_id,i)));
+        }
     }
-    
-    dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(street_segment_id, seg.curvePointCount - 1), getIntersectionPosition(seg.to))); 
     return dist; 
 }
 
@@ -219,8 +225,18 @@ std::vector<int> find_intersections_of_street(int street_id) {
 
 //Return all intersection ids for two intersecting streets
 //This function will typically return one intersection id.
+//Made the choice not to use set_intersection as requires sorted arrays
 std::vector<int> find_intersections_of_two_streets(std::pair<int, int> street_ids) {
-    return {};
+    std::vector<int> streetOne = find_intersections_of_street(street_ids.first); 
+    std::vector<int> streetTwo = find_intersections_of_street(street_ids.second); 
+    
+    std::vector<int> intersections; 
+    
+    std::sort(streetOne.begin(), streetOne.end()); 
+    std::sort(streetTwo.begin(), streetTwo.end()); 
+   
+    std::set_intersection(streetOne.begin(), streetOne.end(), streetTwo.begin(), streetTwo.end(), intersections.begin()); 
+    return intersections;
 }
 
 //Returns all street ids corresponding to street names that start with the given prefix
