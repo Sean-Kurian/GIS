@@ -105,14 +105,14 @@ double find_street_segment_length(int street_segment_id) {
     for (unsigned i = 0; i <= seg.curvePointCount; i++){
         
         if (i == 0) {
-            dist = dist + find_distance_between_two_points(std::make_pair(getIntersectionPosition(seg.from), getStreetSegmentCurvePoint(street_segment_id,i)));
+            dist = dist + find_distance_between_two_points(std::make_pair(getIntersectionPosition(seg.from), getStreetSegmentCurvePoint(i, street_segment_id)));
         }
         
         else if (i == seg.curvePointCount){
-            dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(street_segment_id,seg.curvePointCount-1), getIntersectionPosition(seg.to)));
+            dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(seg.curvePointCount-1, street_segment_id), getIntersectionPosition(seg.to)));
         }
         else{
-            dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(street_segment_id,i-1), getStreetSegmentCurvePoint(street_segment_id,i)));
+            dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(i-1, street_segment_id), getStreetSegmentCurvePoint(i, street_segment_id)));
         }
     }
     return dist; 
