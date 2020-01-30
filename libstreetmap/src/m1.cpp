@@ -125,7 +125,7 @@ double find_street_segment_length(int street_segment_id) {
 //Returns the travel time to drive a street segment in seconds 
 //(time = distance/speed_limit)
 double find_street_segment_travel_time(int street_segment_id) {
-    return find_street_segment_length(street_segment_id) / 1000 / getInfoStreetSegment(street_segment_id).speedLimit * 60; 
+    return (find_street_segment_length(street_segment_id) / (getInfoStreetSegment(street_segment_id).speedLimit / 3.6)); 
 }
 
 //Returns the nearest intersection to the given position
