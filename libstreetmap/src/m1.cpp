@@ -113,11 +113,14 @@ double find_street_segment_length(int street_segment_id) {
     
     for (unsigned i = 0; i <= seg.curvePointCount; i++) {       
         if (i == 0) 
-            dist = dist + find_distance_between_two_points(std::make_pair(getIntersectionPosition(seg.from), getStreetSegmentCurvePoint(i, street_segment_id)));               
+            dist = dist + find_distance_between_two_points(std::make_pair
+                (getIntersectionPosition(seg.from), getStreetSegmentCurvePoint(i, street_segment_id)));               
         else if (i == seg.curvePointCount) 
-            dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(seg.curvePointCount-1, street_segment_id), getIntersectionPosition(seg.to)));
+            dist = dist + find_distance_between_two_points(std::make_pair
+                (getStreetSegmentCurvePoint(seg.curvePointCount-1, street_segment_id), getIntersectionPosition(seg.to)));
         else 
-            dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(i-1, street_segment_id), getStreetSegmentCurvePoint(i, street_segment_id)));       
+            dist = dist + find_distance_between_two_points(std::make_pair
+                (getStreetSegmentCurvePoint(i-1, street_segment_id), getStreetSegmentCurvePoint(i, street_segment_id)));       
     }
     return dist; 
 }
@@ -160,8 +163,14 @@ std::vector<std::string> find_street_names_of_intersection(int intersection_id) 
 //street segment (hint: check for 1-way streets too)
 //corner case: an intersection is considered to be connected to itself
 bool are_directly_connected(std::pair<int, int> intersection_ids) {
+    
     if (intersection_ids.first == intersection_ids.second) return true; 
-    else return false;
+    
+    std::vector<int> adjacentIntersections = find_adjacent_intersections(intersection_ids.first); 
+    for (auto & intersection : adjacentIntersections){
+        if (intersection == intersection_ids.second) return true; 
+    }
+    return false; 
 }
 
 //Returns all intersections reachable by traveling down one street segment 
