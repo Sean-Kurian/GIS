@@ -24,7 +24,6 @@
 #include <string>
 #include <map>
 #include <algorithm>
-#include "mapComparitor.cpp"
 
 TEST(ExampleTest) {
     //This test will always pass
@@ -33,7 +32,7 @@ TEST(ExampleTest) {
 
 TEST(MapComparitorTest) {
     std::multimap<std::string, unsigned> defaultMap;
-    std::multimap<std::string, unsigned, mapCaseCompare> compareMap;
+    std::multimap<std::string, unsigned> compareMap;
     
     std::string testName = "Saint";
     unsigned num = 10;   

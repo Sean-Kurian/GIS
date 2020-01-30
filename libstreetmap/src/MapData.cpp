@@ -49,20 +49,24 @@ void MapData::addSegToIntersection(const StreetSegmentIndex& segID, const Inters
 const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) {
     std::vector<int> streetIDs;
     if (!name.empty()) {
+        // In-place removal of spaces
+        name.erase(std::remove_if(name.begin(), name.end(), ::isspace), name.end());
+        // In-place transform to lower case characters
+        std::transform(name.begin(), name.end(), name.begin(), 
+                       [](unsigned char letter){ return std::tolower(letter); });
+        unsigned nameSize = name.size(); // Num chars after removing spaces
+        // Finds first possible match. Returns end if no match
         auto itr = IDsOfStreetNames.lower_bound(name);
         auto end = IDsOfStreetNames.end();
-        if (itr != end) {
+        if (itr != end) { // If match exists
             std::string nameMatch = itr->first;
-            std::transform(nameMatch.begin(), nameMatch.end(), nameMatch.begin(), ::tolower);
-            std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-            
-            while (!nameMatch.compare(0, name.size(), name, 0, name.size())) {
+            // Compares strings char by char from position 0 up to name.size())
+            while (!nameMatch.compare(0, nameSize, name, 0, nameSize)) {
+                // If strings match add the key to vector and try next entry
                 streetIDs.push_back(itr->second);
                 itr++;
-                if (itr != end) {
+                if (itr != end) // Ensures no dereferencing of end iterator
                     nameMatch = itr->first;
-                    std::transform(nameMatch.begin(), nameMatch.end(), nameMatch.begin(), ::tolower);
-                }
                 else if (itr == end)
                     return streetIDs;
             }

@@ -5,12 +5,11 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "mapComparitor.cpp"
 #include <unordered_set>
 
 class MapData {
 private:
-    std::multimap<std::string, unsigned, mapCaseCompare> IDsOfStreetNames;
+    std::multimap<std::string, unsigned> IDsOfStreetNames;
     std::vector<std::unordered_set<int> > intersectionsOfStreet;
     std::vector<std::vector<int> > segsOfIntersection;
     
