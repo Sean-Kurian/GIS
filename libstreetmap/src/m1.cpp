@@ -61,12 +61,13 @@ void getStreetData(const unsigned& numStreets) {
     std::string streetName;
     for (unsigned streetInd = 0; streetInd < numStreets; ++streetInd) {
         streetName = getStreetName(streetInd);
-        // In-place removal of spaces
+        // In-place removal of spaces from street name
         streetName.erase(std::remove_if(streetName.begin(), streetName.end(), ::isspace), 
                                         streetName.end());
         // In-place transform to lower case characters
         std::transform(streetName.begin(), streetName.end(), streetName.begin(), 
                        [](unsigned char letter){ return std::tolower(letter); });
+        // Adds street name to multimap which pairs it with its street index
         gData.addStreetIDtoName(streetInd, streetName);
     }
 }
@@ -107,22 +108,16 @@ double find_street_segment_length(int street_segment_id) {
     InfoStreetSegment seg = getInfoStreetSegment(street_segment_id); 
     double dist = 0; 
    
-    if (seg.curvePointCount == 0){
+    if (seg.curvePointCount == 0) 
         return find_distance_between_two_points(std::make_pair(getIntersectionPosition(seg.from), getIntersectionPosition(seg.to))); 
-    }
     
-    for (unsigned i = 0; i <= seg.curvePointCount; i++){
-        
-        if (i == 0) {
-            dist = dist + find_distance_between_two_points(std::make_pair(getIntersectionPosition(seg.from), getStreetSegmentCurvePoint(i, street_segment_id)));
-        }
-        
-        else if (i == seg.curvePointCount){
+    for (unsigned i = 0; i <= seg.curvePointCount; i++) {       
+        if (i == 0) 
+            dist = dist + find_distance_between_two_points(std::make_pair(getIntersectionPosition(seg.from), getStreetSegmentCurvePoint(i, street_segment_id)));               
+        else if (i == seg.curvePointCount) 
             dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(seg.curvePointCount-1, street_segment_id), getIntersectionPosition(seg.to)));
-        }
-        else{
-            dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(i-1, street_segment_id), getStreetSegmentCurvePoint(i, street_segment_id)));
-        }
+        else 
+            dist = dist + find_distance_between_two_points(std::make_pair(getStreetSegmentCurvePoint(i-1, street_segment_id), getStreetSegmentCurvePoint(i, street_segment_id)));       
     }
     return dist; 
 }

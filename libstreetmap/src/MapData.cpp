@@ -14,6 +14,7 @@ MapData::~MapData() {
     intersectionsOfStreet.clear();
     segsOfIntersection.clear();
 }
+// Clears all structures used to store data. Used to load map without needing destructor
 void MapData::clearMapData() {
     IDsOfStreetNames.clear();
     intersectionsOfStreet.clear();
@@ -22,30 +23,38 @@ void MapData::clearMapData() {
 //==============================================================================
 // Initializers
 //==============================================================================
+// Sizes street vectors to their appropriate size to avoid out of index access
 void MapData::allocStreetVecs(const unsigned& numStreets) {
     intersectionsOfStreet.resize(numStreets);
 }
+// Sizes segment vectors to their appropriate size to avoid out of index access
 void MapData::allocSegmmentVecs(const unsigned& numSegments) {
     
 }
+// Sizes intersection vectors to their appropriate size to avoid out of index access
 void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
     segsOfIntersection.resize(numIntersections);
 }
 //==============================================================================
 // Mutators
 //==============================================================================
+// Adds streetID to multimap which is keyed to its street name
 void MapData::addStreetIDtoName(const StreetIndex& streetID, const std::string& streetName) {
     IDsOfStreetNames.insert(std::make_pair(streetName, streetID));
 }
+// Adds intersectionID to a unordered_set inside a vector indexed to its streetID
 void MapData::addIntersectToStreet(const IntersectionIndex& intID, const StreetIndex& streetID) {
     intersectionsOfStreet[streetID].insert(intID);
 }
+// Adds segment to vector containing all segments inside a vector indexed to its intersectionID
 void MapData::addSegToIntersection(const StreetSegmentIndex& segID, const IntersectionIndex& intID) {
     segsOfIntersection[intID].push_back(segID);
 }
 //==============================================================================
 // Accessors
 //==============================================================================
+// Returns vector containing all streetIDs corresponding to the name given
+// Works with partial names and ignores spaces (e.g. dund a for Dundas st.)
 const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) {
     std::vector<int> streetIDs;
     if (!name.empty()) {
@@ -74,12 +83,14 @@ const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) {
     }
     return streetIDs;
 }
+// Returns vector containing IDs of all intersections along a street
 const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& streetID) const {
     std::vector<int> intersections;
     for (int intID : intersectionsOfStreet[streetID])
         intersections.push_back(intID);
     return intersections;
 }
+// Returns vector containing IDs of all segments at a given intersection
 const std::vector<int> MapData::getSegsOfIntersection(const IntersectionIndex& intID) const {
     return segsOfIntersection[intID];
 }
