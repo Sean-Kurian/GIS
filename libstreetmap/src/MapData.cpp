@@ -57,7 +57,6 @@ void MapData::addIntersectToStreet(const IntersectionIndex& intID, const StreetI
 void MapData::addSegToIntersection(const StreetSegmentIndex& segID, const IntersectionIndex& intID) {
     segsOfIntersection[intID].push_back(segID);
 }
-
 // Adds segment to an unordered_set inside a vector indexed to its streetID
 void MapData::addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex& streetID) {
     segsOfStreet[streetID].insert(segID);
@@ -65,6 +64,10 @@ void MapData::addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex&
 //
 void MapData::addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID) {
     nodeIndexOfOSMID.insert(std::make_pair(nodeID, nodeIndex));
+}
+//
+void MapData::addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID) {
+    wayIndexOfOSMID.insert(std::make_pair(wayID, wayIndex));
 }
 //==============================================================================
 // Accessors
@@ -112,7 +115,6 @@ const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& stre
 const std::vector<int> MapData::getSegsOfIntersection(const IntersectionIndex& intID) const {
     return segsOfIntersection[intID];
 }
-
 // Returns a vector containing IDs of all segments along a street
 const std::vector<int> MapData::getSegmentsOfStreet(const StreetIndex& streetID) const {
     std::vector<int> segments;
@@ -120,12 +122,21 @@ const std::vector<int> MapData::getSegmentsOfStreet(const StreetIndex& streetID)
         segments.push_back(segID);
     return segments;
 }
-
 //
-const unsigned MapData::getNodeIndexOfOSMID(const OSMID& nodeID) const {
+unsigned MapData::getNodeIndexOfOSMID(const OSMID& nodeID) const {
     const auto mapItr = nodeIndexOfOSMID.find(nodeID);
     if (mapItr == nodeIndexOfOSMID.end()) {
         std::cerr << "No node found with OSMID " << nodeID << "\n";
+        return 0;
+    }
+    else 
+        return mapItr->second;
+}
+//
+unsigned MapData::getWayIndexOfOSMID(const OSMID& wayID) const {
+    const auto mapItr = wayIndexOfOSMID.find(wayID);
+    if (mapItr == wayIndexOfOSMID.end()) {
+        std::cerr << "No node found with OSMID " << wayID << "\n";
         return 0;
     }
     else 

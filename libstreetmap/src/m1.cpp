@@ -34,7 +34,7 @@ void getSegmentData(const unsigned& numStreetSegments);
 void getIntersectionData(const unsigned& numIntersections);
 void getStreetData(const unsigned& numStreets);
 void getSegmentOfStreetData(const unsigned& numStreets);
-void getLayer1Data(const unsigned& numNodes);
+void getLayer1Data(const unsigned& numNodes, const unsigned& numWays);
 
 bool load_map(std::string mapPath) {
     bool loadSuccessful = loadStreetsDatabaseBIN(mapPath);
@@ -59,7 +59,8 @@ bool load_map(std::string mapPath) {
     loadSuccessful = loadOSMDatabaseBIN(mapPath);
     if (loadSuccessful) {
         const unsigned numNodes = getNumberOfNodes();
-        getLayer1Data(numNodes);
+        const unsigned numWays = getNumberOfWays();
+        getLayer1Data(numNodes, numWays);
     }
     
     return loadSuccessful;
@@ -136,11 +137,16 @@ void getSegmentOfStreetData(const unsigned& numStreets) {
     }
 }
 
-void getLayer1Data(const unsigned& numNodes) {
+void getLayer1Data(const unsigned& numNodes, const unsigned& numWays) {
     const OSMNode* node;
+    const OSMWay* way;
     for (unsigned nodeInd = 0; nodeInd < numNodes; ++nodeInd) {
         node = getNodeByIndex(nodeInd);
         gData.addNodeIndexToOSMID(nodeInd, node->id());
+    }
+    for (unsigned wayInd = 0; wayInd < numWays; ++wayInd) {
+        way =  getWayByIndex(wayInd);
+        gData.addWayIndexToOSMID(wayInd, way->id());
     }
 }
 
@@ -317,7 +323,7 @@ double find_feature_area(int feature_id) {
         LatLon point1 = getFeaturePoint(i, feature_id);
         LatLon point2 = getFeaturePoint(j, feature_id);
         
-        //Compute the difference in x-position and y-position (using functionality from find_distance_between_two_points) according to shoelace formula
+        //Compute the difference in x-position and y-position according to shoelace formula
         // (x[j] + x[i]) * (y[j) - y[i])
         double latAvg = DEGREE_TO_RADIAN * ((point1.lat() + point2.lat()) / 2.0);   
         double xDiff = (DEGREE_TO_RADIAN * point2.lon() * cos(latAvg)) + DEGREE_TO_RADIAN * (point1.lon() * cos(latAvg)); 
@@ -336,7 +342,21 @@ double find_feature_area(int feature_id) {
 //To implement this function you will have to  access the OSMDatabaseAPI.h 
 //functions.
 double find_way_length(OSMID way_id) {
-    std::vector<OSMID> nodes;
-    
-    return 0;
+    double length = 0;
+    const unsigned wayInd = gData.getWayIndexOfOSMID(way_id);
+    const OSMWay* way = getWayByIndex(wayInd);
+    std::vector<OSMID> nodeIDs = getWayMembers(way);
+    std::vector<LatLon> nodePos;
+    for (auto ID : nodeIDs) {
+        unsigned nodeInd = gData.getNodeIndexOfOSMID(ID);
+        LatLon nodeLatLon = getNodeCoords(getNodeByIndex(nodeInd));
+        nodePos.push_back(nodeLatLon);
+    }
+    if (nodePos.size() == 1)
+        return 0;
+    else {
+        for (unsigned i = 0; i < nodePos.size() - 1; ++i) 
+            length += find_distance_between_two_points(std::make_pair(nodePos[i], nodePos[i + 1]));
+    }
+    return length;
 }
