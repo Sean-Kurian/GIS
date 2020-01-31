@@ -1,3 +1,8 @@
+//==============================================================================
+// File Description:
+//
+//==============================================================================
+
 #include "MapData.h"
 #include "m1.h"
 
@@ -7,9 +12,11 @@
 //==============================================================================
 // Constructors / Destructors
 //==============================================================================
+
 MapData::MapData() {
     
 }
+// Only called on program exit
 MapData::~MapData() {
     IDsOfStreetNames.clear();
     intersectionsOfStreet.clear();
@@ -23,9 +30,11 @@ void MapData::clearMapData() {
     segsOfIntersection.clear();
     segsOfStreet.clear();
 }
+
 //==============================================================================
 // Initializers
 //==============================================================================
+
 // Sizes street vectors to their appropriate size to avoid out of index access
 void MapData::allocStreetVecs(const unsigned& numStreets) {
     intersectionsOfStreet.resize(numStreets);
@@ -42,9 +51,11 @@ void MapData::allocSegmmentVecs(const unsigned& numSegments) {
 void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
     segsOfIntersection.resize(numIntersections);
 }
+
 //==============================================================================
 // Mutators
 //==============================================================================
+
 // Adds streetID to multimap which is keyed to its street name
 void MapData::addStreetIDtoName(const StreetIndex& streetID, const std::string& streetName) {
     IDsOfStreetNames.insert(std::make_pair(streetName, streetID));
@@ -61,17 +72,19 @@ void MapData::addSegToIntersection(const StreetSegmentIndex& segID, const Inters
 void MapData::addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex& streetID) {
     segsOfStreet[streetID].insert(segID);
 }
-//
+// Adds node index (0 to numNodes) to map keyed to its OSMID
 void MapData::addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID) {
     nodeIndexOfOSMID.insert(std::make_pair(nodeID, nodeIndex));
 }
-//
+// Adds way index (0 to numWays) to map keyed to its OSMID
 void MapData::addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID) {
     wayIndexOfOSMID.insert(std::make_pair(wayID, wayIndex));
 }
+
 //==============================================================================
 // Accessors
 //==============================================================================
+
 // Returns vector containing all streetIDs corresponding to the name given
 // Works with partial names and ignores spaces (e.g. dund a for Dundas st.)
 const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) const {
@@ -107,7 +120,7 @@ const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) con
 // Returns vector containing IDs of all intersections along a street
 const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& streetID) const {
     std::vector<int> intersections;
-    for (int intID : intersectionsOfStreet[streetID])
+    for (const int& intID : intersectionsOfStreet[streetID])
         intersections.push_back(intID);
     return intersections;
 }
@@ -118,27 +131,31 @@ const std::vector<int> MapData::getSegsOfIntersection(const IntersectionIndex& i
 // Returns a vector containing IDs of all segments along a street
 const std::vector<int> MapData::getSegmentsOfStreet(const StreetIndex& streetID) const {
     std::vector<int> segments;
-    for (int segID : segsOfStreet[streetID])
+    for (const int& segID : segsOfStreet[streetID])
         segments.push_back(segID);
     return segments;
 }
-//
+// Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
 unsigned MapData::getNodeIndexOfOSMID(const OSMID& nodeID) const {
     const auto mapItr = nodeIndexOfOSMID.find(nodeID);
-    if (mapItr == nodeIndexOfOSMID.end()) {
+    // If no OSMID match is found the itr will point to end
+    if (mapItr == nodeIndexOfOSMID.end()) { 
         std::cerr << "No node found with OSMID " << nodeID << "\n";
         return 0;
     }
-    else 
+    // Found a valid OSMID. Return the node index of the OSMID
+    else
         return mapItr->second;
 }
-//
+// Returns way index (0 to numWays) of the OSMID. Outputs error if none found
 unsigned MapData::getWayIndexOfOSMID(const OSMID& wayID) const {
     const auto mapItr = wayIndexOfOSMID.find(wayID);
+    // If no OSMID match is found the itr will point to end
     if (mapItr == wayIndexOfOSMID.end()) {
         std::cerr << "No node found with OSMID " << wayID << "\n";
         return 0;
     }
-    else 
+    // Found a valid OSMID. Return the way index of the OSMID
+    else
         return mapItr->second;
 }

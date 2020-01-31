@@ -18,6 +18,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+//==============================================================================
+// File Description:
+//
+//==============================================================================
+
 #include "m1.h"
 #include "StreetsDatabaseAPI.h"
 #include "OSMDatabaseAPI.h"
@@ -62,7 +68,6 @@ bool load_map(std::string mapPath) {
         const unsigned numWays = getNumberOfWays();
         getLayer1Data(numNodes, numWays);
     }
-    
     return loadSuccessful;
 }
 
@@ -185,7 +190,8 @@ double find_street_segment_length(int street_segment_id) {
 //Returns the travel time to drive a street segment in seconds 
 //(time = distance/speed_limit)
 double find_street_segment_travel_time(int street_segment_id) {
-    return (find_street_segment_length(street_segment_id) / (getInfoStreetSegment(street_segment_id).speedLimit / 3.6)); 
+    return (find_street_segment_length(street_segment_id) / 
+           (getInfoStreetSegment(street_segment_id).speedLimit / 3.6)); 
 }
 
 //Returns the nearest intersection to the given position
@@ -231,11 +237,13 @@ std::vector<std::string> find_street_names_of_intersection(int intersection_id) 
 //corner case: an intersection is considered to be connected to itself
 bool are_directly_connected(std::pair<int, int> intersection_ids) {
     
-    if (intersection_ids.first == intersection_ids.second) return true; 
+    if (intersection_ids.first == intersection_ids.second) 
+        return true; 
     
     std::vector<int> adjacentIntersections = find_adjacent_intersections(intersection_ids.first); 
     for (const auto& intersection : adjacentIntersections){
-        if (intersection == intersection_ids.second) return true; 
+        if (intersection == intersection_ids.second) 
+            return true; 
     }
     return false; 
 }
@@ -288,7 +296,8 @@ std::vector<int> find_intersections_of_two_streets(std::pair<int, int> street_id
     std::sort(streetOne.begin(), streetOne.end()); 
     std::sort(streetTwo.begin(), streetTwo.end()); 
    
-    std::set_intersection(streetOne.begin(), streetOne.end(), streetTwo.begin(), streetTwo.end(), intersections.begin()); 
+    std::set_intersection(streetOne.begin(), streetOne.end(), 
+                          streetTwo.begin(), streetTwo.end(), intersections.begin()); 
     return intersections;
 }
 
@@ -326,8 +335,10 @@ double find_feature_area(int feature_id) {
         //Compute the difference in x-position and y-position according to shoelace formula
         // (x[j] + x[i]) * (y[j) - y[i])
         double latAvg = DEGREE_TO_RADIAN * ((point1.lat() + point2.lat()) / 2.0);   
-        double xDiff = (DEGREE_TO_RADIAN * point2.lon() * cos(latAvg)) + DEGREE_TO_RADIAN * (point1.lon() * cos(latAvg)); 
+        double xDiff = (DEGREE_TO_RADIAN * point2.lon() * cos(latAvg)) 
+                       + DEGREE_TO_RADIAN * (point1.lon() * cos(latAvg)); 
         xDiff = xDiff * EARTH_RADIUS_METERS;
+        
         double yDiff = DEGREE_TO_RADIAN * (point2.lat() - point1.lat()); 
         yDiff = yDiff * EARTH_RADIUS_METERS;
         
@@ -343,12 +354,17 @@ double find_feature_area(int feature_id) {
 //functions.
 double find_way_length(OSMID way_id) {
     double length = 0;
-    const unsigned wayInd = gData.getWayIndexOfOSMID(way_id);
-    const OSMWay* way = getWayByIndex(wayInd);
-    std::vector<OSMID> nodeIDs = getWayMembers(way);
     std::vector<LatLon> nodePos;
-    for (auto ID : nodeIDs) {
-        unsigned nodeInd = gData.getNodeIndexOfOSMID(ID);
+    // Gets way index based on the OSMID
+    const unsigned wayInd = gData.getWayIndexOfOSMID(way_id);
+    // Gets way from its index
+    const OSMWay* way = getWayByIndex(wayInd);
+    // Gets the OSMIDs of the nodes in the way 
+    std::vector<OSMID> nodeIDs = getWayMembers(way);
+
+    // Loop through all the OSMIDs of the nodes and put their LatLons into a vector
+    for (const auto& ID : nodeIDs) {
+        unsigned nodeInd = gData.getNodeIndexOfOSMID(ID); // Get nodes index
         LatLon nodeLatLon = getNodeCoords(getNodeByIndex(nodeInd));
         nodePos.push_back(nodeLatLon);
     }
