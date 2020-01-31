@@ -2,6 +2,7 @@
 #include "m1.h"
 
 #include <algorithm>
+#include <iostream>
 
 //==============================================================================
 // Constructors / Destructors
@@ -50,12 +51,16 @@ void MapData::addIntersectToStreet(const IntersectionIndex& intID, const StreetI
 void MapData::addSegToIntersection(const StreetSegmentIndex& segID, const IntersectionIndex& intID) {
     segsOfIntersection[intID].push_back(segID);
 }
+//
+void MapData::addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID) {
+    nodeIndexOfOSMID.insert(std::make_pair(nodeID, nodeIndex));
+}
 //==============================================================================
 // Accessors
 //==============================================================================
 // Returns vector containing all streetIDs corresponding to the name given
 // Works with partial names and ignores spaces (e.g. dund a for Dundas st.)
-const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) {
+const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) const {
     std::vector<int> streetIDs;
     if (!name.empty()) {
         // In-place removal of spaces
@@ -93,4 +98,14 @@ const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& stre
 // Returns vector containing IDs of all segments at a given intersection
 const std::vector<int> MapData::getSegsOfIntersection(const IntersectionIndex& intID) const {
     return segsOfIntersection[intID];
+}
+//
+const unsigned MapData::getNodeIndexOfOSMID(const OSMID& nodeID) const {
+    const auto mapItr = nodeIndexOfOSMID.find(nodeID);
+    if (mapItr == nodeIndexOfOSMID.end()) {
+        std::cerr << "No node found with OSMID " << nodeID << "\n";
+        return 0;
+    }
+    else 
+        return mapItr->second;
 }
