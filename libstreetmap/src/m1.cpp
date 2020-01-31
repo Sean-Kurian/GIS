@@ -158,7 +158,7 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays) {
 //Returns the distance between two coordinates in meters
 double find_distance_between_two_points(std::pair<LatLon, LatLon> points) {
     
-    double latAvg = DEGREE_TO_RADIAN * ((points.first.lat() + points.second.lat()) / 2.0);   
+    double latAvg = DEGREE_TO_RADIAN * ((points.first.lat() + points.second.lat()) * 0.5);   
     double xDiff = (DEGREE_TO_RADIAN * points.second.lon() * cos(latAvg)) - DEGREE_TO_RADIAN * (points.first.lon() * cos(latAvg)); 
     double yDiff = DEGREE_TO_RADIAN * (points.second.lat() - points.first.lat()); 
     
@@ -291,13 +291,15 @@ std::vector<int> find_intersections_of_two_streets(std::pair<int, int> street_id
     std::vector<int> streetOne = find_intersections_of_street(street_ids.first); 
     std::vector<int> streetTwo = find_intersections_of_street(street_ids.second); 
     
-    std::vector<int> intersections; 
+    std::vector<int> intersections(streetOne.size() + streetTwo.size()); 
+    std::vector<int>::iterator it;
     
     std::sort(streetOne.begin(), streetOne.end()); 
     std::sort(streetTwo.begin(), streetTwo.end()); 
    
-    std::set_intersection(streetOne.begin(), streetOne.end(), 
+    it=std::set_intersection(streetOne.begin(), streetOne.end(), 
                           streetTwo.begin(), streetTwo.end(), intersections.begin()); 
+    intersections.resize(it-intersections.begin());  
     return intersections;
 }
 
