@@ -79,10 +79,12 @@ const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) con
         // In-place transform to lower case characters
         std::transform(name.begin(), name.end(), name.begin(), 
                        [](unsigned char letter){ return std::tolower(letter); });
-        unsigned nameSize = name.size(); // Num chars after removing spaces
+        const unsigned nameSize = name.size(); // Num chars after removing spaces
+        
         // Finds first possible match. Returns end if no match
         auto itr = IDsOfStreetNames.lower_bound(name);
         auto end = IDsOfStreetNames.end();
+        
         if (itr != end) { // If match exists
             std::string nameMatch = itr->first;
             // Compares strings char by char from position 0 up to name.size())

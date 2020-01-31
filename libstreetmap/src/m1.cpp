@@ -137,7 +137,10 @@ void getSegmentOfStreetData(const unsigned& numStreets) {
 }
 
 void getLayer1Data(const unsigned& numNodes) {
+    const OSMNode* node;
     for (unsigned nodeInd = 0; nodeInd < numNodes; ++nodeInd) {
+        node = getNodeByIndex(nodeInd);
+        gData.addNodeIndexToOSMID(nodeInd, node->id());
     }
 }
 
@@ -333,5 +336,7 @@ double find_feature_area(int feature_id) {
 //To implement this function you will have to  access the OSMDatabaseAPI.h 
 //functions.
 double find_way_length(OSMID way_id) {
+    std::vector<OSMID> nodes;
+    
     return 0;
 }
