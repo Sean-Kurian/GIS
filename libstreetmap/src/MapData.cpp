@@ -37,15 +37,12 @@ void MapData::clearMapData() {
 
 // Sizes street vectors to their appropriate size to avoid out of index access
 void MapData::allocStreetVecs(const unsigned& numStreets) {
-    intersectionsOfStreet.resize(numStreets);
-}
-// Sizes street vectors to their appropriate size to avoid out of index access
-void MapData::allocSegOfStreetVecs(const unsigned& numStreets) {
     segsOfStreet.resize(numStreets);
+    intersectionsOfStreet.resize(numStreets);
 }
 // Sizes segment vectors to their appropriate size to avoid out of index access
 void MapData::allocSegmmentVecs(const unsigned& numSegments) {
-    
+    lengthOfStreetSegs.resize(numSegments);
 }
 // Sizes intersection vectors to their appropriate size to avoid out of index access
 void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
@@ -60,24 +57,32 @@ void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
 void MapData::addStreetIDtoName(const StreetIndex& streetID, const std::string& streetName) {
     IDsOfStreetNames.insert(std::make_pair(streetName, streetID));
 }
-void MapData::addLengthOfSegment(const InfoStreetSegment& SSData, const StreetSegmentIndex& segID) {
+//
+void MapData::addLengthOfSegment(const InfoStreetSegment& SSData, const unsigned& segID) {
     double dist = 0; 
-   
-//    if (SSData.curvePointCount == 0) 
-//        return find_distance_between_two_points(std::make_pair(getIntersectionPosition(SSData.from), getIntersectionPosition(SSData.to))); 
-    
-    for (unsigned i = 0; i <= SSData.curvePointCount; i++) {       
-        if (i == 0) 
-            dist = dist + find_distance_between_two_points(std::make_pair
-                (getIntersectionPosition(SSData.from), getStreetSegmentCurvePoint(i, segID)));               
-        else if (i == SSData.curvePointCount) 
-            dist = dist + find_distance_between_two_points(std::make_pair
-                (getStreetSegmentCurvePoint(SSData.curvePointCount-1, segID), getIntersectionPosition(SSData.to)));
-        else 
-            dist = dist + find_distance_between_two_points(std::make_pair
-                (getStreetSegmentCurvePoint(i-1, segID), getStreetSegmentCurvePoint(i, segID)));       
+    unsigned numCurves = SSData.curvePointCount;
+    // If no curves find distance between the two intersections
+    if (numCurves == 0) 
+        dist = find_distance_between_two_points(std::make_pair(getIntersectionPosition(SSData.from), 
+                                                               getIntersectionPosition(SSData.to)));
+    else {
+        // Loop over the curve points and sum their distance
+        for (unsigned i = 0; i <= numCurves; i++) {       
+            // From first intersection to first curve point
+            if (i == 0) 
+                dist += find_distance_between_two_points(std::make_pair
+                     (getIntersectionPosition(SSData.from), getStreetSegmentCurvePoint(i, segID)));               
+            // From last curve point to last intersection
+            else if (i == SSData.curvePointCount) 
+                dist += find_distance_between_two_points(std::make_pair
+                     (getStreetSegmentCurvePoint(numCurves - 1, segID), getIntersectionPosition(SSData.to)));
+            // From one curve point to another
+            else 
+                dist += find_distance_between_two_points(std::make_pair
+                    (getStreetSegmentCurvePoint(i - 1, segID), getStreetSegmentCurvePoint(i, segID)));       
+        }
     }
-     lengthOfStreetSegs.push_back(dist);
+    lengthOfStreetSegs[segID] = dist;
 }
 // Adds intersectionID to a unordered_set inside a vector indexed to its streetID
 void MapData::addIntersectToStreet(const IntersectionIndex& intID, const StreetIndex& streetID) {
@@ -135,6 +140,10 @@ const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) con
         }
     }
     return streetIDs;
+}
+//
+double MapData::getLengthOfSegment(const StreetSegmentIndex& segID) const {
+    return lengthOfStreetSegs[segID];
 }
 // Returns vector containing IDs of all intersections along a street
 const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& streetID) const {

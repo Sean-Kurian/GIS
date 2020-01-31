@@ -57,7 +57,6 @@ public:
     void allocStreetVecs(const unsigned& numStreets);
     void allocSegmmentVecs(const unsigned& numSegments);
     void allocIntersectionVecs(const unsigned& numIntersections);
-    void allocSegOfStreetVecs(const unsigned& numStreets);
 //==============================================================================
 // Mutators
 //==============================================================================
@@ -65,7 +64,7 @@ public:
     void addStreetIDtoName(const StreetIndex& streetID, const std::string& streetName);
     
     // 
-    void addLengthOfSegment(const InfoStreetSegment& SSData, const StreetSegmentIndex& segID);
+    void addLengthOfSegment(const InfoStreetSegment& SSData, const unsigned& segID);
     
     // Adds intersectionID to a unordered_set inside a vector indexed to its streetID 
     void addIntersectToStreet(const IntersectionIndex& intID, const StreetIndex& streetID);
@@ -89,6 +88,7 @@ public:
     const std::vector<int> getStreetIDsFromStreetName(std::string name) const;
     
     //
+    double getLengthOfSegment(const StreetSegmentIndex& segID) const;
     
     // Returns vector containing IDs of all intersections along a street
     const std::vector<int> getIntersectionsOfStreet(const StreetIndex& streetID) const;
