@@ -20,11 +20,13 @@
  */
 #include "m1.h"
 #include "StreetsDatabaseAPI.h"
+#include "OSMDatabaseAPI.h"
 #include "globalData.h"
 #include "math.h"
 
 #include <set>
 #include <algorithm>
+#include <regex>
 
 MapData gData;
 
@@ -32,6 +34,7 @@ void getSegmentData(const unsigned& numStreetSegments);
 void getIntersectionData(const unsigned& numIntersections);
 void getStreetData(const unsigned& numStreets);
 void getSegmentOfStreetData(const unsigned& numStreets);
+void getLayer1Data(const unsigned& numNodes);
 
 bool load_map(std::string mapPath) {
     bool loadSuccessful = loadStreetsDatabaseBIN(mapPath);
@@ -51,12 +54,21 @@ bool load_map(std::string mapPath) {
         getIntersectionData(numIntersections);
         getSegmentOfStreetData(numStreets);
     }
+    // Changes "streets" to "osm" to load layer 1 data
+    mapPath = std::regex_replace(mapPath, std::regex("streets"), "osm");
+    loadSuccessful = loadOSMDatabaseBIN(mapPath);
+    if (loadSuccessful) {
+        const unsigned numNodes = getNumberOfNodes();
+        getLayer1Data(numNodes);
+    }
+    
     return loadSuccessful;
 }
 
 void close_map() {
     //Clean-up your map related data structures here
     gData.clearMapData();
+    closeOSMDatabase();
     closeStreetDatabase();
 }
 
@@ -96,6 +108,7 @@ void getIntersectionData(const unsigned& numIntersections) {
     }
 }
 
+
 //Function to store all street segments of every street (used for find_street_segments_of_street)
 void getSegmentOfStreetData(const unsigned& numStreets) {
     //Perform the following to get all the street segments for each street
@@ -119,6 +132,11 @@ void getSegmentOfStreetData(const unsigned& numStreets) {
                 }
             }
         }
+    }
+}
+
+void getLayer1Data(const unsigned& numNodes) {
+    for (unsigned nodeInd = 0; nodeInd < numNodes; ++nodeInd) {
     }
 }
 
@@ -164,8 +182,8 @@ double find_street_segment_travel_time(int street_segment_id) {
 int find_closest_intersection(LatLon my_position) {
     //Start by assuming that the 0th intersection is the closest
     int closestIntersection = 0;
-    double closestDistance = find_distance_between_two_points(std::make_pair(my_position, getIntersectionPosition(0)));
-    
+    double closestDistance = find_distance_between_two_points(std::make_pair(my_position, 
+                                                              getIntersectionPosition(0)));
     //Check each intersection against the 0th intersection to see if it's closer
     for (int intersectionID = 1; intersectionID < getNumIntersections(); ++intersectionID) {
         double distance = find_distance_between_two_points(std::make_pair(my_position, getIntersectionPosition(intersectionID)));
@@ -282,9 +300,8 @@ double find_feature_area(int feature_id) {
     //Ensure feature is a closed polygon, else return 0
     LatLon firstPoint = getFeaturePoint(0, feature_id);
     LatLon lastPoint = getFeaturePoint(getFeaturePointCount(feature_id) - 1, feature_id);
-    if (firstPoint.lat() != lastPoint.lat() || firstPoint.lon() != lastPoint.lon()) {
+    if (firstPoint.lat() != lastPoint.lat() || firstPoint.lon() != lastPoint.lon()) 
         return 0;
-    }
     
     //Find the area of the feature using the shoelace formula
     double area = 0;
@@ -292,7 +309,6 @@ double find_feature_area(int feature_id) {
     
     int j = numPoints - 1;
     for (int i = 0; i < numPoints; ++i) {
-        
         //Get two LatLon points from the feature
         LatLon point1 = getFeaturePoint(i, feature_id);
         LatLon point2 = getFeaturePoint(j, feature_id);
@@ -307,10 +323,8 @@ double find_feature_area(int feature_id) {
         
         //Compute the signed area
         area += xDiff * yDiff;
-        
         j = i;
     }
-    
     return abs(area / 2.0);
 }
 
