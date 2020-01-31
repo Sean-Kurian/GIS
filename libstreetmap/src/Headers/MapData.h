@@ -28,6 +28,9 @@ private:
     
     // 
     std::unordered_map<OSMID, unsigned> nodeIndexOfOSMID;
+    
+    //
+    std::unordered_map<OSMID, unsigned> wayIndexOfOSMID;
 public:
 //==============================================================================
 // Constructors / Destructors
@@ -62,6 +65,9 @@ public:
     
     //
     void addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID);
+    
+    //
+    void addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID);
 //==============================================================================
 // Accessors
 //==============================================================================
@@ -79,7 +85,10 @@ public:
     const std::vector<int> getSegmentsOfStreet(const StreetIndex& streetID) const;
     
     //
-    const unsigned getNodeIndexOfOSMID(const OSMID& nodeID) const;
+    unsigned getNodeIndexOfOSMID(const OSMID& nodeID) const;
+    
+    //
+    unsigned getWayIndexOfOSMID(const OSMID& wayID) const;
 };
 
 #endif /* MAPDATA_H */
