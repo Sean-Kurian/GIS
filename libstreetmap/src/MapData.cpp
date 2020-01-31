@@ -57,6 +57,7 @@ void MapData::addIntersectToStreet(const IntersectionIndex& intID, const StreetI
 void MapData::addSegToIntersection(const StreetSegmentIndex& segID, const IntersectionIndex& intID) {
     segsOfIntersection[intID].push_back(segID);
 }
+
 // Adds segment to an unordered_set inside a vector indexed to its streetID
 void MapData::addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex& streetID) {
     segsOfStreet[streetID].insert(segID);

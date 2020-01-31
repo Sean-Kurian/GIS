@@ -109,6 +109,7 @@ void getIntersectionData(const unsigned& numIntersections) {
 }
 
 
+
 //Function to store all street segments of every street (used for find_street_segments_of_street)
 void getSegmentOfStreetData(const unsigned& numStreets) {
     //Perform the following to get all the street segments for each street
