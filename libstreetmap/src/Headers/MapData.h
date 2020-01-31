@@ -1,6 +1,11 @@
 #ifndef MAPDATA_H
 #define MAPDATA_H
 
+//==============================================================================
+// File Description:
+//
+//==============================================================================
+
 #include "StreetsDatabaseAPI.h"
 #include "OSMDatabaseAPI.h"
 #include <vector>
@@ -26,10 +31,12 @@ private:
     // Using vector & set for O(1) access. Using set to guarantee no duplicates
     std::vector<std::unordered_set<int> > segsOfStreet;
     
-    // 
+    // Unordered map which stores the node indexes of OSMIDs in key, value pairs
+    // Unordered map has O(1) insertion/access. Not using vector because can't index on OSMID
     std::unordered_map<OSMID, unsigned> nodeIndexOfOSMID;
     
-    //
+    // Unordered map which stores the way indexes of OSMIDs in key, value pairs
+    // Unordered map has O(1) insertion/access. Not using vector because can't index on OSMID   
     std::unordered_map<OSMID, unsigned> wayIndexOfOSMID;
 public:
 //==============================================================================
@@ -63,10 +70,10 @@ public:
     // Adds segment to an unordered_set inside a vector indexed to its streetID
     void addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex& streetID);
     
-    //
+    // Adds node index (0 to numNodes) to map keyed to its OSMID
     void addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID);
     
-    //
+    // Adds way index (0 to numWays) to map keyed to its OSMID
     void addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID);
 //==============================================================================
 // Accessors
@@ -84,10 +91,10 @@ public:
     // Returns a vector containing IDs of all segments along a street
     const std::vector<int> getSegmentsOfStreet(const StreetIndex& streetID) const;
     
-    //
+    // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
     unsigned getNodeIndexOfOSMID(const OSMID& nodeID) const;
     
-    //
+    // Returns way index (0 to numWays) of the OSMID. Outputs error if none found
     unsigned getWayIndexOfOSMID(const OSMID& wayID) const;
 };
 
