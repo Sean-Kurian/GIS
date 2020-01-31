@@ -59,7 +59,6 @@ public:
 
     // Adds segment to an unordered_set inside a vector indexed to its streetID
     void addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex& streetID);
-
     
     //
     void addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID);
@@ -78,7 +77,6 @@ public:
 
     // Returns a vector containing IDs of all segments along a street
     const std::vector<int> getSegmentsOfStreet(const StreetIndex& streetID) const;
-
     
     //
     const unsigned getNodeIndexOfOSMID(const OSMID& nodeID) const;
