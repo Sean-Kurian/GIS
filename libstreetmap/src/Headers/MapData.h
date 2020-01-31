@@ -17,6 +17,9 @@ private:
     std::vector<std::unordered_set<int> > intersectionsOfStreet;
     // Vector which stores all segments of any intersection in a vector
     std::vector<std::vector<int> > segsOfIntersection;
+    // Vector which stores all street segments of each street
+    // Using vector & set for O(1) access. Using set to guarantee no duplicates
+    std::vector<std::unordered_set<int> > segsOfStreet;
 public:
 //==============================================================================
 // Constructors / Destructors
@@ -32,6 +35,7 @@ public:
     void allocStreetVecs(const unsigned& numStreets);
     void allocSegmmentVecs(const unsigned& numSegments);
     void allocIntersectionVecs(const unsigned& numIntersections);
+    void allocSegOfStreetVecs(const unsigned& numStreets);
 //==============================================================================
 // Mutators
 //==============================================================================
@@ -41,6 +45,8 @@ public:
     void addIntersectToStreet(const IntersectionIndex& intID, const StreetIndex& streetID);
     // Adds segment to vector containing all segments inside a vector indexed to its intersectionID
     void addSegToIntersection(const StreetSegmentIndex& segID, const IntersectionIndex& intID);
+    // Adds segment to an unordered_set inside a vector indexed to its streetID
+    void addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex& streetID);
 //==============================================================================
 // Accessors
 //==============================================================================
@@ -51,6 +57,8 @@ public:
     const std::vector<int> getIntersectionsOfStreet(const StreetIndex& streetID) const;
     // Returns vector containing IDs of all segments at a given intersection
     const std::vector<int> getSegsOfIntersection(const IntersectionIndex& intID) const;
+    // Returns a vector containing IDs of all segments along a street
+    const std::vector<int> getSegmentsOfStreet(const StreetIndex& streetID) const;
 };
 
 #endif /* MAPDATA_H */

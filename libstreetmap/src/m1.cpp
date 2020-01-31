@@ -31,6 +31,7 @@ MapData gData;
 void getSegmentData(const unsigned& numStreetSegments);
 void getIntersectionData(const unsigned& numIntersections);
 void getStreetData(const unsigned& numStreets);
+void getSegmentOfStreetData(const unsigned& numStreets);
 
 bool load_map(std::string mapPath) {
     bool loadSuccessful = loadStreetsDatabaseBIN(mapPath);
@@ -43,10 +44,12 @@ bool load_map(std::string mapPath) {
         gData.allocStreetVecs(numStreets);
         gData.allocSegmmentVecs(numSegments);
         gData.allocIntersectionVecs(numIntersections);
+        gData.allocSegOfStreetVecs(numStreets);
 
         getStreetData(numStreets);
         getSegmentData(numSegments);
         getIntersectionData(numIntersections);
+        getSegmentOfStreetData(numStreets);
     }
     return loadSuccessful;
 }
@@ -89,6 +92,32 @@ void getIntersectionData(const unsigned& numIntersections) {
         for (unsigned segNum = 0; segNum < numSegs; ++segNum) {
             StreetSegmentIndex segInd = getIntersectionStreetSegment(intInd, segNum);
             gData.addSegToIntersection(segInd, intInd);
+        }
+    }
+}
+
+//Function to store all street segments of every street (used for find_street_segments_of_street)
+void getSegmentOfStreetData(const unsigned& numStreets) {
+    //Perform the following to get all the street segments for each street
+    for (unsigned street_id = 0; street_id < numStreets; ++street_id) {
+        
+        //Get all the intersections on the given street
+        std::vector<int> intersectionsOfStreet = gData.getIntersectionsOfStreet(street_id);
+
+        //Iterate over each intersection on the street
+        for (int intersectionCount = 0; intersectionCount < intersectionsOfStreet.size(); ++intersectionCount) {
+            //Get all the segments on the intersection
+            IntersectionIndex int_id = intersectionsOfStreet[intersectionCount];
+            std::vector<int> segmentsOfIntersection = gData.getSegsOfIntersection(int_id);
+
+            //Check each segment of the intersection to ensure it belongs to given street
+            for (int segmentCount = 0; segmentCount < getIntersectionStreetSegmentCount(int_id); ++segmentCount) {
+                StreetSegmentIndex seg_id = segmentsOfIntersection[segmentCount];
+                InfoStreetSegment segmentInfo = getInfoStreetSegment(seg_id);
+                if (segmentInfo.streetID == street_id) {
+                    gData.addSegToStreet(seg_id, street_id);
+                }
+            }
         }
     }
 }
@@ -211,30 +240,7 @@ std::vector<int> find_adjacent_intersections(int intersection_id) {
 
 //Returns all street segments for the given street
 std::vector<int> find_street_segments_of_street(int street_id) {
-    //Start by creating a set so segments are only added once
-    std::set<int> streetSegmentsOfStreetSet;
-    //Get all the intersections on the given street
-    std::vector<int> intersectionsOfStreet = gData.getIntersectionsOfStreet(street_id);
-    
-    //Iterate over each intersection on the street
-    for (int intersectionCount = 0; intersectionCount < intersectionsOfStreet.size(); ++intersectionCount) {
-        //Get all the segments on the intersection
-        IntersectionIndex int_id = intersectionsOfStreet[intersectionCount];
-        std::vector<int> segmentsOfIntersection = gData.getSegsOfIntersection(int_id);
-        
-        //Check each segment of the intersection to ensure it belongs to given street
-        for (int segmentCount = 0; segmentCount < getIntersectionStreetSegmentCount(int_id); ++segmentCount) {
-            StreetSegmentIndex seg_id = segmentsOfIntersection[segmentCount];
-            InfoStreetSegment segmentInfo = getInfoStreetSegment(seg_id);
-            if (segmentInfo.streetID == street_id) {
-                streetSegmentsOfStreetSet.insert(seg_id);
-            }
-        }
-    }
-    
-    //Copy data over to a vector
-    std::vector<int> streetSegmentsOfStreet(streetSegmentsOfStreetSet.begin(), streetSegmentsOfStreetSet.end());
-    return streetSegmentsOfStreet;
+    return gData.getSegmentsOfStreet(street_id);
 }
 
 //Returns all intersections along the a given street
