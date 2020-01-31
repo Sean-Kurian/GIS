@@ -156,7 +156,17 @@ std::vector<int> find_street_segments_of_intersection(int intersection_id) {
 //Returns the street names at the given intersection (includes duplicate street 
 //names in returned vector)
 std::vector<std::string> find_street_names_of_intersection(int intersection_id) {
-    return {};
+    std::vector<std::string> streetNames;
+    InfoStreetSegment SSData;
+    // Gets all segments of the intersection
+    std::vector<int> segsOfInt = gData.getSegsOfIntersection(intersection_id);
+    
+    // Loops through the segments and adds their names to return vector
+    for (const auto& segment : segsOfInt) {
+        SSData = getInfoStreetSegment(segment);
+        streetNames.push_back(getStreetName(SSData.streetID));
+    }
+    return streetNames;
 }
 
 //Returns true if you can get from intersection_ids.first to intersection_ids.second using a single 
@@ -167,7 +177,7 @@ bool are_directly_connected(std::pair<int, int> intersection_ids) {
     if (intersection_ids.first == intersection_ids.second) return true; 
     
     std::vector<int> adjacentIntersections = find_adjacent_intersections(intersection_ids.first); 
-    for (auto & intersection : adjacentIntersections){
+    for (const auto& intersection : adjacentIntersections){
         if (intersection == intersection_ids.second) return true; 
     }
     return false; 
@@ -178,7 +188,6 @@ bool are_directly_connected(std::pair<int, int> intersection_ids) {
 //the returned vector should NOT contain duplicate intersections
 std::vector<int> find_adjacent_intersections(int intersection_id) {
     std::set<int> adjacentIntersectionsSet;
-    
     //Find all the segments attached to the intersection
     std::vector<int> segmentsOfIntersection = gData.getSegsOfIntersection(intersection_id);
     
@@ -186,18 +195,15 @@ std::vector<int> find_adjacent_intersections(int intersection_id) {
     for (auto it = segmentsOfIntersection.begin(); it != segmentsOfIntersection.end(); ++it) {
         //Get the info for the street segment
         InfoStreetSegment segmentInfo = getInfoStreetSegment(*it);
-        
         //Avoid adding the given intersection
         if (segmentInfo.to != intersection_id) {
             adjacentIntersectionsSet.insert(segmentInfo.to);
         }
-        
         //Ensure any from intersections added are not one-way segments as well
         if (segmentInfo.from != intersection_id && !segmentInfo.oneWay) {
             adjacentIntersectionsSet.insert(segmentInfo.from);
         }
     }
-    
     //Create a vector to return
     std::vector<int> adjacentIntersections(adjacentIntersectionsSet.begin(), adjacentIntersectionsSet.end());
     return adjacentIntersections;
@@ -207,7 +213,6 @@ std::vector<int> find_adjacent_intersections(int intersection_id) {
 std::vector<int> find_street_segments_of_street(int street_id) {
     //Start by creating a set so segments are only added once
     std::set<int> streetSegmentsOfStreetSet;
-    
     //Get all the intersections on the given street
     std::vector<int> intersectionsOfStreet = gData.getIntersectionsOfStreet(street_id);
     
