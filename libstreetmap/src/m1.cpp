@@ -53,8 +53,7 @@ bool load_map(std::string mapPath) {
         gData.allocStreetVecs(numStreets);
         gData.allocSegmmentVecs(numSegments);
         gData.allocIntersectionVecs(numIntersections);
-        gData.allocSegOfStreetVecs(numStreets);
-
+        
         getStreetData(numStreets);
         getSegmentData(numSegments);
         getIntersectionData(numIntersections);
@@ -80,8 +79,8 @@ void close_map() {
 
 void getStreetData(const unsigned& numStreets) {
     std::string streetName;
-    for (unsigned streetInd = 0; streetInd < numStreets; ++streetInd) {
-        streetName = getStreetName(streetInd);
+    for (unsigned streetIndex =  0; streetIndex < numStreets; ++streetIndex) {
+        streetName = getStreetName(streetIndex);
         // In-place removal of spaces from street name
         streetName.erase(std::remove_if(streetName.begin(), streetName.end(), ::isspace), 
                                         streetName.end());
@@ -89,32 +88,32 @@ void getStreetData(const unsigned& numStreets) {
         std::transform(streetName.begin(), streetName.end(), streetName.begin(), 
                        [](unsigned char letter){ return std::tolower(letter); });
         // Adds street name to multimap which pairs it with its street index
-        gData.addStreetIDtoName(streetInd, streetName);
+        gData.addStreetIDtoName(streetIndex, streetName);
     }
 }
 
 void getSegmentData(const unsigned& numStreetSegments) {
     InfoStreetSegment SSData;
     
-    for (unsigned segInd = 0; segInd < numStreetSegments; ++segInd) {
-        SSData = getInfoStreetSegment(segInd);
+    for (unsigned segIndex = 0; segIndex < numStreetSegments; ++segIndex) {
+        SSData = getInfoStreetSegment(segIndex);
         
         gData.addIntersectToStreet(SSData.from, SSData.streetID);
         gData.addIntersectToStreet(SSData.to, SSData.streetID);
+        
+        gData.addLengthOfSegment(SSData, segIndex);
     }
 }
 
 void getIntersectionData(const unsigned& numIntersections) {
-    for (unsigned intInd = 0; intInd < numIntersections; ++intInd) {
-        int numSegs = getIntersectionStreetSegmentCount(intInd);
+    for (unsigned intIndex = 0; intIndex < numIntersections; ++intIndex) {
+        int numSegs = getIntersectionStreetSegmentCount(intIndex);
         for (unsigned segNum = 0; segNum < numSegs; ++segNum) {
-            StreetSegmentIndex segInd = getIntersectionStreetSegment(intInd, segNum);
-            gData.addSegToIntersection(segInd, intInd);
+            StreetSegmentIndex segInd = getIntersectionStreetSegment(intIndex, segNum);
+            gData.addSegToIntersection(segInd, intIndex);
         }
     }
 }
-
-
 
 //Function to store all street segments of every street (used for find_street_segments_of_street)
 void getSegmentOfStreetData(const unsigned& numStreets) {
@@ -167,31 +166,18 @@ double find_distance_between_two_points(std::pair<LatLon, LatLon> points) {
 
 //Returns the length of the given street segment in meters
 double find_street_segment_length(int street_segment_id) {
-    InfoStreetSegment seg = getInfoStreetSegment(street_segment_id); 
-    double dist = 0; 
-   
-    if (seg.curvePointCount == 0) 
-        return find_distance_between_two_points(std::make_pair(getIntersectionPosition(seg.from), getIntersectionPosition(seg.to))); 
-    
-    for (unsigned i = 0; i <= seg.curvePointCount; i++) {       
-        if (i == 0) 
-            dist = dist + find_distance_between_two_points(std::make_pair
-                (getIntersectionPosition(seg.from), getStreetSegmentCurvePoint(i, street_segment_id)));               
-        else if (i == seg.curvePointCount) 
-            dist = dist + find_distance_between_two_points(std::make_pair
-                (getStreetSegmentCurvePoint(seg.curvePointCount-1, street_segment_id), getIntersectionPosition(seg.to)));
-        else 
-            dist = dist + find_distance_between_two_points(std::make_pair
-                (getStreetSegmentCurvePoint(i-1, street_segment_id), getStreetSegmentCurvePoint(i, street_segment_id)));       
-    }
-    return dist; 
+    return gData.getLengthOfSegment(street_segment_id);
 }
 
 //Returns the travel time to drive a street segment in seconds 
 //(time = distance/speed_limit)
 double find_street_segment_travel_time(int street_segment_id) {
-    return (find_street_segment_length(street_segment_id) / 
-           (getInfoStreetSegment(street_segment_id).speedLimit / 3.6)); 
+    double distance = gData.getLengthOfSegment(street_segment_id);
+    distance *= 0.001;
+    double speedLimit = getInfoStreetSegment(street_segment_id).speedLimit;
+    return (distance * (1 / speedLimit) * 3600);
+//    return (gData.getLengthOfSegment(street_segment_id) / 
+//           (getInfoStreetSegment(street_segment_id).speedLimit / 3.6)); 
 }
 
 //Returns the nearest intersection to the given position
