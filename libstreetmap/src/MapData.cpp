@@ -60,6 +60,25 @@ void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
 void MapData::addStreetIDtoName(const StreetIndex& streetID, const std::string& streetName) {
     IDsOfStreetNames.insert(std::make_pair(streetName, streetID));
 }
+void MapData::addLengthOfSegment(const InfoStreetSegment& SSData, const StreetSegmentIndex& segID) {
+    double dist = 0; 
+   
+//    if (SSData.curvePointCount == 0) 
+//        return find_distance_between_two_points(std::make_pair(getIntersectionPosition(SSData.from), getIntersectionPosition(SSData.to))); 
+    
+    for (unsigned i = 0; i <= SSData.curvePointCount; i++) {       
+        if (i == 0) 
+            dist = dist + find_distance_between_two_points(std::make_pair
+                (getIntersectionPosition(SSData.from), getStreetSegmentCurvePoint(i, segID)));               
+        else if (i == SSData.curvePointCount) 
+            dist = dist + find_distance_between_two_points(std::make_pair
+                (getStreetSegmentCurvePoint(SSData.curvePointCount-1, segID), getIntersectionPosition(SSData.to)));
+        else 
+            dist = dist + find_distance_between_two_points(std::make_pair
+                (getStreetSegmentCurvePoint(i-1, segID), getStreetSegmentCurvePoint(i, segID)));       
+    }
+     lengthOfStreetSegs.push_back(dist);
+}
 // Adds intersectionID to a unordered_set inside a vector indexed to its streetID
 void MapData::addIntersectToStreet(const IntersectionIndex& intID, const StreetIndex& streetID) {
     intersectionsOfStreet[streetID].insert(intID);

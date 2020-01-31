@@ -24,12 +24,15 @@ private:
     // Using vector & set for O(1) access. Using set to guarantee no duplicates
     std::vector<std::unordered_set<int> > intersectionsOfStreet;
     
-    // Vector which stores all segments of any intersection in a vector
-    std::vector<std::vector<int> > segsOfIntersection;
-
+    //
+    std::vector<double> lengthOfStreetSegs;
+    
     // Vector which stores all street segments of each street
     // Using vector & set for O(1) access. Using set to guarantee no duplicates
     std::vector<std::unordered_set<int> > segsOfStreet;
+    
+    // Vector which stores all segments of any intersection in a vector
+    std::vector<std::vector<int> > segsOfIntersection;
     
     // Unordered map which stores the node indexes of OSMIDs in key, value pairs
     // Unordered map has O(1) insertion/access. Not using vector because can't index on OSMID
@@ -61,6 +64,9 @@ public:
     // Adds streetID to multimap which is keyed to its street name
     void addStreetIDtoName(const StreetIndex& streetID, const std::string& streetName);
     
+    // 
+    void addLengthOfSegment(const InfoStreetSegment& SSData, const StreetSegmentIndex& segID);
+    
     // Adds intersectionID to a unordered_set inside a vector indexed to its streetID 
     void addIntersectToStreet(const IntersectionIndex& intID, const StreetIndex& streetID);
     
@@ -81,6 +87,8 @@ public:
     // Returns vector containing all streetIDs corresponding to the name given
     // Works with partial names and ignores spaces (e.g. dund a for Dundas st.)
     const std::vector<int> getStreetIDsFromStreetName(std::string name) const;
+    
+    //
     
     // Returns vector containing IDs of all intersections along a street
     const std::vector<int> getIntersectionsOfStreet(const StreetIndex& streetID) const;
