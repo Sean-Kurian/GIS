@@ -20,17 +20,27 @@ MapData::MapData() {
 // Only called on program exit
 MapData::~MapData() {
     IDsOfStreetName.clear();
-    intersectionsOfStreet.clear();
-    segsOfIntersection.clear();
     segsOfStreet.clear();
+    intersectionsOfStreet.clear();
+    lengthOfSegment.clear();
+    travelTimeOfSegment.clear();
+    segsOfIntersection.clear();
+    adjacentIntsOfIntersection.clear();
+    nodeIndexOfOSMID.clear();
+    wayIndexOfOSMID.clear();
 }
 
 // Clears all structures used to store data. Used to load map without needing destructor
 void MapData::clearMapData() {
     IDsOfStreetName.clear();
-    intersectionsOfStreet.clear();
-    segsOfIntersection.clear();
     segsOfStreet.clear();
+    intersectionsOfStreet.clear();
+    lengthOfSegment.clear();
+    travelTimeOfSegment.clear();
+    segsOfIntersection.clear();
+    adjacentIntsOfIntersection.clear();
+    nodeIndexOfOSMID.clear();
+    wayIndexOfOSMID.clear();
 }
 
 //==============================================================================
@@ -52,6 +62,7 @@ void MapData::allocSegmmentVecs(const unsigned& numSegments) {
 // Sizes intersection vectors to their appropriate size to avoid out of index access
 void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
     segsOfIntersection.resize(numIntersections);
+    adjacentIntsOfIntersection.resize(numIntersections);
 }
 
 //==============================================================================
@@ -68,7 +79,7 @@ void MapData::addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex&
     segsOfStreet[streetID].push_back(segID);
 }
 
-// Calculates length and travel time of seg and adds to vectors indexed by the segID
+// Calculates length and travel time of segment and adds to vectors indexed by the segID
 void MapData::addLengthAndTravelTimeOfSeg(const InfoStreetSegment& SSData, const unsigned& segID) {
     double dist = 0; 
     unsigned numCurves = SSData.curvePointCount;
@@ -97,7 +108,7 @@ void MapData::addLengthAndTravelTimeOfSeg(const InfoStreetSegment& SSData, const
     }
     lengthOfSegment[segID] = dist;
     
-    // Calculate travel time
+    // Calculate and store travel time
     dist *= 0.001;
     travelTimeOfSegment[segID] = (dist * (1 / SSData.speedLimit) * 3600);
 }
@@ -112,9 +123,10 @@ void MapData::addSegToIntersection(const StreetSegmentIndex& segID, const Inters
     segsOfIntersection[intID].push_back(segID);
 }
 
+// Adds adjacent intersection to set with all reachable intersections from main intersection
 void MapData::addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
                                            const IntersectionIndex& mainIntID) {
-    adjacentIntsOfIntersection[mainIntID].push_back(adjacentIntID);
+    adjacentIntsOfIntersection[mainIntID].insert(adjacentIntID);
 }
 
 // Adds node index (0 to numNodes) to map keyed to its OSMID
@@ -182,6 +194,7 @@ double MapData::getTravelTimeOfSegment(const StreetSegmentIndex& segID) const {
 // Returns vector containing IDs of all intersections along a street
 const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& streetID) const {
     std::vector<int> intersections;
+    // Goes through set and adds intersection IDs to vector
     for (const int& intID : intersectionsOfStreet[streetID])
         intersections.push_back(intID);
     return intersections;
@@ -192,9 +205,13 @@ const std::vector<int> MapData::getSegsOfIntersection(const IntersectionIndex& i
     return segsOfIntersection[intID];
 }
 
-//
+// Returns vector containing IDs of all intersections reachable from a given intersection
 const std::vector<int> MapData::getAdjacentIntsOfIntersection(const IntersectionIndex& intID) const {
-    return adjacentIntsOfIntersection[intID];
+    std::vector<int> adjIntersections;
+    // Goes through set and adds intersection IDs to vector
+    for (const int& adjIntID : adjacentIntsOfIntersection[intID])
+        adjIntersections.push_back(adjIntID);
+    return adjIntersections;
 }
 
 // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found

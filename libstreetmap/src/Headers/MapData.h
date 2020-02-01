@@ -37,8 +37,9 @@ private:
     // Vector which stores all segments of any intersection in a vector
     std::vector<std::vector<int> > segsOfIntersection;
     
-    //
-    std::vector<std::vector<int> > adjacentIntsOfIntersection; 
+    // Vector which stores all reachable intersections from an intersection in a set
+    // Using vector & set for O(1) access. Using set to guarantee no duplicates
+    std::vector<std::unordered_set<int> > adjacentIntsOfIntersection; 
     
     // Unordered map which stores the node indexes of OSMIDs in key, value pairs
     // Unordered map has O(1) insertion/access. Not using vector because can't index an OSMID
@@ -82,7 +83,7 @@ public:
     // Adds segment to vector containing all segments inside a vector indexed to its intersectionID
     void addSegToIntersection(const StreetSegmentIndex& segID, const IntersectionIndex& intID);
     
-    //
+    // Adds adjacent intersection to set with all reachable intersections from main intersection
     void addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
                                       const IntersectionIndex& mainIntID);
     
@@ -113,7 +114,7 @@ public:
     // Returns vector containing IDs of all segments at a given intersection
     const std::vector<int> getSegsOfIntersection(const IntersectionIndex& intID) const;
     
-    //
+    // Returns vector containing IDs of all intersections reachable from a given intersection
     const std::vector<int> getAdjacentIntsOfIntersection(const IntersectionIndex& intID) const;
     
     // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
