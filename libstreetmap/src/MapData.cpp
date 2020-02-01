@@ -18,14 +18,14 @@ MapData::MapData() {
 }
 // Only called on program exit
 MapData::~MapData() {
-    IDsOfStreetNames.clear();
+    IDsOfStreetName.clear();
     intersectionsOfStreet.clear();
     segsOfIntersection.clear();
     segsOfStreet.clear();
 }
 // Clears all structures used to store data. Used to load map without needing destructor
 void MapData::clearMapData() {
-    IDsOfStreetNames.clear();
+    IDsOfStreetName.clear();
     intersectionsOfStreet.clear();
     segsOfIntersection.clear();
     segsOfStreet.clear();
@@ -42,7 +42,8 @@ void MapData::allocStreetVecs(const unsigned& numStreets) {
 }
 // Sizes segment vectors to their appropriate size to avoid out of index access
 void MapData::allocSegmmentVecs(const unsigned& numSegments) {
-    lengthOfStreetSegs.resize(numSegments);
+    lengthOfSegment.resize(numSegments);
+    travelTimeOfSegment.resize(numSegments);
 }
 // Sizes intersection vectors to their appropriate size to avoid out of index access
 void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
@@ -55,10 +56,10 @@ void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
 
 // Adds streetID to multimap which is keyed to its street name
 void MapData::addStreetIDtoName(const StreetIndex& streetID, const std::string& streetName) {
-    IDsOfStreetNames.insert(std::make_pair(streetName, streetID));
+    IDsOfStreetName.insert(std::make_pair(streetName, streetID));
 }
 //
-void MapData::addLengthOfSegment(const InfoStreetSegment& SSData, const unsigned& segID) {
+void MapData::addLengthAndTravelTimeOfSeg(const InfoStreetSegment& SSData, const unsigned& segID) {
     double dist = 0; 
     unsigned numCurves = SSData.curvePointCount;
     // If no curves find distance between the two intersections
@@ -82,7 +83,11 @@ void MapData::addLengthOfSegment(const InfoStreetSegment& SSData, const unsigned
                     (getStreetSegmentCurvePoint(i - 1, segID), getStreetSegmentCurvePoint(i, segID)));       
         }
     }
-    lengthOfStreetSegs[segID] = dist;
+    lengthOfSegment[segID] = dist;
+    
+    // Calculate travel time
+    dist *= 0.001;
+    travelTimeOfSegment[segID] = (dist * (1 / SSData.speedLimit) * 3600);
 }
 // Adds intersectionID to a unordered_set inside a vector indexed to its streetID
 void MapData::addIntersectToStreet(const IntersectionIndex& intID, const StreetIndex& streetID) {
@@ -122,8 +127,8 @@ const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) con
         const unsigned nameSize = name.size(); // Num chars after removing spaces
         
         // Finds first possible match. Returns end if no match
-        auto itr = IDsOfStreetNames.lower_bound(name);
-        auto end = IDsOfStreetNames.end();
+        auto itr = IDsOfStreetName.lower_bound(name);
+        auto end = IDsOfStreetName.end();
         
         if (itr != end) { // If match exists
             std::string nameMatch = itr->first;
@@ -143,7 +148,11 @@ const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) con
 }
 //
 double MapData::getLengthOfSegment(const StreetSegmentIndex& segID) const {
-    return lengthOfStreetSegs[segID];
+    return lengthOfSegment[segID];
+}
+//
+double MapData::getTravelTimeOfSegment(const StreetSegmentIndex& segID) const {
+    return travelTimeOfSegment[segID];
 }
 // Returns vector containing IDs of all intersections along a street
 const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& streetID) const {

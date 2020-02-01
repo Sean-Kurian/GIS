@@ -101,7 +101,7 @@ void getSegmentData(const unsigned& numStreetSegments) {
         gData.addIntersectToStreet(SSData.from, SSData.streetID);
         gData.addIntersectToStreet(SSData.to, SSData.streetID);
         
-        gData.addLengthOfSegment(SSData, segIndex);
+        gData.addLengthAndTravelTimeOfSeg(SSData, segIndex);
     }
 }
 
@@ -172,12 +172,7 @@ double find_street_segment_length(int street_segment_id) {
 //Returns the travel time to drive a street segment in seconds 
 //(time = distance/speed_limit)
 double find_street_segment_travel_time(int street_segment_id) {
-    double distance = gData.getLengthOfSegment(street_segment_id);
-    distance *= 0.001;
-    double speedLimit = getInfoStreetSegment(street_segment_id).speedLimit;
-    return (distance * (1 / speedLimit) * 3600);
-//    return (gData.getLengthOfSegment(street_segment_id) / 
-//           (getInfoStreetSegment(street_segment_id).speedLimit / 3.6)); 
+    return gData.getTravelTimeOfSegment(street_segment_id);
 }
 
 //Returns the nearest intersection to the given position
