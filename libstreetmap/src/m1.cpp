@@ -34,14 +34,14 @@
 #include <algorithm>
 #include <regex>
 
-MapData gData;
+MapData gData; // Global data object used to store data in load map
 
+void getStreetData(const unsigned& numStreets);
 void getSegmentData(const unsigned& numStreetSegments);
 void getIntersectionData(const unsigned& numIntersections);
-void getStreetData(const unsigned& numStreets);
-void getSegmentOfStreetData(const unsigned& numStreets);
 void getLayer1Data(const unsigned& numNodes, const unsigned& numWays);
 
+// Loads layer 1 and 2 data into gData's data structures
 bool load_map(std::string mapPath) {
     bool loadSuccessful = loadStreetsDatabaseBIN(mapPath);
     
@@ -50,33 +50,38 @@ bool load_map(std::string mapPath) {
         const unsigned numSegments = getNumStreetSegments();
         const unsigned numIntersections = getNumIntersections();
         
+        // Sizes vectors in gData to correct size to avoid indexing errors
         gData.allocStreetVecs(numStreets);
         gData.allocSegmmentVecs(numSegments);
         gData.allocIntersectionVecs(numIntersections);
         
+        // Loops over all of the respective elements and stores data in gData
         getStreetData(numStreets);
         getSegmentData(numSegments);
         getIntersectionData(numIntersections);
-        getSegmentOfStreetData(numStreets);
     }
     // Changes "streets" to "osm" to load layer 1 data
     mapPath = std::regex_replace(mapPath, std::regex("streets"), "osm");
     loadSuccessful = loadOSMDatabaseBIN(mapPath);
+    
     if (loadSuccessful) {
         const unsigned numNodes = getNumberOfNodes();
         const unsigned numWays = getNumberOfWays();
+        // Loops over all nodes and ways to store OSMIDs keyed to their index
         getLayer1Data(numNodes, numWays);
     }
     return loadSuccessful;
 }
 
+// Clears all data to be able to open another map without restarting program
 void close_map() {
-    //Clean-up your map related data structures here
+    // Clears all data in gData structures but doesn't destroy object
     gData.clearMapData();
     closeOSMDatabase();
     closeStreetDatabase();
 }
 
+// Loads street data into gData by looping over all streets
 void getStreetData(const unsigned& numStreets) {
     std::string streetName;
     for (unsigned streetIndex =  0; streetIndex < numStreets; ++streetIndex) {
@@ -92,65 +97,47 @@ void getStreetData(const unsigned& numStreets) {
     }
 }
 
+// Loads segment data into gData by looping over all segments
 void getSegmentData(const unsigned& numStreetSegments) {
     InfoStreetSegment SSData;
-    
     for (unsigned segIndex = 0; segIndex < numStreetSegments; ++segIndex) {
         SSData = getInfoStreetSegment(segIndex);
-        
+        // Adds segment to vector containing all segments of a street
+        gData.addSegToStreet(segIndex, SSData.streetID);
+        // Calculates and stores length and travel time of segment
+        gData.addLengthAndTravelTimeOfSeg(SSData, segIndex);
+        // Adds intersection to set with all intersections of a street
         gData.addIntersectToStreet(SSData.from, SSData.streetID);
         gData.addIntersectToStreet(SSData.to, SSData.streetID);
-        
-        gData.addLengthAndTravelTimeOfSeg(SSData, segIndex);
     }
 }
 
+// Loads intersection data into gData by looping over all intersections
 void getIntersectionData(const unsigned& numIntersections) {
     for (unsigned intIndex = 0; intIndex < numIntersections; ++intIndex) {
+        // Finds and loops over all segments connected to intersection
         int numSegs = getIntersectionStreetSegmentCount(intIndex);
         for (unsigned segNum = 0; segNum < numSegs; ++segNum) {
             StreetSegmentIndex segInd = getIntersectionStreetSegment(intIndex, segNum);
+            // Adds segment to vector containing all segments at an intersection
             gData.addSegToIntersection(segInd, intIndex);
         }
     }
 }
 
-//Function to store all street segments of every street (used for find_street_segments_of_street)
-void getSegmentOfStreetData(const unsigned& numStreets) {
-    //Perform the following to get all the street segments for each street
-    for (unsigned street_id = 0; street_id < numStreets; ++street_id) {
-        
-        //Get all the intersections on the given street
-        std::vector<int> intersectionsOfStreet = gData.getIntersectionsOfStreet(street_id);
-
-        //Iterate over each intersection on the street
-        for (int intersectionCount = 0; intersectionCount < intersectionsOfStreet.size(); ++intersectionCount) {
-            //Get all the segments on the intersection
-            IntersectionIndex int_id = intersectionsOfStreet[intersectionCount];
-            std::vector<int> segmentsOfIntersection = gData.getSegsOfIntersection(int_id);
-
-            //Check each segment of the intersection to ensure it belongs to given street
-            for (int segmentCount = 0; segmentCount < getIntersectionStreetSegmentCount(int_id); ++segmentCount) {
-                StreetSegmentIndex seg_id = segmentsOfIntersection[segmentCount];
-                InfoStreetSegment segmentInfo = getInfoStreetSegment(seg_id);
-                if (segmentInfo.streetID == street_id) {
-                    gData.addSegToStreet(seg_id, street_id);
-                }
-            }
-        }
-    }
-}
-
+// Loads maps in gData which connect the node/way indexes with their OSMIDs
 void getLayer1Data(const unsigned& numNodes, const unsigned& numWays) {
     const OSMNode* node;
     const OSMWay* way;
-    for (unsigned nodeInd = 0; nodeInd < numNodes; ++nodeInd) {
-        node = getNodeByIndex(nodeInd);
-        gData.addNodeIndexToOSMID(nodeInd, node->id());
+    // Loops over all nodes and stores their index with their OSMID
+    for (unsigned nodeIndex = 0; nodeIndex < numNodes; ++nodeIndex) {
+        node = getNodeByIndex(nodeIndex);
+        gData.addNodeIndexToOSMID(nodeIndex, node->id());
     }
-    for (unsigned wayInd = 0; wayInd < numWays; ++wayInd) {
-        way =  getWayByIndex(wayInd);
-        gData.addWayIndexToOSMID(wayInd, way->id());
+    // Loops over all nodes and stores their index with their OSMID
+    for (unsigned wayIndex = 0; wayIndex < numWays; ++wayIndex) {
+        way = getWayByIndex(wayIndex);
+        gData.addWayIndexToOSMID(wayIndex, way->id());
     }
 }
 
@@ -257,7 +244,7 @@ std::vector<int> find_adjacent_intersections(int intersection_id) {
 
 //Returns all street segments for the given street
 std::vector<int> find_street_segments_of_street(int street_id) {
-    return gData.getSegmentsOfStreet(street_id);
+    return gData.getSegsOfStreet(street_id);
 }
 
 //Returns all intersections along the a given street

@@ -22,7 +22,7 @@ private:
     
     // Vector which stores all street segments of each street
     // Using vector & set for O(1) access. Using set to guarantee no duplicates
-    std::vector<std::unordered_set<int> > segsOfStreet;
+    std::vector<std::vector<int> > segsOfStreet;
     
     // Vector which stores set of all unique intersections along any street
     // Using vector & set for O(1) access. Using set to guarantee no duplicates
@@ -91,7 +91,7 @@ public:
     const std::vector<int> getStreetIDsFromStreetName(std::string name) const;
     
     // Returns a vector containing IDs of all segments along a street
-    const std::vector<int> getSegmentsOfStreet(const StreetIndex& streetID) const;
+    const std::vector<int> getSegsOfStreet(const StreetIndex& streetID) const;
     
     // Returns length of a given segment
     double getLengthOfSegment(const StreetSegmentIndex& segID) const;

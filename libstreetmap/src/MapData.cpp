@@ -65,7 +65,7 @@ void MapData::addStreetIDtoName(const StreetIndex& streetID, const std::string& 
 
 // Adds segment to an unordered_set inside a vector indexed to its streetID
 void MapData::addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex& streetID) {
-    segsOfStreet[streetID].insert(segID);
+    segsOfStreet[streetID].push_back(segID);
 }
 
 // Calculates length and travel time of seg and adds to vectors indexed by the segID
@@ -160,11 +160,8 @@ const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) con
 }
 
 // Returns a vector containing IDs of all segments along a street
-const std::vector<int> MapData::getSegmentsOfStreet(const StreetIndex& streetID) const {
-    std::vector<int> segments;
-    for (const int& segID : segsOfStreet[streetID])
-        segments.push_back(segID);
-    return segments;
+const std::vector<int> MapData::getSegsOfStreet(const StreetIndex& streetID) const {
+    return segsOfStreet[streetID];
 }
 
 // Returns length of a given segment
