@@ -124,8 +124,10 @@ void getIntersectionData(const unsigned& numIntersections) {
             gData.addSegToIntersection(segIndex, intIndex);
             
             SSData = getInfoStreetSegment(segIndex);
+            // If this is the starting intersection the end one must be reachable
             if (intIndex == SSData.from)
                 gData.addAdjacentIntToIntersection(SSData.to, intIndex);
+            // If its a two way street then the other intersection must be reachable
             else if (!SSData.oneWay)
                 gData.addAdjacentIntToIntersection(SSData.from, intIndex);
         }
@@ -200,7 +202,7 @@ std::vector<std::string> find_street_names_of_intersection(int intersection_id) 
     std::vector<int> segsOfInt = gData.getSegsOfIntersection(intersection_id);
     
     // Loops through the segments and adds their names to return vector
-    for (const auto& segment : segsOfInt) {
+    for (const int& segment : segsOfInt) {
         SSData = getInfoStreetSegment(segment);
         streetNames.push_back(getStreetName(SSData.streetID));
     }
@@ -211,12 +213,13 @@ std::vector<std::string> find_street_names_of_intersection(int intersection_id) 
 //street segment (hint: check for 1-way streets too)
 //corner case: an intersection is considered to be connected to itself
 bool are_directly_connected(std::pair<int, int> intersection_ids) {
-    
+    // Checks if intersection is connected to itself
     if (intersection_ids.first == intersection_ids.second) 
         return true; 
-    
-    std::vector<int> adjacentIntersections = find_adjacent_intersections(intersection_ids.first); 
-    for (const auto& intersection : adjacentIntersections){
+    // Finds adjacent intersections which are reachable from intersection 1
+    std::vector<int> adjacentIntersections = find_adjacent_intersections(intersection_ids.first);
+    // Loops through adjacent intersections looking for intersection 2
+    for (const int& intersection : adjacentIntersections) {
         if (intersection == intersection_ids.second) 
             return true; 
     }
@@ -227,26 +230,7 @@ bool are_directly_connected(std::pair<int, int> intersection_ids) {
 //from given intersection (hint: you can't travel the wrong way on a 1-way street)
 //the returned vector should NOT contain duplicate intersections
 std::vector<int> find_adjacent_intersections(int intersection_id) {
-    std::set<int> adjacentIntersectionsSet;
-    //Find all the segments attached to the intersection
-    std::vector<int> segmentsOfIntersection = gData.getSegsOfIntersection(intersection_id);
-    
-    //Iterate through each segment
-    for (auto it = segmentsOfIntersection.begin(); it != segmentsOfIntersection.end(); ++it) {
-        //Get the info for the street segment
-        InfoStreetSegment segmentInfo = getInfoStreetSegment(*it);
-        //Avoid adding the given intersection
-        if (segmentInfo.to != intersection_id) {
-            adjacentIntersectionsSet.insert(segmentInfo.to);
-        }
-        //Ensure any from intersections added are not one-way segments as well
-        if (segmentInfo.from != intersection_id && !segmentInfo.oneWay) {
-            adjacentIntersectionsSet.insert(segmentInfo.from);
-        }
-    }
-    //Create a vector to return
-    std::vector<int> adjacentIntersections(adjacentIntersectionsSet.begin(), adjacentIntersectionsSet.end());
-    return adjacentIntersections;
+    return gData.getAdjacentIntsOfIntersection(intersection_id);
 }
 
 //Returns all street segments for the given street
@@ -273,7 +257,7 @@ std::vector<int> find_intersections_of_two_streets(std::pair<int, int> street_id
     std::sort(streetTwo.begin(), streetTwo.end()); 
    
     it=std::set_intersection(streetOne.begin(), streetOne.end(), 
-                          streetTwo.begin(), streetTwo.end(), intersections.begin()); 
+                             streetTwo.begin(), streetTwo.end(), intersections.begin()); 
     intersections.resize(it-intersections.begin());  
     return intersections;
 }
@@ -345,8 +329,11 @@ double find_way_length(OSMID way_id) {
         LatLon nodeLatLon = getNodeCoords(getNodeByIndex(nodeInd));
         nodePos.push_back(nodeLatLon);
     }
+    
+    // Checks if singular point
     if (nodePos.size() == 1)
         return 0;
+    // Finds length of way by finding distance between one node and the next
     else {
         for (unsigned i = 0; i < nodePos.size() - 1; ++i) 
             length += find_distance_between_two_points(std::make_pair(nodePos[i], nodePos[i + 1]));
