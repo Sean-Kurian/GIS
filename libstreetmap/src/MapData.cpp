@@ -112,6 +112,11 @@ void MapData::addSegToIntersection(const StreetSegmentIndex& segID, const Inters
     segsOfIntersection[intID].push_back(segID);
 }
 
+void MapData::addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
+                                           const IntersectionIndex& mainIntID) {
+    adjacentIntsOfIntersection[mainIntID].push_back(adjacentIntID);
+}
+
 // Adds node index (0 to numNodes) to map keyed to its OSMID
 void MapData::addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID) {
     nodeIndexOfOSMID.insert(std::make_pair(nodeID, nodeIndex));
@@ -127,7 +132,7 @@ void MapData::addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID) {
 //==============================================================================
 
 // Returns vector containing all streetIDs corresponding to the name given
-// Works with partial names and ignores spaces (e.g. dund a for Dundas st.)
+// Works with partial names and ignores spaces (e.g. "dund a" for "Dundas st.")
 const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) const {
     std::vector<int> streetIDs;
     if (!name.empty()) {
@@ -185,6 +190,11 @@ const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& stre
 // Returns vector containing IDs of all segments at a given intersection
 const std::vector<int> MapData::getSegsOfIntersection(const IntersectionIndex& intID) const {
     return segsOfIntersection[intID];
+}
+
+//
+const std::vector<int> MapData::getAdjacentIntsOfIntersection(const IntersectionIndex& intID) const {
+    return adjacentIntsOfIntersection[intID];
 }
 
 // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found

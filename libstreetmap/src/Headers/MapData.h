@@ -37,13 +37,17 @@ private:
     // Vector which stores all segments of any intersection in a vector
     std::vector<std::vector<int> > segsOfIntersection;
     
+    //
+    std::vector<std::vector<int> > adjacentIntsOfIntersection; 
+    
     // Unordered map which stores the node indexes of OSMIDs in key, value pairs
-    // Unordered map has O(1) insertion/access. Not using vector because can't index on OSMID
+    // Unordered map has O(1) insertion/access. Not using vector because can't index an OSMID
     std::unordered_map<OSMID, unsigned> nodeIndexOfOSMID;
     
     // Unordered map which stores the way indexes of OSMIDs in key, value pairs
-    // Unordered map has O(1) insertion/access. Not using vector because can't index on OSMID   
+    // Unordered map has O(1) insertion/access. Not using vector because can't index an OSMID   
     std::unordered_map<OSMID, unsigned> wayIndexOfOSMID;
+    
 public:
 //==============================================================================
 // Constructors / Destructors
@@ -78,6 +82,10 @@ public:
     // Adds segment to vector containing all segments inside a vector indexed to its intersectionID
     void addSegToIntersection(const StreetSegmentIndex& segID, const IntersectionIndex& intID);
     
+    //
+    void addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
+                                      const IntersectionIndex& mainIntID);
+    
     // Adds node index (0 to numNodes) to map keyed to its OSMID
     void addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID);
     
@@ -87,7 +95,7 @@ public:
 // Accessors
 //==============================================================================
     // Returns vector containing all streetIDs corresponding to the name given
-    // Works with partial names and ignores spaces (e.g. dund a for Dundas st.)
+    // Works with partial names and ignores spaces (e.g. "dund a" for "Dundas st.")
     const std::vector<int> getStreetIDsFromStreetName(std::string name) const;
     
     // Returns a vector containing IDs of all segments along a street
@@ -104,6 +112,9 @@ public:
     
     // Returns vector containing IDs of all segments at a given intersection
     const std::vector<int> getSegsOfIntersection(const IntersectionIndex& intID) const;
+    
+    //
+    const std::vector<int> getAdjacentIntsOfIntersection(const IntersectionIndex& intID) const;
     
     // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
     unsigned getNodeIndexOfOSMID(const OSMID& nodeID) const;
