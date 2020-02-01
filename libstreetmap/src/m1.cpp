@@ -114,13 +114,20 @@ void getSegmentData(const unsigned& numStreetSegments) {
 
 // Loads intersection data into gData by looping over all intersections
 void getIntersectionData(const unsigned& numIntersections) {
+    InfoStreetSegment SSData;
     for (unsigned intIndex = 0; intIndex < numIntersections; ++intIndex) {
         // Finds and loops over all segments connected to intersection
         int numSegs = getIntersectionStreetSegmentCount(intIndex);
         for (unsigned segNum = 0; segNum < numSegs; ++segNum) {
-            StreetSegmentIndex segInd = getIntersectionStreetSegment(intIndex, segNum);
+            StreetSegmentIndex segIndex = getIntersectionStreetSegment(intIndex, segNum);
             // Adds segment to vector containing all segments at an intersection
-            gData.addSegToIntersection(segInd, intIndex);
+            gData.addSegToIntersection(segIndex, intIndex);
+            
+            SSData = getInfoStreetSegment(segIndex);
+            if (intIndex == SSData.from)
+                gData.addAdjacentIntToIntersection(SSData.to, intIndex);
+            else if (!SSData.oneWay)
+                gData.addAdjacentIntToIntersection(SSData.from, intIndex);
         }
     }
 }
