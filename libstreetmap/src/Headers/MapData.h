@@ -20,6 +20,10 @@ private:
     // Using multimap for O(logn) searching and O(logn) insertion
     std::multimap<std::string, unsigned> IDsOfStreetName;
     
+    // Vector which stores all street segments of each street
+    // Using vector & set for O(1) access. Using set to guarantee no duplicates
+    std::vector<std::unordered_set<int> > segsOfStreet;
+    
     // Vector which stores set of all unique intersections along any street
     // Using vector & set for O(1) access. Using set to guarantee no duplicates
     std::vector<std::unordered_set<int> > intersectionsOfStreet;
@@ -29,10 +33,6 @@ private:
     
     //Vector which stores the travel time of every segment indexed to its segmentID
     std::vector<double> travelTimeOfSegment;
-    
-    // Vector which stores all street segments of each street
-    // Using vector & set for O(1) access. Using set to guarantee no duplicates
-    std::vector<std::unordered_set<int> > segsOfStreet;
     
     // Vector which stores all segments of any intersection in a vector
     std::vector<std::vector<int> > segsOfIntersection;
@@ -66,7 +66,10 @@ public:
     // Adds streetID to multimap which is keyed to its street name
     void addStreetIDtoName(const StreetIndex& streetID, const std::string& streetName);
     
-    // 
+    // Adds segment to an unordered_set inside a vector indexed to its streetID
+    void addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex& streetID);
+    
+    // Calculates length and travel time of seg and adds to vectors indexed by the segID
     void addLengthAndTravelTimeOfSeg(const InfoStreetSegment& SSData, const unsigned& segID);
     
     // Adds intersectionID to a unordered_set inside a vector indexed to its streetID 
@@ -74,9 +77,6 @@ public:
     
     // Adds segment to vector containing all segments inside a vector indexed to its intersectionID
     void addSegToIntersection(const StreetSegmentIndex& segID, const IntersectionIndex& intID);
-
-    // Adds segment to an unordered_set inside a vector indexed to its streetID
-    void addSegToStreet(const StreetSegmentIndex& segID, const StreetIndex& streetID);
     
     // Adds node index (0 to numNodes) to map keyed to its OSMID
     void addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID);
@@ -90,10 +90,13 @@ public:
     // Works with partial names and ignores spaces (e.g. dund a for Dundas st.)
     const std::vector<int> getStreetIDsFromStreetName(std::string name) const;
     
-    //
+    // Returns a vector containing IDs of all segments along a street
+    const std::vector<int> getSegmentsOfStreet(const StreetIndex& streetID) const;
+    
+    // Returns length of a given segment
     double getLengthOfSegment(const StreetSegmentIndex& segID) const;
     
-    //
+    // Returns time needed to travel at speed limit down a given segment
     double getTravelTimeOfSegment(const StreetSegmentIndex& segID) const;
     
     // Returns vector containing IDs of all intersections along a street
@@ -101,9 +104,6 @@ public:
     
     // Returns vector containing IDs of all segments at a given intersection
     const std::vector<int> getSegsOfIntersection(const IntersectionIndex& intID) const;
-
-    // Returns a vector containing IDs of all segments along a street
-    const std::vector<int> getSegmentsOfStreet(const StreetIndex& streetID) const;
     
     // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
     unsigned getNodeIndexOfOSMID(const OSMID& nodeID) const;
