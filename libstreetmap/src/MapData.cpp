@@ -109,8 +109,7 @@ void MapData::addLengthAndTravelTimeOfSeg(const InfoStreetSegment& SSData, const
     lengthOfSegment[segID] = dist;
     
     // Calculate and store travel time
-    dist *= 0.001;
-    travelTimeOfSegment[segID] = (dist * (1 / SSData.speedLimit) * 3600);
+    travelTimeOfSegment[segID] = (1 / SSData.speedLimit) * 3.6;
 }
 
 // Adds intersectionID to a unordered_set inside a vector indexed to its streetID
