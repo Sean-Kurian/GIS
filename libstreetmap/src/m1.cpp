@@ -245,20 +245,17 @@ std::vector<int> find_intersections_of_street(int street_id) {
 
 //Return all intersection ids for two intersecting streets
 //This function will typically return one intersection id.
-//Made the choice not to use set_intersection as requires sorted arrays
 std::vector<int> find_intersections_of_two_streets(std::pair<int, int> street_ids) {
-    std::vector<int> streetOne = find_intersections_of_street(street_ids.first); 
-    std::vector<int> streetTwo = find_intersections_of_street(street_ids.second); 
+    // Get all intersections of the two streets in sorted vector
+    std::vector<int> streetOne = gData.getIntersectionsOfStreet(street_ids.first); 
+    std::vector<int> streetTwo = gData.getIntersectionsOfStreet(street_ids.second); 
+    // Vector to store result
+    std::vector<int> intersections; 
+    // Find mutual elements and store in vector
+    std::set_intersection(streetOne.begin(), streetOne.end(), 
+                          streetTwo.begin(), streetTwo.end(), 
+                          std::back_inserter(intersections)); 
     
-    std::vector<int> intersections(streetOne.size() + streetTwo.size()); 
-    std::vector<int>::iterator it;
-    
-    std::sort(streetOne.begin(), streetOne.end()); 
-    std::sort(streetTwo.begin(), streetTwo.end()); 
-   
-    it=std::set_intersection(streetOne.begin(), streetOne.end(), 
-                             streetTwo.begin(), streetTwo.end(), intersections.begin()); 
-    intersections.resize(it-intersections.begin());  
     return intersections;
 }
 

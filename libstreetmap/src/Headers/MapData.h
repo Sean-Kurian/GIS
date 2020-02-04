@@ -12,6 +12,7 @@
 #include <string>
 #include <map>
 #include <unordered_map>
+#include <set>
 #include <unordered_set>
 
 class MapData {
@@ -25,8 +26,8 @@ private:
     std::vector<std::vector<int> > segsOfStreet;
     
     // Vector which stores set of all unique intersections along any street
-    // Using vector & set for O(1) access. Using set to guarantee no duplicates
-    std::vector<std::unordered_set<int> > intersectionsOfStreet;
+    // Using vector for O(1) access. Using set to guarantee no duplicates
+    std::vector<std::set<int> > intersectionsOfStreet;
     
     // Vector which stores the length of every segment indexed to its segmentID
     std::vector<double> lengthOfSegment;
