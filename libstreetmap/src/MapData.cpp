@@ -1,6 +1,6 @@
 //==============================================================================
-// File Description:
-//
+// File Description: Function definitions for class of the global object gData
+// Only mutators can change data and they should only be used in load_map
 //==============================================================================
 
 #include "MapData.h"
@@ -14,7 +14,7 @@
 //==============================================================================
 
 MapData::MapData() {
-    
+    // Currently nothing needed as all data is gotten during load_map
 }
 
 // Only called on program exit
@@ -96,19 +96,21 @@ void MapData::addLengthAndTravelTimeOfSeg(const InfoStreetSegment& SSData, const
             if (i == 0) 
                 dist += find_distance_between_two_points(std::make_pair
                         (fromInt, getStreetSegmentCurvePoint(i, segID)));
-            // From last curve point to last intersection
+            // Else from last curve point to last intersection
             else if (i == SSData.curvePointCount)
                 dist += find_distance_between_two_points(std::make_pair
                         (getStreetSegmentCurvePoint(numCurves - 1, segID), toInt));
-            // From one curve point to another
+            // Else from one curve point to the next curve point
             else
                 dist += find_distance_between_two_points(std::make_pair
-                    (getStreetSegmentCurvePoint(i - 1, segID), getStreetSegmentCurvePoint(i, segID)));       
+                    (getStreetSegmentCurvePoint(i - 1, segID), 
+                     getStreetSegmentCurvePoint(i, segID)));       
         }
     }
+    // Stores distance of segment
     lengthOfSegment[segID] = dist;
     
-    // Calculate and store travel time
+    // Calculates and stores travel time
     travelTimeOfSegment[segID] = (1 / SSData.speedLimit) * 3.6;
 }
 
@@ -207,7 +209,7 @@ const std::vector<int> MapData::getSegsOfIntersection(const IntersectionIndex& i
 // Returns vector containing IDs of all intersections reachable from a given intersection
 const std::vector<int> MapData::getAdjacentIntsOfIntersection(const IntersectionIndex& intID) const {
     std::vector<int> adjIntersections;
-    // Goes through set and adds intersection IDs to vector
+    // Goes through unordered set and adds intersection IDs to vector
     for (const int& adjIntID : adjacentIntsOfIntersection[intID])
         adjIntersections.push_back(adjIntID);
     return adjIntersections;

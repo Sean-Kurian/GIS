@@ -36,6 +36,7 @@
 
 MapData gData; // Global data object used to store data in load map
 
+// Forward declarations of our load_map sub functions
 void getStreetData(const unsigned& numStreets);
 void getSegmentData(const unsigned& numStreetSegments);
 void getIntersectionData(const unsigned& numIntersections);
@@ -150,28 +151,30 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays) {
     }
 }
 
-//Returns the distance between two coordinates in meters
+// Returns the distance between two coordinates in meters
 double find_distance_between_two_points(std::pair<LatLon, LatLon> points) {
-    
-    double latAvg = DEGREE_TO_RADIAN * ((points.first.lat() + points.second.lat()) * 0.5);   
-    double xDiff = (DEGREE_TO_RADIAN * points.second.lon() * cos(latAvg)) - DEGREE_TO_RADIAN * (points.first.lon() * cos(latAvg)); 
+    // Calculates the average latitude between the two points
+    double latAvg = DEGREE_TO_RADIAN * ((points.first.lat() + points.second.lat()) * 0.5);
+    // Finds the differences in x and y coordinates
+    double xDiff = (DEGREE_TO_RADIAN * points.second.lon() * cos(latAvg)) 
+                   - DEGREE_TO_RADIAN * (points.first.lon() * cos(latAvg)); 
     double yDiff = DEGREE_TO_RADIAN * (points.second.lat() - points.first.lat()); 
-    
+    // Returns distance using Pythagoras's Theorem
     return (EARTH_RADIUS_METERS * sqrt(xDiff*xDiff + yDiff*yDiff)); 
 }
 
-//Returns the length of the given street segment in meters
+// Returns the length of the given street segment in meters
 double find_street_segment_length(int street_segment_id) {
     return gData.getLengthOfSegment(street_segment_id);
 }
 
-//Returns the travel time to drive a street segment in seconds 
-//(time = distance/speed_limit)
+// Returns the travel time to drive a street segment in seconds 
 double find_street_segment_travel_time(int street_segment_id) {
     return gData.getTravelTimeOfSegment(street_segment_id);
 }
 
-//Returns the nearest intersection to the given position
+// Returns the nearest intersection to the given position by checking distance to
+// all intersections and finding the shortest
 int find_closest_intersection(LatLon my_position) {
     //Start by assuming that the 0th intersection is the closest
     int closestIntersection = 0;
@@ -179,7 +182,10 @@ int find_closest_intersection(LatLon my_position) {
                                                               getIntersectionPosition(0)));
     //Check each intersection against the 0th intersection to see if it's closer
     for (int intersectionID = 1; intersectionID < getNumIntersections(); ++intersectionID) {
-        double distance = find_distance_between_two_points(std::make_pair(my_position, getIntersectionPosition(intersectionID)));
+        // Get position of intersection and find distance
+        LatLon intersectionPos = getIntersectionPosition(intersectionID);
+        double distance = find_distance_between_two_points(std::make_pair(my_position, intersectionPos));
+        // If its closer change data to this intersection being closest
         if (distance < closestDistance) {
             closestDistance = distance;
             closestIntersection = intersectionID;
@@ -188,13 +194,12 @@ int find_closest_intersection(LatLon my_position) {
     return closestIntersection;
 }
 
-//Returns the street segments for the given intersection 
+// Returns the street segments for the given intersection 
 std::vector<int> find_street_segments_of_intersection(int intersection_id) {
     return gData.getSegsOfIntersection(intersection_id);
 }
 
-//Returns the street names at the given intersection (includes duplicate street 
-//names in returned vector)
+// Returns street names at the given intersection (includes duplicate street names) 
 std::vector<std::string> find_street_names_of_intersection(int intersection_id) {
     std::vector<std::string> streetNames;
     InfoStreetSegment SSData;
@@ -209,9 +214,8 @@ std::vector<std::string> find_street_names_of_intersection(int intersection_id) 
     return streetNames;
 }
 
-//Returns true if you can get from intersection_ids.first to intersection_ids.second using a single 
-//street segment (hint: check for 1-way streets too)
-//corner case: an intersection is considered to be connected to itself
+// Returns true if you can get from intersection_ids.first to intersection_ids.second 
+// using a single street segment (hint: check for 1-way streets too)
 bool are_directly_connected(std::pair<int, int> intersection_ids) {
     // Checks if intersection is connected to itself
     if (intersection_ids.first == intersection_ids.second) 
@@ -226,25 +230,23 @@ bool are_directly_connected(std::pair<int, int> intersection_ids) {
     return false; 
 }
 
-//Returns all intersections reachable by traveling down one street segment 
-//from given intersection (hint: you can't travel the wrong way on a 1-way street)
-//the returned vector should NOT contain duplicate intersections
+// Returns all intersections reachable by traveling down one street segment 
+// from given intersection. Does not contain duplicate intersections
 std::vector<int> find_adjacent_intersections(int intersection_id) {
     return gData.getAdjacentIntsOfIntersection(intersection_id);
 }
 
-//Returns all street segments for the given street
+// Returns all street segments for the given street
 std::vector<int> find_street_segments_of_street(int street_id) {
     return gData.getSegsOfStreet(street_id);
 }
 
-//Returns all intersections along the a given street
+// Returns all intersections along the a given street
 std::vector<int> find_intersections_of_street(int street_id) {
     return gData.getIntersectionsOfStreet(street_id);
 }
 
-//Return all intersection ids for two intersecting streets
-//This function will typically return one intersection id.
+// Return all intersection ids for two intersecting streets
 std::vector<int> find_intersections_of_two_streets(std::pair<int, int> street_ids) {
     // Get all intersections of the two streets in sorted vector
     std::vector<int> streetOne = gData.getIntersectionsOfStreet(street_ids.first); 
@@ -255,24 +257,19 @@ std::vector<int> find_intersections_of_two_streets(std::pair<int, int> street_id
     std::set_intersection(streetOne.begin(), streetOne.end(), 
                           streetTwo.begin(), streetTwo.end(), 
                           std::back_inserter(intersections)); 
-    
     return intersections;
 }
 
-//Returns all street ids corresponding to street names that start with the given prefix
-//The function should be case-insensitive to the street prefix. You should ignore spaces.
-//For example, both "bloor " and "BloOrst" are prefixes to "Bloor Street East".
-//If no street names match the given prefix, this routine returns an empty (length 0) 
-//vector.
-//You can choose what to return if the street prefix passed in is an empty (length 0) 
-//string, but your program must not crash if street_prefix is a length 0 string.
+// Returns all streetIDs corresponding to street names that start with a given prefix
+// Function is case-insensitive to the street prefix and ignores spaces.
+// For example, both "dun " and "dun d a s" are prefixes to "Dundas Street".
+// If no street names match the given prefix the function returns an empty vector
 std::vector<int> find_street_ids_from_partial_street_name(std::string street_prefix) {
     return gData.getStreetIDsFromStreetName(street_prefix);
 }
 
 //Returns the area of the given closed feature in square meters
-//Assume a non self-intersecting polygon (i.e. no holes)
-//Return 0 if this feature is not a closed polygon.
+//Returns 0 if the feature is not a closed polygon.
 double find_feature_area(int feature_id) {
     //Ensure feature is a closed polygon, else return 0
     LatLon firstPoint = getFeaturePoint(0, feature_id);
@@ -283,7 +280,6 @@ double find_feature_area(int feature_id) {
     //Find the area of the feature using the shoelace formula
     double area = 0;
     int numPoints = getFeaturePointCount(feature_id);
-    
     int j = numPoints - 1;
     for (int i = 0; i < numPoints; ++i) {
         //Get two LatLon points from the feature
@@ -304,12 +300,11 @@ double find_feature_area(int feature_id) {
         area += xDiff * yDiff;
         j = i;
     }
+    // Returns area using shoelace formula
     return abs(area / 2.0);
 }
 
 //Returns the length of the OSMWay that has the given OSMID, in meters.
-//To implement this function you will have to  access the OSMDatabaseAPI.h 
-//functions.
 double find_way_length(OSMID way_id) {
     double length = 0;
     std::vector<LatLon> nodePos;

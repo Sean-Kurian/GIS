@@ -2,8 +2,9 @@
 #define MAPDATA_H
 
 //==============================================================================
-// File Description:
-//
+// File Description: Class header of the global object used to store all data
+// needed for the map during load_map. Mutators should only be used in load_map
+// Accessors are used to get data from class outside of load_map
 //==============================================================================
 
 #include "StreetsDatabaseAPI.h"
