@@ -86,9 +86,6 @@ void getSegmentData(const unsigned& numStreetSegments) {
         gData.addSegToStreet(segIndex, SSData.streetID);
         // Calculates and stores length and travel time of segment
         gData.addLengthAndTravelTimeOfSeg(SSData, segIndex);
-        // Adds intersection to set with all intersections of a street
-        //gData.addIntersectToStreet(SSData.from, SSData.streetID);
-        //gData.addIntersectToStreet(SSData.to, SSData.streetID);
     }
 }
 
@@ -120,6 +117,7 @@ void getIntersectionData(const unsigned& numIntersections) {
             }
             streetIDs.push_back(SSData.streetID);
             if (!added)
+                // Adds intersection to vector with all intersections of a street
                 gData.addIntersectToStreet(intIndex, SSData.streetID);
         }
     }
