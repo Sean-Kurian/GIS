@@ -14,7 +14,7 @@
 //==============================================================================
 
 MapData::MapData() {
-    // Currently nothing needed as all data is gotten during load_map
+    // Currently nothing needed as all data is stored during load_map
 }
 
 // Only called on program exit
@@ -30,7 +30,7 @@ MapData::~MapData() {
     wayIndexOfOSMID.clear();
 }
 
-// Clears all structures used to store data. Used to load map without needing destructor
+// Clears all data structures. Used to load another map without needing destructor
 void MapData::clearMapData() {
     IDsOfStreetName.clear();
     segsOfStreet.clear();
@@ -111,7 +111,7 @@ void MapData::addLengthAndTravelTimeOfSeg(const InfoStreetSegment& SSData, const
     lengthOfSegment[segID] = dist;
     
     // Calculates and stores travel time
-    travelTimeOfSegment[segID] = (1 / SSData.speedLimit) * 3.6;
+    travelTimeOfSegment[segID] = dist * (1 / SSData.speedLimit) * 3.6;
 }
 
 // Adds intersectionID to a unordered_set inside a vector indexed to its streetID

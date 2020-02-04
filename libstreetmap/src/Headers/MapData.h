@@ -9,6 +9,7 @@
 
 #include "StreetsDatabaseAPI.h"
 #include "OSMDatabaseAPI.h"
+
 #include <vector>
 #include <string>
 #include <map>
