@@ -103,8 +103,8 @@ void MapData::addLengthAndTravelTimeOfSeg(const InfoStreetSegment& SSData, const
             // Else from one curve point to the next curve point
             else
                 dist += find_distance_between_two_points(std::make_pair
-                    (getStreetSegmentCurvePoint(i - 1, segID), 
-                     getStreetSegmentCurvePoint(i, segID)));       
+                        (getStreetSegmentCurvePoint(i - 1, segID), 
+                         getStreetSegmentCurvePoint(i, segID)));       
         }
     }
     // Stores distance of segment

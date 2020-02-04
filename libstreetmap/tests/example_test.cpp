@@ -25,11 +25,8 @@
 #include <map>
 #include <algorithm>
 
-TEST(ExampleTest) {
-    //This test will always pass
-    CHECK(true);
-}
-
+// Tests how the map stores its data
+// Removed comparison function that was being used on compareMap
 TEST(MapComparitorTest) {
     std::multimap<std::string, unsigned> defaultMap;
     std::multimap<std::string, unsigned> compareMap;
