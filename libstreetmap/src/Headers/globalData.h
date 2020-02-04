@@ -2,8 +2,8 @@
 #define GLOBALDATA_H
 
 //==============================================================================
-// File Description:
-//
+// File Description: Declares our global data object as extern which allows it
+// to be used in any file which has #include "globalData.h"
 //==============================================================================
 
 #include "MapData.h"
