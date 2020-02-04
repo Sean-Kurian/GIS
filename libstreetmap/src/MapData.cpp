@@ -116,7 +116,7 @@ void MapData::addLengthAndTravelTimeOfSeg(const InfoStreetSegment& SSData, const
 
 // Adds intersectionID to a unordered_set inside a vector indexed to its streetID
 void MapData::addIntersectToStreet(const IntersectionIndex& intID, const StreetIndex& streetID) {
-    intersectionsOfStreet[streetID].insert(intID);
+    intersectionsOfStreet[streetID].push_back(intID);
 }
 
 // Adds segment to vector containing all segments inside a vector indexed to its intersectionID
@@ -194,11 +194,12 @@ double MapData::getTravelTimeOfSegment(const StreetSegmentIndex& segID) const {
 
 // Returns vector containing IDs of all intersections along a street
 const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& streetID) const {
-    std::vector<int> intersections;
-    // Goes through set and adds intersection IDs to vector
-    for (const int& intID : intersectionsOfStreet[streetID])
-        intersections.push_back(intID);
-    return intersections;
+//    std::vector<int> intersections;
+//    // Goes through set and adds intersection IDs to vector
+//    for (const int& intID : intersectionsOfStreet[streetID])
+//        intersections.push_back(intID);
+//    return intersections;
+    return intersectionsOfStreet[streetID];
 }
 
 // Returns vector containing IDs of all segments at a given intersection

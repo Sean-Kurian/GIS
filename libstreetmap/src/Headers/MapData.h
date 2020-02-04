@@ -28,7 +28,7 @@ private:
     
     // Vector which stores set of all unique intersections along any street
     // Using vector for O(1) access. Using set to guarantee no duplicates
-    std::vector<std::set<int> > intersectionsOfStreet;
+    std::vector<std::vector<int> > intersectionsOfStreet;
     
     // Vector which stores the length of every segment indexed to its segmentID
     std::vector<double> lengthOfSegment;
