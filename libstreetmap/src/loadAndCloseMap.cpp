@@ -87,8 +87,8 @@ void getSegmentData(const unsigned& numStreetSegments) {
         // Calculates and stores length and travel time of segment
         gData.addLengthAndTravelTimeOfSeg(SSData, segIndex);
         // Adds intersection to set with all intersections of a street
-        gData.addIntersectToStreet(SSData.from, SSData.streetID);
-        gData.addIntersectToStreet(SSData.to, SSData.streetID);
+        //gData.addIntersectToStreet(SSData.from, SSData.streetID);
+        //gData.addIntersectToStreet(SSData.to, SSData.streetID);
     }
 }
 
@@ -96,9 +96,11 @@ void getSegmentData(const unsigned& numStreetSegments) {
 void getIntersectionData(const unsigned& numIntersections) {
     InfoStreetSegment SSData;
     for (unsigned intIndex = 0; intIndex < numIntersections; ++intIndex) {
+        std::vector<int> streetIDs; 
         // Finds and loops over all segments connected to intersection
         int numSegs = getIntersectionStreetSegmentCount(intIndex);
         for (unsigned segNum = 0; segNum < numSegs; ++segNum) {
+            bool added = false;
             StreetSegmentIndex segIndex = getIntersectionStreetSegment(intIndex, segNum);
             // Adds segment to vector containing all segments at an intersection
             gData.addSegToIntersection(segIndex, intIndex);
@@ -110,6 +112,15 @@ void getIntersectionData(const unsigned& numIntersections) {
             // If its a two way street then the other intersection must be reachable
             else if (!SSData.oneWay)
                 gData.addAdjacentIntToIntersection(SSData.from, intIndex);
+            
+            // Check if this streetID has already been added to intersectsOfStreet
+            for (const int& ID : streetIDs) {
+                if (ID == SSData.streetID)
+                    added = true;
+            }
+            streetIDs.push_back(SSData.streetID);
+            if (!added)
+                gData.addIntersectToStreet(intIndex, SSData.streetID);
         }
     }
 }
