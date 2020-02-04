@@ -23,7 +23,6 @@ private:
     std::multimap<std::string, unsigned> IDsOfStreetName;
     
     // Vector which stores all street segments of each street
-    // Using vector & set for O(1) access. Using set to guarantee no duplicates
     std::vector<std::vector<int> > segsOfStreet;
     
     // Vector which stores set of all unique intersections along any street
@@ -40,7 +39,7 @@ private:
     std::vector<std::vector<int> > segsOfIntersection;
     
     // Vector which stores all reachable intersections from an intersection in a set
-    // Using vector & set for O(1) access. Using set to guarantee no duplicates
+    // Using vector & unord set for O(1) access. Using set guarantees no duplicates
     std::vector<std::unordered_set<int> > adjacentIntsOfIntersection; 
     
     // Unordered map which stores the node indexes of OSMIDs in key, value pairs
@@ -48,7 +47,6 @@ private:
     std::unordered_map<OSMID, unsigned> nodeIndexOfOSMID;
     
     // Unordered map which stores the way indexes of OSMIDs in key, value pairs
-    // Unordered map has O(1) insertion/access. Not using vector because can't index an OSMID   
     std::unordered_map<OSMID, unsigned> wayIndexOfOSMID;
     
 public:

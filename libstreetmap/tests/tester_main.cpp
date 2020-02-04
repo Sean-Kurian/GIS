@@ -18,16 +18,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+//==============================================================================
+// File Description: Test driver to run our unit tests as we need them
+//==============================================================================
+
 #include <iostream>
 #include <unittest++/UnitTest++.h>
 
-/*
- * This is the main that drives running
- * unit tests.
- */
+
 int main(int /*argc*/, char** /*argv*/) {
     //Run the unit tests
     int num_failures = 0;
+    // Commented out because it was causing valgrind issues even on release conf
     // num_failures = UnitTest::RunAllTests();
 
      return num_failures;

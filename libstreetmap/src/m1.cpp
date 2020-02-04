@@ -20,8 +20,9 @@
  */
 
 //==============================================================================
-// File Description:
-//
+// File Description: This file implements functions which are needed to perform
+// essential operations on map data for a GIS application
+// For example: finding distance between two points
 //==============================================================================
 
 #include "m1.h"

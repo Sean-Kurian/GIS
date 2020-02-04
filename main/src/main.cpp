@@ -20,8 +20,8 @@
  */
 
 //==============================================================================
-// File Description:
-//
+// File Description: Main function for GIS application. Responsible for deciding
+// which map will be loaded and closing it when the user is done
 //==============================================================================
 
 #include <iostream>
