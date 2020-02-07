@@ -19,6 +19,7 @@ MapData gData; // Global data object used to store data in load map
 void getStreetData(const unsigned& numStreets);
 void getSegmentData(const unsigned& numStreetSegments);
 void getIntersectionData(const unsigned& numIntersections);
+void getFeatureData(const unsigned& numFeatures);
 void getLayer1Data(const unsigned& numNodes, const unsigned& numWays);
 
 // Loads layer 1 and 2 data into gData's data structures
@@ -29,6 +30,7 @@ bool load_map(std::string mapPath) {
         const unsigned numStreets = getNumStreets();
         const unsigned numSegments = getNumStreetSegments();
         const unsigned numIntersections = getNumIntersections();
+        const unsigned numFeatures = getNumFeatures();
         
         // Sizes vectors in gData to correct size to avoid indexing errors
         gData.allocStreetVecs(numStreets);
@@ -39,6 +41,7 @@ bool load_map(std::string mapPath) {
         getStreetData(numStreets);
         getSegmentData(numSegments);
         getIntersectionData(numIntersections);
+        getFeatureData(numFeatures);
     }
     // Changes "streets" to "osm" to load layer 1 data
     mapPath = std::regex_replace(mapPath, std::regex("streets"), "osm");
@@ -119,6 +122,26 @@ void getIntersectionData(const unsigned& numIntersections) {
             if (!added)
                 // Adds intersection to vector with all intersections of a street
                 gData.addIntersectToStreet(intIndex, SSData.streetID);
+        }
+    }
+}
+
+//
+void getFeatureData(const unsigned& numFeatures) {
+    LatLon location = getFeaturePoint(0, 0);
+    double minLat = location.lat();
+    double minLon = location.lon();
+    double maxLat = minLat;
+    double maxLon = minLon;
+    
+    for (unsigned featureIndex = 0; featureIndex < numFeatures; ++featureIndex) {
+        unsigned numPoints = getFeaturePointCount(featureIndex);
+        for (unsigned pointIndex = 0; pointIndex < numPoints; ++pointIndex) {
+            location = getFeaturePoint(pointIndex, featureIndex);
+            minLat = std::min(minLat, location.lat());
+            minLon = std::min(minLon, location.lon());
+            maxLat = std::max(maxLat, location.lat());
+            maxLon = std::max(maxLon, location.lon());
         }
     }
 }
