@@ -7,8 +7,8 @@
 //==============================================================================
 
 // Coordinate Functions
-inline double xFromLon(double lon);
-inline double yFromLat(double lat);
+double xFromLon(double lon);
+double yFromLat(double lat);
 
 #endif /* DRAWMAPHELPERS_H */
 

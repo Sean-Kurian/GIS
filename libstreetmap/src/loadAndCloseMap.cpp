@@ -144,6 +144,7 @@ void getFeatureData(const unsigned& numFeatures) {
             maxLon = std::max(maxLon, location.lon());
         }
     }
+    gData.addCoordData(minLat, maxLat, minLon, maxLon);
 }
 
 // Loads maps in gData which connect the node/way indexes with their OSMIDs

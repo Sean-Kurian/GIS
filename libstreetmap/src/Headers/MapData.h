@@ -45,7 +45,7 @@ private:
     std::vector<std::unordered_set<int> > adjacentIntsOfIntersection; 
     
     //
-    struct CoordData coordData;
+    CoordData coordData;
     
     // Unordered map which stores the node indexes of OSMIDs in key, value pairs
     // Unordered map has O(1) insertion/access. Not using vector because can't index an OSMID
@@ -93,8 +93,8 @@ public:
                                       const IntersectionIndex& mainIntID);
     
     //
-    void addCoordData(const unsigned& _minLon, const unsigned& _maxLon,
-                      const unsigned& _minLat, const unsigned& _maxLat);
+    void addCoordData(const double& _minLat, const double& _maxLat, 
+                      const double& _minLon, const double& _maxLon);
     
     // Adds node index (0 to numNodes) to map keyed to its OSMID
     void addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID);
@@ -130,10 +130,16 @@ public:
     double getLatAspectRatio() const;
     
     //
-    double getMaxLat() const;
+    double getMinLat() const;
     
     //
     double getMaxLon() const;
+    
+    //
+    double getAvgLat() const;
+    
+    //
+    double getAvgLon() const;
     
     // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
     unsigned getNodeIndexOfOSMID(const OSMID& nodeID) const;
