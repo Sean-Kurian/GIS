@@ -9,9 +9,11 @@
 
 // Coordinate Functions
 double xFromLon(double lon) {
-    return EARTH_RADIUS_METERS * (DEGREE_TO_RADIAN * lon) * gData.getLatAspectRatio();
+    double lonRelative = (lon - gData.getAvgLon()) * DEGREE_TO_RADIAN;
+    return EARTH_RADIUS_METERS * lonRelative * gData.getLatAspectRatio();
 }
 
 double yFromLat(double lat) {
-    return EARTH_RADIUS_METERS * (DEGREE_TO_RADIAN * lat);
+    double latRelative = (lat - gData.getAvgLat()) * DEGREE_TO_RADIAN;
+    return EARTH_RADIUS_METERS * latRelative;
 }

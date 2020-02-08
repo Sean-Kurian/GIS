@@ -132,14 +132,15 @@ void MapData::addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntI
 }
 
 //
-void MapData::addCoordData(const unsigned& _minLon, const unsigned& _maxLon,
-                           const unsigned& _minLat, const unsigned& _maxLat) {
-    coordData.minLon = _minLon;
-    coordData.maxLon = _maxLon;
+void MapData::addCoordData(const double& _minLat, const double& _maxLat, 
+                           const double& _minLon, const double& _maxLon) {
     coordData.minLat = _minLat;
     coordData.maxLat = _maxLat;
-    coordData.latAvg = (_minLat + _maxLat) * 0.5;
-    coordData.latAspectRatio = cos(coordData.latAvg * DEGREE_TO_RADIAN);
+    coordData.minLon = _minLon;
+    coordData.maxLon = _maxLon;
+    coordData.avgLat = (_minLat + _maxLat) * 0.5;
+    coordData.avgLon = (_minLon + _maxLon) * 0.5;
+    coordData.latAspectRatio = cos(coordData.avgLat * DEGREE_TO_RADIAN);
 }
 
 // Adds node index (0 to numNodes) to map keyed to its OSMID
@@ -229,13 +230,23 @@ double MapData::getLatAspectRatio() const {
 }
 
 //
-double MapData::getMaxLat() const {
-    return coordData.maxLat;
+double MapData::getMinLat() const {
+    return coordData.minLat;
 }
 
 //
 double MapData::getMaxLon() const {
     return coordData.maxLon;
+}
+
+//
+double MapData::getAvgLat() const {
+    return coordData.avgLat;
+}
+
+//
+double MapData::getAvgLon() const {
+    return coordData.avgLon;
 }
 
 // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
