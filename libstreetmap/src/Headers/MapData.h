@@ -9,6 +9,7 @@
 
 #include "StreetsDatabaseAPI.h"
 #include "OSMDatabaseAPI.h"
+#include "CoordData.h"
 
 #include <vector>
 #include <string>
@@ -42,6 +43,9 @@ private:
     // Vector which stores all reachable intersections from an intersection in a set
     // Using vector & unord set for O(1) access. Using set guarantees no duplicates
     std::vector<std::unordered_set<int> > adjacentIntsOfIntersection; 
+    
+    //
+    struct CoordData coordData;
     
     // Unordered map which stores the node indexes of OSMIDs in key, value pairs
     // Unordered map has O(1) insertion/access. Not using vector because can't index an OSMID
@@ -88,6 +92,10 @@ public:
     void addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
                                       const IntersectionIndex& mainIntID);
     
+    //
+    void addCoordData(const unsigned& _minLon, const unsigned& _maxLon,
+                      const unsigned& _minLat, const unsigned& _maxLat);
+    
     // Adds node index (0 to numNodes) to map keyed to its OSMID
     void addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID);
     
@@ -117,6 +125,15 @@ public:
     
     // Returns vector containing IDs of all intersections reachable from a given intersection
     const std::vector<int> getAdjacentIntsOfIntersection(const IntersectionIndex& intID) const;
+    
+    //
+    double getLatAspectRatio() const;
+    
+    //
+    double getMaxLat() const;
+    
+    //
+    double getMaxLon() const;
     
     // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
     unsigned getNodeIndexOfOSMID(const OSMID& nodeID) const;

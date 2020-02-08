@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <cmath>
 
 //==============================================================================
 // Constructors / Destructors
@@ -130,6 +131,17 @@ void MapData::addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntI
     adjacentIntsOfIntersection[mainIntID].insert(adjacentIntID);
 }
 
+//
+void MapData::addCoordData(const unsigned& _minLon, const unsigned& _maxLon,
+                           const unsigned& _minLat, const unsigned& _maxLat) {
+    coordData.minLon = _minLon;
+    coordData.maxLon = _maxLon;
+    coordData.minLat = _minLat;
+    coordData.maxLat = _maxLat;
+    coordData.latAvg = (_minLat + _maxLat) * 0.5;
+    coordData.latAspectRatio = cos(coordData.latAvg * DEGREE_TO_RADIAN);
+}
+
 // Adds node index (0 to numNodes) to map keyed to its OSMID
 void MapData::addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID) {
     nodeIndexOfOSMID.insert(std::make_pair(nodeID, nodeIndex));
@@ -194,11 +206,6 @@ double MapData::getTravelTimeOfSegment(const StreetSegmentIndex& segID) const {
 
 // Returns vector containing IDs of all intersections along a street
 const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& streetID) const {
-//    std::vector<int> intersections;
-//    // Goes through set and adds intersection IDs to vector
-//    for (const int& intID : intersectionsOfStreet[streetID])
-//        intersections.push_back(intID);
-//    return intersections;
     return intersectionsOfStreet[streetID];
 }
 
@@ -214,6 +221,21 @@ const std::vector<int> MapData::getAdjacentIntsOfIntersection(const Intersection
     for (const int& adjIntID : adjacentIntsOfIntersection[intID])
         adjIntersections.push_back(adjIntID);
     return adjIntersections;
+}
+
+//
+double MapData::getLatAspectRatio() const {
+    return coordData.latAspectRatio;
+}
+
+//
+double MapData::getMaxLat() const {
+    return coordData.maxLat;
+}
+
+//
+double MapData::getMaxLon() const {
+    return coordData.maxLon;
 }
 
 // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
