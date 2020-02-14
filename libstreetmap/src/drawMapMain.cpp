@@ -8,6 +8,7 @@
 #include "StreetsDatabaseAPI.h"
 #include "globalData.h"
 #include "drawMapHelpers.h"
+#include "mouseAndKBCtrl.h"
 
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"
@@ -17,7 +18,6 @@
 void drawMainCanvas(ezgl::renderer* rend);
 void drawFeatures(ezgl::renderer* rend);
 ezgl::color getColour(FeatureType type);
-
 
 //
 void draw_map() {
@@ -34,7 +34,7 @@ void draw_map() {
     
     application.add_canvas("MainCanvas", drawMainCanvas, mapCoords);
     
-    application.run(nullptr, nullptr, nullptr, nullptr);
+    application.run(nullptr, actOnMousePress, nullptr, nullptr);
 }
 
 //

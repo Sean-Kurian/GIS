@@ -1,6 +1,6 @@
 //==============================================================================
 // File Description: This file implements the load_map and close_map functions
-// along with some sub-functions that they used. These are used to load all the
+// along with some sub-functions that they use. These are used to load all the
 // map data that we need into data structures in the global data object
 // Close map clears these structures which allows us to open another map
 //==============================================================================
