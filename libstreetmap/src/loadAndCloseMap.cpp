@@ -89,6 +89,8 @@ void getSegmentData(const unsigned& numStreetSegments) {
         gData.addSegToStreet(segIndex, SSData.streetID);
         // Calculates and stores length and travel time of segment
         gData.addLengthAndTravelTimeOfSeg(SSData, segIndex);
+        //
+        gData.addSegToWayOSMID(segIndex, SSData.wayOSMID);
     }
 }
 

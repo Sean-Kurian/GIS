@@ -10,6 +10,7 @@
 #include "StreetsDatabaseAPI.h"
 #include "OSMDatabaseAPI.h"
 #include "CoordData.h"
+#include "streetTypes.h"
 
 #include <vector>
 #include <string>
@@ -46,6 +47,12 @@ private:
     
     //
     CoordData coordData;
+    
+    //
+    std::unordered_map<OSMID, std::vector<int> > segsOfWayOSMID;
+    
+    //
+    std::vector<std::vector<int> > segsOfStreetType;
     
     // Unordered map which stores the node indexes of OSMIDs in key, value pairs
     // Unordered map has O(1) insertion/access. Not using vector because can't index an OSMID
@@ -96,6 +103,9 @@ public:
     void addCoordData(const double& _minLat, const double& _maxLat, 
                       const double& _minLon, const double& _maxLon);
     
+    //
+    void addSegToWayOSMID(const StreetSegmentIndex& segID, const OSMID& wayID);
+    
     // Adds node index (0 to numNodes) to map keyed to its OSMID
     void addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID);
     
@@ -109,7 +119,7 @@ public:
     const std::vector<int> getStreetIDsFromStreetName(std::string name) const;
     
     // Returns a vector containing IDs of all segments along a street
-    const std::vector<int> getSegsOfStreet(const StreetIndex& streetID) const;
+    const std::vector<int>& getSegsOfStreet(const StreetIndex& streetID) const;
     
     // Returns length of a given segment
     double getLengthOfSegment(const StreetSegmentIndex& segID) const;
@@ -121,7 +131,7 @@ public:
     const std::vector<int> getIntersectionsOfStreet(const StreetIndex& streetID) const;
     
     // Returns vector containing IDs of all segments at a given intersection
-    const std::vector<int> getSegsOfIntersection(const IntersectionIndex& intID) const;
+    const std::vector<int>& getSegsOfIntersection(const IntersectionIndex& intID) const;
     
     // Returns vector containing IDs of all intersections reachable from a given intersection
     const std::vector<int> getAdjacentIntsOfIntersection(const IntersectionIndex& intID) const;
@@ -129,19 +139,20 @@ public:
     //
     double getLatAspectRatio() const;
     
-    //
+    // Return the min or max latitude
     double getMinLat() const;
     double getMaxLat() const;
     
-    //
+    // Return the min or max longitude
     double getMinLon() const;
     double getMaxLon() const;
     
-    //
+    // Return the average latitude or longitude
     double getAvgLat() const;
+    double getAvgLon() const;
     
     //
-    double getAvgLon() const;
+    const std::vector<int> getSegsOfWayOSMID(const OSMID& wayID);
     
     // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
     unsigned getNodeIndexOfOSMID(const OSMID& nodeID) const;

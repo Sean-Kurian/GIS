@@ -29,6 +29,7 @@ MapData::~MapData() {
     adjacentIntsOfIntersection.clear();
     nodeIndexOfOSMID.clear();
     wayIndexOfOSMID.clear();
+    segsOfWayOSMID.clear();
 }
 
 // Clears all data structures. Used to load another map without needing destructor
@@ -42,6 +43,7 @@ void MapData::clearMapData() {
     adjacentIntsOfIntersection.clear();
     nodeIndexOfOSMID.clear();
     wayIndexOfOSMID.clear();
+    segsOfWayOSMID.clear();
 }
 
 //==============================================================================
@@ -143,6 +145,17 @@ void MapData::addCoordData(const double& _minLat, const double& _maxLat,
     coordData.latAspectRatio = cos(coordData.avgLat * DEGREE_TO_RADIAN);
 }
 
+//
+void MapData::addSegToWayOSMID(const StreetSegmentIndex& segID, const OSMID& wayID) {
+    const auto itr = segsOfWayOSMID.find(wayID);
+    if (itr == segsOfWayOSMID.end()) {
+        std::vector<int> segs{ segID };
+        segsOfWayOSMID.insert(std::make_pair(wayID, segs));
+    }
+    else 
+        itr->second.push_back(segID);
+}
+
 // Adds node index (0 to numNodes) to map keyed to its OSMID
 void MapData::addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID) {
     nodeIndexOfOSMID.insert(std::make_pair(nodeID, nodeIndex));
@@ -191,7 +204,7 @@ const std::vector<int> MapData::getStreetIDsFromStreetName(std::string name) con
 }
 
 // Returns a vector containing IDs of all segments along a street
-const std::vector<int> MapData::getSegsOfStreet(const StreetIndex& streetID) const {
+const std::vector<int>& MapData::getSegsOfStreet(const StreetIndex& streetID) const {
     return segsOfStreet[streetID];
 }
 
@@ -211,7 +224,7 @@ const std::vector<int> MapData::getIntersectionsOfStreet(const StreetIndex& stre
 }
 
 // Returns vector containing IDs of all segments at a given intersection
-const std::vector<int> MapData::getSegsOfIntersection(const IntersectionIndex& intID) const {
+const std::vector<int>& MapData::getSegsOfIntersection(const IntersectionIndex& intID) const {
     return segsOfIntersection[intID];
 }
 
@@ -229,34 +242,40 @@ double MapData::getLatAspectRatio() const {
     return coordData.latAspectRatio;
 }
 
-//
+// Functions to return the min or max latitude
 double MapData::getMinLat() const {
     return coordData.minLat;
 }
-
-//
 double MapData::getMaxLat() const {
     return coordData.maxLat;
 }
 
-//
+// Functions to return the min or max longitude
 double MapData::getMinLon() const {
     return coordData.minLon;
 }
-
-//
 double MapData::getMaxLon() const {
     return coordData.maxLon;
 }
 
-//
+// Functions to return the average latitude or longitude
 double MapData::getAvgLat() const {
     return coordData.avgLat;
 }
-
-//
 double MapData::getAvgLon() const {
     return coordData.avgLon;
+}
+
+//
+const std::vector<int> MapData::getSegsOfWayOSMID(const OSMID& wayID) {
+    const auto itr = segsOfWayOSMID.find(wayID);
+    if (itr != segsOfWayOSMID.end())
+        return itr->second;
+    else {
+        std::cerr << "No segments found with way OSMID " << wayID << "\n";
+        std::vector<int> emptyVec;
+        return emptyVec;
+    }
 }
 
 // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
@@ -277,7 +296,7 @@ unsigned MapData::getWayIndexOfOSMID(const OSMID& wayID) const {
     const auto mapItr = wayIndexOfOSMID.find(wayID);
     // If no OSMID match is found the itr will point to end
     if (mapItr == wayIndexOfOSMID.end()) {
-        std::cerr << "No node found with OSMID " << wayID << "\n";
+        std::cerr << "No way found with OSMID " << wayID << "\n";
         return 0;
     }
     // Found a valid OSMID. Return the way index of the OSMID
