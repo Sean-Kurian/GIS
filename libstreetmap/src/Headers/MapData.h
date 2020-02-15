@@ -131,8 +131,10 @@ public:
     
     //
     double getMinLat() const;
+    double getMaxLat() const;
     
     //
+    double getMinLon() const;
     double getMaxLon() const;
     
     //
