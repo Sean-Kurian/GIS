@@ -231,7 +231,17 @@ double MapData::getLatAspectRatio() const {
 
 //
 double MapData::getMinLat() const {
+    return coordData.minLat;
+}
+
+//
+double MapData::getMaxLat() const {
     return coordData.maxLat;
+}
+
+//
+double MapData::getMinLon() const {
+    return coordData.minLon;
 }
 
 //

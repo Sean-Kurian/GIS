@@ -26,10 +26,13 @@ void draw_map() {
     settings.canvas_identifier = "MainCanvas";  
     ezgl::application application(settings); 
     
-    std::cout << "MinLat / MaxLon: " << gData.getMinLat() << " " << gData.getMaxLon() << "\n";
-    ezgl::point2d maxPt(xFromLon(gData.getMaxLon()), yFromLat(gData.getMinLat()));
+    std::cout << "MinLat / MaxLat: " << gData.getMinLat() << " " << gData.getMaxLat() << "\n";
+    std::cout << "MinLon / MaxLon: " << gData.getMinLon() << " " << gData.getMaxLon() << "\n";
+    ezgl::point2d minPt(xFromLon(gData.getMinLon()), yFromLat(gData.getMinLat()));
+    ezgl::point2d maxPt(xFromLon(gData.getMaxLon()), yFromLat(gData.getMaxLat()));
+    std::cout << "Min point: " << minPt.x << " " << minPt.y << "\n";
     std::cout << "Max point: " << maxPt.x << " " << maxPt.y << "\n";
-    ezgl::rectangle mapCoords{ {0, 0}, maxPt };
+    ezgl::rectangle mapCoords{ minPt, maxPt };
     
     application.add_canvas("MainCanvas", drawMainCanvas, mapCoords);
     
