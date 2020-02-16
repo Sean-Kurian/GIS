@@ -49,7 +49,7 @@ private:
     CoordData coordData;
     
     //
-    std::vector<std::vector<int> > segsOfStreetType;
+    std::vector<std::vector<std::pair<int, unsigned> > > segsOfStreetType;
     
     //
     std::unordered_map<OSMID, std::vector<int> > segsOfWayOSMID;
@@ -104,7 +104,8 @@ public:
                       const double& _minLon, const double& _maxLon);
     
     //
-    void addSegToStreetType(const StreetSegmentIndex& segID, const roadType& type);
+    void addSegToStreetType(const StreetSegmentIndex& segID, const unsigned& numLanes, 
+                            const roadType& type);
     
     //
     void addSegToWayOSMID(const StreetSegmentIndex& segID, const OSMID& wayID);
@@ -155,7 +156,7 @@ public:
     double getAvgLon() const;
     
     //
-    const std::vector<int>& getSegsOfStreetType(const roadType& type) const;
+    const std::vector<std::pair<int, unsigned> >& getSegsOfStreetType(const roadType& type) const;
     
     //
     const std::vector<int> getSegsOfWayOSMID(const OSMID& wayID) const;

@@ -147,8 +147,9 @@ void MapData::addCoordData(const double& _minLat, const double& _maxLat,
 }
 
 //
-void MapData::addSegToStreetType(const StreetSegmentIndex& segID, const roadType& type) {
-    segsOfStreetType[type].push_back(segID);
+void MapData::addSegToStreetType(const StreetSegmentIndex& segID, const unsigned& numLanes, 
+                                 const roadType& type) {
+    segsOfStreetType[type].push_back(std::make_pair(segID, numLanes));
 }
 
 //
@@ -273,7 +274,7 @@ double MapData::getAvgLon() const {
 }
 
 //
-const std::vector<int>& MapData::getSegsOfStreetType(const roadType& type) const {
+const std::vector<std::pair<int, unsigned> >& MapData::getSegsOfStreetType(const roadType& type) const {
     return segsOfStreetType[type];
 }
 

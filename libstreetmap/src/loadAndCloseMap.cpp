@@ -159,22 +159,25 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays) {
         node = getNodeByIndex(nodeIndex);
         gData.addNodeIndexToOSMID(nodeIndex, node->id());
     }
-    // Loops over all nodes and stores their index with their OSMID
+    // Loops over all ways 
     for (unsigned wayIndex = 0; wayIndex < numWays; ++wayIndex) {
         way = getWayByIndex(wayIndex);
+        // Stores way's index with its OSMID
         gData.addWayIndexToOSMID(wayIndex, way->id());
+        std::vector<int> segs = gData.getSegsOfWayOSMID(way->id());
+        unsigned numLanes = 2;
+        roadType type;
         
         for (unsigned tagNum = 0; tagNum < getTagCount(way); ++tagNum) {
             std::string key, val;
             std::tie(key, val) = getTagPair(way, tagNum);
-            if (key == "highway") {
-                roadType type = determineRoadType(val);
-                std::vector<int> segs = gData.getSegsOfWayOSMID(way->id());
-                for (const int segIndex : segs)
-                    gData.addSegToStreetType(segIndex, type);
-                
-            }
+            if (key == "lanes") 
+                numLanes = std::stoi(val);
+            else if (key == "highway") 
+                type = determineRoadType(val);
         }
+        for (const int segIndex : segs)
+            gData.addSegToStreetType(segIndex, numLanes, type);
     }
 }
 
