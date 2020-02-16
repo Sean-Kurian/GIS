@@ -43,7 +43,7 @@ void drawFeatures(ezgl::renderer* rend) {
             if (points.front() == points.back())
                 rend->fill_poly(points);
             else
-                for (unsigned i = 0; i < points.size() - 1; ++i)
+                for (unsigned i = 0; i < points.size() - 1; ++i) 
                     rend->draw_line(points[i], points[i + 1]);
         }
     }

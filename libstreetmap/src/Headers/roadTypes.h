@@ -15,5 +15,7 @@ enum roadType {
     TYPECOUNT
 };
 
+roadType determineRoadType(const std::string& val);
+
 #endif /* STREETTYPES_H */
 

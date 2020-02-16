@@ -23,8 +23,6 @@ void getIntersectionData(const unsigned& numIntersections);
 void getFeatureData(const unsigned& numFeatures);
 void getLayer1Data(const unsigned& numNodes, const unsigned& numWays);
 
-roadType determineRoadType(const std::string& val);
-
 // Loads layer 1 and 2 data into gData's data structures
 bool load_map(std::string mapPath) {
     bool loadSuccessful = loadStreetsDatabaseBIN(mapPath);
