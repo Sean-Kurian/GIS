@@ -6,17 +6,18 @@
 #include "drawMapObjects.h"
 #include "drawMapHelpers.h"
 
-void drawStreets(ezgl::renderer* rend, const roadType& type) {
+void drawStreets(ezgl::renderer* rend, const roadType& type, const unsigned& roadWidth) {
     rend->set_color(getRoadColour(type));
-    std::vector<int> segs = gData.getSegsOfStreetType(type);
+    std::vector<std::pair<int, unsigned> > segs = gData.getSegsOfStreetType(type);
     ezgl::point2d fromPos(0, 0), toPos(0, 0);
-    for (const int SSIndex : segs) {
-        InfoStreetSegment SSData = getInfoStreetSegment(SSIndex);
+    for (const auto SSIndex : segs) {
+        rend->set_line_width(roadWidth * SSIndex.second);
+        InfoStreetSegment SSData = getInfoStreetSegment(SSIndex.first);
         unsigned numCurves = SSData.curvePointCount;
         LatLon intPos = getIntersectionPosition(SSData.from);
         fromPos = ezgl::point2d(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
         for (unsigned curveIndex = 0; curveIndex < numCurves; ++curveIndex) {
-            LatLon curvePos = getStreetSegmentCurvePoint(curveIndex, SSIndex);
+            LatLon curvePos = getStreetSegmentCurvePoint(curveIndex, SSIndex.first);
             toPos = ezgl::point2d(xFromLon(curvePos.lon()), yFromLat(curvePos.lat()));
             rend->draw_line(fromPos, toPos);
             fromPos = toPos;
@@ -55,23 +56,23 @@ ezgl::color getFeatureColour(const FeatureType& type) {
         case Unknown:
             return ezgl::RED;
         case Park:
-            return ezgl::color(0xcb, 0xe6, 0xa3);
+            return ezgl::color(0xCB, 0xE6, 0xA3);
         case Beach:
             return ezgl::YELLOW;
         case Lake:
-            return ezgl::color(0xa2, 0xcd, 0xfc);
+            return ezgl::color(0xA2, 0xCD, 0xFC);
         case River:
-            return ezgl::color(0xa2, 0xecd, 0xfc);
+            return ezgl::color(0xA2, 0xCD, 0xFC);
         case Island:
-            return ezgl::color(0x8a, 0xc7, 0x63);
+            return ezgl::color(0x8A, 0xC7, 0x63);
         case Building:
-            return ezgl::color(0xeb, 0xe7, 0xdf);
+            return ezgl::color(0xEB, 0xE7, 0xDF);
         case Greenspace:
-            return ezgl::color(0xcb, 0xe6, 0xa3);
+            return ezgl::color(0xCB, 0xE6, 0xA3);
         case Golfcourse:
-            return ezgl::color(0xcb, 0xe6, 0xa3);
+            return ezgl::color(0xCB, 0xE6, 0xA3);
         case Stream:
-            return ezgl::color(0xa2, 0xecd, 0xfc);
+            return ezgl::color(0xA2, 0xCD, 0xFC);
         default:
             std::cerr << "Error: No matching feature type\n";
     }
@@ -81,11 +82,11 @@ ezgl::color getFeatureColour(const FeatureType& type) {
 ezgl::color getRoadColour(const roadType& type) {
     switch (type) {
         case highway:
-            return ezgl::color(0xff, 0xf1, 0xba);
+            return ezgl::color(0xFF, 0xF1, 0xBA);
         case majorRoad:
-            return ezgl::color(0xff, 0xff, 0xff);
+            return ezgl::color(0xFF, 0xFF, 0xFF);
         case minorRoad:
-            return ezgl::color(0xc4, 0xc4, 0xc4);
+            return ezgl::color(0xC4, 0xC4, 0xC4);
         case trail:
             return ezgl::BLACK;
         case path:
