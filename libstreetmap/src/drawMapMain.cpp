@@ -41,15 +41,15 @@ void draw_map() {
 
 //
 void drawMainCanvas(ezgl::renderer* rend) {
-    rend->set_color(0xE8, 0xE8, 0xE8);
+    rend->set_color(0xE0, 0xE0, 0xE0);
     rend->fill_rectangle(rend->get_visible_world());
     rend->set_line_cap(ezgl::line_cap::round);
     rend->set_line_width(10);
     drawFeatures(rend);
 
-    drawStreets(rend, roadType::minorRoad, 2);
+    drawStreets(rend, roadType::minorRoad, 4);
 
-    drawStreets(rend, roadType::majorRoad, 4);
+    drawStreets(rend, roadType::majorRoad, 5);
 
     drawStreets(rend, roadType::highway, 6);
 }
