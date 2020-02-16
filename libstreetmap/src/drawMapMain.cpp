@@ -42,7 +42,12 @@ void draw_map() {
 //
 void drawMainCanvas(ezgl::renderer* rend) {
     rend->set_line_cap(ezgl::line_cap::round);
-    drawStreets(rend);
+    rend->set_line_width(3);
+    drawStreets(rend, roadType::minorRoad);
+    rend->set_line_width(5);
+    drawStreets(rend, roadType::majorRoad);
+    rend->set_line_width(7);
+    drawStreets(rend, roadType::highway);
     drawFeatures(rend);
 }
 

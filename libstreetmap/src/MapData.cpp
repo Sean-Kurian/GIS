@@ -54,6 +54,7 @@ void MapData::clearMapData() {
 void MapData::allocStreetVecs(const unsigned& numStreets) {
     segsOfStreet.resize(numStreets);
     intersectionsOfStreet.resize(numStreets);
+    segsOfStreetType.resize(roadType::TYPECOUNT);
 }
 
 // Sizes segment vectors to their appropriate size to avoid out of index access
@@ -143,6 +144,11 @@ void MapData::addCoordData(const double& _minLat, const double& _maxLat,
     coordData.avgLat = (_minLat + _maxLat) * 0.5;
     coordData.avgLon = (_minLon + _maxLon) * 0.5;
     coordData.latAspectRatio = cos(coordData.avgLat * DEGREE_TO_RADIAN);
+}
+
+//
+void MapData::addSegToStreetType(const StreetSegmentIndex& segID, const roadType& type) {
+    segsOfStreetType[type].push_back(segID);
 }
 
 //
@@ -267,7 +273,12 @@ double MapData::getAvgLon() const {
 }
 
 //
-const std::vector<int> MapData::getSegsOfWayOSMID(const OSMID& wayID) {
+const std::vector<int>& MapData::getSegsOfStreetType(const roadType& type) const {
+    return segsOfStreetType[type];
+}
+
+//
+const std::vector<int> MapData::getSegsOfWayOSMID(const OSMID& wayID) const {
     const auto itr = segsOfWayOSMID.find(wayID);
     if (itr != segsOfWayOSMID.end())
         return itr->second;
