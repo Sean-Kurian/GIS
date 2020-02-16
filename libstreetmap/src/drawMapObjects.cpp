@@ -59,9 +59,9 @@ ezgl::color getFeatureColour(const FeatureType& type) {
         case Beach:
             return ezgl::YELLOW;
         case Lake:
-            return ezgl::color(0xa2, 0xecd, 0xfc);
+            return ezgl::color(0xa2, 0xcd, 0xfc);
         case River:
-            ezgl::color(0xa2, 0xecd, 0xfc);
+            return ezgl::color(0xa2, 0xecd, 0xfc);
         case Island:
             return ezgl::color(0x8a, 0xc7, 0x63);
         case Building:
