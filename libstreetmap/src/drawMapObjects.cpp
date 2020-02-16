@@ -6,11 +6,11 @@
 #include "drawMapObjects.h"
 #include "drawMapHelpers.h"
 
-void drawStreets(ezgl::renderer* rend) {
-    rend->set_line_width(7);
-    rend->set_color(ezgl::GREY_75);
+void drawStreets(ezgl::renderer* rend, const roadType& type) {
+    rend->set_color(getRoadColour(type));
+    std::vector<int> segs = gData.getSegsOfStreetType(type);
     ezgl::point2d fromPos(0, 0), toPos(0, 0);
-    for (unsigned SSIndex = 0; SSIndex < getNumStreetSegments(); ++SSIndex) {
+    for (const int SSIndex : segs) {
         InfoStreetSegment SSData = getInfoStreetSegment(SSIndex);
         unsigned numCurves = SSData.curvePointCount;
         LatLon intPos = getIntersectionPosition(SSData.from);
@@ -30,7 +30,7 @@ void drawStreets(ezgl::renderer* rend) {
 void drawFeatures(ezgl::renderer* rend) {
     rend->set_line_width(4);
     for (unsigned featureIndex = 0; featureIndex < getNumFeatures(); ++featureIndex) {
-        rend->set_color(getColour(getFeatureType((featureIndex))));
+        rend->set_color(getFeatureColour(getFeatureType((featureIndex))));
         LatLon pointLL;
         std::vector<ezgl::point2d> points;
         unsigned numPoints = getFeaturePointCount(featureIndex);
@@ -50,7 +50,7 @@ void drawFeatures(ezgl::renderer* rend) {
 }
 
 //
-ezgl::color getColour(FeatureType type) {
+ezgl::color getFeatureColour(const FeatureType& type) {
     switch (type) {
         case Unknown:
             return ezgl::RED;
@@ -73,7 +73,25 @@ ezgl::color getColour(FeatureType type) {
         case Stream:
             return ezgl::LIGHT_SKY_BLUE;
         default:
-            std::cerr << "Error: No matching type. Fix yo shit\n";
+            std::cerr << "Error: No matching feature type\n";
+    }
+    return ezgl::RED;
+}
+
+ezgl::color getRoadColour(const roadType& type) {
+    switch (type) {
+        case highway:
+            return ezgl::YELLOW;
+        case majorRoad:
+            return ezgl::GREY_75;
+        case minorRoad:
+            return ezgl::GREY_55;
+        case trail:
+            return ezgl::BLACK;
+        case path:
+            return ezgl::BLACK;
+        default:
+            std::cerr << "Error: no matching street type\n";
     }
     return ezgl::RED;
 }

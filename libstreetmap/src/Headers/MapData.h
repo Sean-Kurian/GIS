@@ -10,7 +10,7 @@
 #include "StreetsDatabaseAPI.h"
 #include "OSMDatabaseAPI.h"
 #include "CoordData.h"
-#include "streetTypes.h"
+#include "roadTypes.h"
 
 #include <vector>
 #include <string>
@@ -49,10 +49,10 @@ private:
     CoordData coordData;
     
     //
-    std::unordered_map<OSMID, std::vector<int> > segsOfWayOSMID;
+    std::vector<std::vector<int> > segsOfStreetType;
     
     //
-    std::vector<std::vector<int> > segsOfStreetType;
+    std::unordered_map<OSMID, std::vector<int> > segsOfWayOSMID;
     
     // Unordered map which stores the node indexes of OSMIDs in key, value pairs
     // Unordered map has O(1) insertion/access. Not using vector because can't index an OSMID
@@ -104,6 +104,9 @@ public:
                       const double& _minLon, const double& _maxLon);
     
     //
+    void addSegToStreetType(const StreetSegmentIndex& segID, const roadType& type);
+    
+    //
     void addSegToWayOSMID(const StreetSegmentIndex& segID, const OSMID& wayID);
     
     // Adds node index (0 to numNodes) to map keyed to its OSMID
@@ -152,7 +155,10 @@ public:
     double getAvgLon() const;
     
     //
-    const std::vector<int> getSegsOfWayOSMID(const OSMID& wayID);
+    const std::vector<int>& getSegsOfStreetType(const roadType& type) const;
+    
+    //
+    const std::vector<int> getSegsOfWayOSMID(const OSMID& wayID) const;
     
     // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
     unsigned getNodeIndexOfOSMID(const OSMID& nodeID) const;

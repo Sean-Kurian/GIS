@@ -9,6 +9,7 @@
 #include "StreetsDatabaseAPI.h"
 #include "OSMDatabaseAPI.h"
 #include "globalData.h"
+#include "roadTypes.h"
 
 #include <algorithm>
 #include <regex>
@@ -21,6 +22,8 @@ void getSegmentData(const unsigned& numStreetSegments);
 void getIntersectionData(const unsigned& numIntersections);
 void getFeatureData(const unsigned& numFeatures);
 void getLayer1Data(const unsigned& numNodes, const unsigned& numWays);
+
+roadType determineRoadType(const std::string& val);
 
 // Loads layer 1 and 2 data into gData's data structures
 bool load_map(std::string mapPath) {
@@ -162,5 +165,39 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays) {
     for (unsigned wayIndex = 0; wayIndex < numWays; ++wayIndex) {
         way = getWayByIndex(wayIndex);
         gData.addWayIndexToOSMID(wayIndex, way->id());
+        
+        for (unsigned tagNum = 0; tagNum < getTagCount(way); ++tagNum) {
+            std::string key, val;
+            std::tie(key, val) = getTagPair(way, tagNum);
+            if (key == "highway") {
+                roadType type = determineRoadType(val);
+                std::vector<int> segs = gData.getSegsOfWayOSMID(way->id());
+                for (const int segIndex : segs)
+                    gData.addSegToStreetType(segIndex, type);
+                
+            }
+        }
     }
+}
+
+roadType determineRoadType(const std::string& val) {
+    if (val == "residential" || val == "unclassified" || val == "living_street"
+            || val == "service" || val == "road")
+        return roadType::minorRoad;
+    
+    else if (val == "secondary" || val == "tertiary" || val == "secondary_link"  
+            || val == "tertiary_link")
+        return roadType::majorRoad;
+    
+    else if (val == "motorway" || val == "trunk" || val == "primary" || val == "motorway_link" 
+            || val == "trunk_link" || val == "primary_link")
+        return roadType::highway;
+    
+    else if (val == "track" || val == "path")
+        return roadType::trail;
+    
+    else if (val == "pedestrian" || val == "footway" || val == "steps")
+        return roadType::path;
+    
+    return roadType::minorRoad;
 }

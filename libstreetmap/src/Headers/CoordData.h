@@ -1,6 +1,11 @@
 #ifndef COORDDATA_H
 #define COORDDATA_H
 
+//==============================================================================
+// File Description: 
+//
+//==============================================================================
+
 struct CoordData {
     CoordData() : minLat(0), minLon(0), maxLat(0), maxLon(0), 
                   avgLat(0), avgLon(0), latAspectRatio(0) { }
