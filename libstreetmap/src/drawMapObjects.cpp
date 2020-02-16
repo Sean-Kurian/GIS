@@ -58,7 +58,7 @@ ezgl::color getFeatureColour(const FeatureType& type) {
         case Park:
             return ezgl::color(0xCB, 0xE6, 0xA3);
         case Beach:
-            return ezgl::YELLOW;
+            return ezgl::color(0xFF, 0xEF, 0xC3);
         case Lake:
             return ezgl::color(0xA2, 0xCD, 0xFC);
         case River:
@@ -66,7 +66,7 @@ ezgl::color getFeatureColour(const FeatureType& type) {
         case Island:
             return ezgl::color(0x8A, 0xC7, 0x63);
         case Building:
-            return ezgl::color(0xF5, 0xF1, 0xE9);
+            return ezgl::color(0x84, 0x94, 0xA4);
         case Greenspace:
             return ezgl::color(0xCB, 0xE6, 0xA3);
         case Golfcourse:
@@ -86,7 +86,7 @@ ezgl::color getRoadColour(const roadType& type) {
         case majorRoad:
             return ezgl::color(0xFF, 0xFF, 0xFF);
         case minorRoad:
-            return ezgl::color(0xC4, 0xC4, 0xC4);
+            return ezgl::color(0xF2, 0xF2, 0xF2);
         case trail:
             return ezgl::BLACK;
         case path:
