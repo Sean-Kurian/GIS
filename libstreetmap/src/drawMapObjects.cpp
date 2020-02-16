@@ -83,9 +83,9 @@ ezgl::color getRoadColour(const roadType& type) {
         case highway:
             return ezgl::color(0xff, 0xf1, 0xba);
         case majorRoad:
-            return ezgl::color(0xe8, 0xe8, 0xe8);
+            return ezgl::color(0xff, 0xff, 0xff);
         case minorRoad:
-            return ezgl::color(0xe8, 0xe8, 0xe8);
+            return ezgl::color(0xc4, 0xc4, 0xc4);
         case trail:
             return ezgl::BLACK;
         case path:
