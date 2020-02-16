@@ -66,7 +66,7 @@ ezgl::color getFeatureColour(const FeatureType& type) {
         case Island:
             return ezgl::color(0x8A, 0xC7, 0x63);
         case Building:
-            return ezgl::color(0xEB, 0xE7, 0xDF);
+            return ezgl::color(0xF5, 0xF1, 0xE9);
         case Greenspace:
             return ezgl::color(0xCB, 0xE6, 0xA3);
         case Golfcourse:
