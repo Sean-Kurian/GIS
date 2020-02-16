@@ -41,6 +41,8 @@ void draw_map() {
 
 //
 void drawMainCanvas(ezgl::renderer* rend) {
+    rend->set_color(0xE8, 0xE8, 0xE8);
+    rend->fill_rectangle(rend->get_visible_world());
     rend->set_line_cap(ezgl::line_cap::round);
     rend->set_line_width(10);
     drawFeatures(rend);
