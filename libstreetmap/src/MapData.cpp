@@ -283,7 +283,6 @@ const std::vector<int> MapData::getSegsOfWayOSMID(const OSMID& wayID) const {
     if (itr != segsOfWayOSMID.end())
         return itr->second;
     else {
-        std::cerr << "No segments found with way OSMID " << wayID << "\n";
         std::vector<int> emptyVec;
         return emptyVec;
     }
