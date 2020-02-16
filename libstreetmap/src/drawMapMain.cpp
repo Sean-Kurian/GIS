@@ -46,11 +46,11 @@ void drawMainCanvas(ezgl::renderer* rend) {
     rend->set_line_cap(ezgl::line_cap::round);
     rend->set_line_width(10);
     drawFeatures(rend);
-    rend->set_line_width(5);
-    drawStreets(rend, roadType::minorRoad);
-    rend->set_line_width(7);
-    drawStreets(rend, roadType::majorRoad);
-    rend->set_line_width(10);
-    drawStreets(rend, roadType::highway);
+
+    drawStreets(rend, roadType::minorRoad, 2);
+
+    drawStreets(rend, roadType::majorRoad, 4);
+
+    drawStreets(rend, roadType::highway, 6);
 }
 
