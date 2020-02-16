@@ -55,23 +55,23 @@ ezgl::color getFeatureColour(const FeatureType& type) {
         case Unknown:
             return ezgl::RED;
         case Park:
-            return ezgl::LIME_GREEN;
+            return ezgl::color(0xcb, 0xe6, 0xa3);
         case Beach:
             return ezgl::YELLOW;
         case Lake:
-            return ezgl::LIGHT_SKY_BLUE;
+            return ezgl::color(0xa2, 0xecd, 0xfc);
         case River:
-            return ezgl::LIGHT_SKY_BLUE;
+            ezgl::color(0xa2, 0xecd, 0xfc);
         case Island:
-            return ezgl::LIME_GREEN;
+            return ezgl::color(0x8a, 0xc7, 0x63);
         case Building:
-            return ezgl::BLACK;
+            return ezgl::color(0xeb, 0xe7, 0xdf);
         case Greenspace:
-            return ezgl::LIME_GREEN;
+            return ezgl::color(0xcb, 0xe6, 0xa3);
         case Golfcourse:
-            return ezgl::LIME_GREEN;
+            return ezgl::color(0xcb, 0xe6, 0xa3);
         case Stream:
-            return ezgl::LIGHT_SKY_BLUE;
+            return ezgl::color(0xa2, 0xecd, 0xfc);
         default:
             std::cerr << "Error: No matching feature type\n";
     }
@@ -81,11 +81,11 @@ ezgl::color getFeatureColour(const FeatureType& type) {
 ezgl::color getRoadColour(const roadType& type) {
     switch (type) {
         case highway:
-            return ezgl::YELLOW;
+            return ezgl::color(0xff, 0xf1, 0xba);
         case majorRoad:
-            return ezgl::GREY_75;
+            return ezgl::color(0xe8, 0xe8, 0xe8);
         case minorRoad:
-            return ezgl::GREY_55;
+            return ezgl::color(0xe8, 0xe8, 0xe8);
         case trail:
             return ezgl::BLACK;
         case path:
