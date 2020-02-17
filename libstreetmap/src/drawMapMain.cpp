@@ -9,6 +9,7 @@
 #include "globalData.h"
 #include "drawMapObjects.h"
 #include "drawMapHelpers.h"
+#include "drawCustomButtons.h"
 #include "mouseAndKBCtrl.h"
 
 #include "ezgl/application.hpp"
