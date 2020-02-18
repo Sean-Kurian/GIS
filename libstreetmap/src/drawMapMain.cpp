@@ -47,13 +47,13 @@ void drawMainCanvas(ezgl::renderer* rend) {
     rend->fill_rectangle(rend->get_visible_world());
     rend->set_line_cap(ezgl::line_cap::round);
     rend->set_line_width(10);
-    drawFeatures(rend);
+    drawAllFeatures(rend);
 
-    drawStreets(rend, roadType::minorRoad, 4);
+    drawStreets(rend, roadType::minorRoad, 5);
 
-    drawStreets(rend, roadType::majorRoad, 5);
+    drawStreets(rend, roadType::majorRoad, 6);
 
-    drawStreets(rend, roadType::highway, 6);
+    drawStreets(rend, roadType::highway, 7);
 }
 
 //Initial setup of the application
