@@ -11,6 +11,7 @@
 #include "OSMDatabaseAPI.h"
 #include "CoordData.h"
 #include "roadTypes.h"
+#include "naturalFeatures.h"
 
 #include <vector>
 #include <string>
@@ -47,6 +48,12 @@ private:
     
     //
     CoordData coordData;
+    
+    //
+    std::vector<std::vector<unsigned> > indexesOfNaturalFeatures;
+    
+    // TEMP.. Will be changed to store buildings of different types
+    std::vector<unsigned> indexesOfBuildings;
     
     //
     std::vector<std::vector<std::pair<int, unsigned> > > segsOfStreetType;
@@ -104,6 +111,12 @@ public:
                       const double& _minLon, const double& _maxLon);
     
     //
+    void addIndexOfNaturalFeature(const FeatureIndex& featID, naturalFeature feature);
+    
+    // TEMP
+    void addIndexOfBuilding(const FeatureIndex& buildingID);
+    
+    //
     void addSegToStreetType(const StreetSegmentIndex& segID, const unsigned& numLanes, 
                             const roadType& type);
     
@@ -154,6 +167,12 @@ public:
     // Return the average latitude or longitude
     double getAvgLat() const;
     double getAvgLon() const;
+    
+    //
+    const std::vector<unsigned> getIndexesOfNaturalFeature(const naturalFeature& type) const;
+    
+    // TEMP
+    const std::vector<unsigned> getIndexesOfBuildings() const;
     
     //
     const std::vector<std::pair<int, unsigned> >& getSegsOfStreetType(const roadType& type) const;

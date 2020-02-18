@@ -54,7 +54,8 @@ void MapData::clearMapData() {
 void MapData::allocStreetVecs(const unsigned& numStreets) {
     segsOfStreet.resize(numStreets);
     intersectionsOfStreet.resize(numStreets);
-    segsOfStreetType.resize(roadType::TYPECOUNT);
+    segsOfStreetType.resize(roadType::RT_TYPECOUNT);
+    indexesOfNaturalFeatures.resize(naturalFeature::NF_TYPECOUNT);
 }
 
 // Sizes segment vectors to their appropriate size to avoid out of index access
@@ -144,6 +145,16 @@ void MapData::addCoordData(const double& _minLat, const double& _maxLat,
     coordData.avgLat = (_minLat + _maxLat) * 0.5;
     coordData.avgLon = (_minLon + _maxLon) * 0.5;
     coordData.latAspectRatio = cos(coordData.avgLat * DEGREE_TO_RADIAN);
+}
+
+//
+void MapData::addIndexOfNaturalFeature(const FeatureIndex& featID, naturalFeature feature) {
+    indexesOfNaturalFeatures[feature].push_back(featID);
+}
+
+//
+void MapData::addIndexOfBuilding(const FeatureIndex& buildingID) {
+    indexesOfBuildings.push_back(buildingID);
 }
 
 //
@@ -271,6 +282,16 @@ double MapData::getAvgLat() const {
 }
 double MapData::getAvgLon() const {
     return coordData.avgLon;
+}
+
+//
+const std::vector<unsigned> MapData::getIndexesOfNaturalFeature(const naturalFeature& type) const {
+    return indexesOfNaturalFeatures[type];
+}
+
+// TEMP
+const std::vector<unsigned> MapData::getIndexesOfBuildings() const {
+    return indexesOfBuildings;
 }
 
 //
