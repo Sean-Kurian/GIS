@@ -18,6 +18,7 @@
 #include <iostream>
 
 void drawMainCanvas(ezgl::renderer* rend);
+void initialSetup(ezgl::application* app, bool newWindow);
 
 //
 void draw_map() {
@@ -37,7 +38,7 @@ void draw_map() {
     
     application.add_canvas("MainCanvas", drawMainCanvas, mapCoords);
     
-    application.run(nullptr, actOnMousePress, nullptr, nullptr);
+    application.run(initialSetup, actOnMousePress, nullptr, nullptr);
 }
 
 //
@@ -53,5 +54,10 @@ void drawMainCanvas(ezgl::renderer* rend) {
     drawStreets(rend, roadType::majorRoad, 5);
 
     drawStreets(rend, roadType::highway, 6);
+}
+
+//Initial setup of the application
+void initialSetup(ezgl::application* app, bool newWindow) {
+    connectZoomButtons(app);
 }
 

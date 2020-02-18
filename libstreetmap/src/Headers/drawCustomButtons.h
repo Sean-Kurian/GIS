@@ -14,8 +14,8 @@
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"
 
-//Draws the Zoom Buttons on top of map 
-void drawZoomButtons(ezgl::renderer* rend);
+//Connect Zoom buttons to callback functions
+void connectZoomButtons(ezgl::application* app);
 
 #endif /* DRAWCUSTOMBUTTONS_H */
 

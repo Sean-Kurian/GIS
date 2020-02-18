@@ -5,14 +5,14 @@
  */
 
 #include "ezgl/graphics.hpp"
+#include "ezgl/application.hpp"
 
 
 #include "drawCustomButtons.h"
 
-//Draws Zoom Buttons on top of map
-void drawZoomButtons(ezgl::renderer* rend) {
-    rend->set_coordinate_system(ezgl::SCREEN);
+//Connect Zoom buttons to callback functions
+void connectZoomButtons(ezgl::application* app) {
+    GtkWidget* zoomInButton = GTK_WIDGET(app->get_object("zoomInButton"));
+    g_signal_connect(G_OBJECT(zoomInButton), "clicked", G_CALLBACK(press_zoom_in(zoomInButton, app)), nullptr);
     
-    
-    rend->set_coordinate_system(ezgl::WORLD);
 }
