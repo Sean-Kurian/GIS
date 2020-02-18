@@ -26,6 +26,10 @@ void drawStreets(ezgl::renderer* rend, const roadType& type, const unsigned& roa
         toPos = ezgl::point2d(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
         rend->draw_line(fromPos, toPos);
     }
+    double lon = lonFromX(100); 
+    double lat = latFromY(150); 
+    std::cout << "Lon, lat is " << lon << "," << lat << "\n"; 
+    std::cout << "x, y is " << xFromLon(lon) << "," << yFromLat(lat) << "\n"; 
 }
 
 void drawFeatures(ezgl::renderer* rend) {
