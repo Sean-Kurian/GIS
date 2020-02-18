@@ -6,14 +6,22 @@
 
 #include "ezgl/graphics.hpp"
 #include "ezgl/application.hpp"
+#include "ezgl/callback.hpp"
 
 
 #include "drawCustomButtons.h"
 
+
+
 //Connect Zoom buttons to callback functions
 void connectZoomButtons(ezgl::application* app) {
     GtkWidget* zoomInButton = GTK_WIDGET(app->get_object("zoomInButton"));
-    g_signal_connect(G_OBJECT(zoomInButton), "clicked", G_CALLBACK(press_zoom_in(zoomInButton, app)), nullptr);
+    g_signal_connect(G_OBJECT(zoomInButton), "clicked", G_CALLBACK(test_call_back), nullptr);
     std::cout << "Attempt to connect signals" << std::endl;
     
+}
+
+void test_call_back(GtkWidget *widget, ezgl::application *app) {
+    std::cout << "Zoom in button pressed" << std::endl;
+    ezgl::press_zoom_in(widget, app); //This is where the seg fault occurs
 }

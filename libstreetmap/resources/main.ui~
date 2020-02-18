@@ -210,7 +210,7 @@
                 <property name="valign">end</property>
                 <property name="margin_right">10</property>
                 <property name="margin_bottom">45</property>
-                <signal name="clicked" handler="press_zoom_in" swapped="no"/>
+                <signal name="clicked" handler="ezgl::press_zoom_in" swapped="no"/>
               </object>
             </child>
             <child type="overlay">
