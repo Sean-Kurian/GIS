@@ -10,6 +10,7 @@
 #include "OSMDatabaseAPI.h"
 #include "globalData.h"
 #include "roadTypes.h"
+#include "naturalFeatures.h"
 
 #include <algorithm>
 #include <regex>
@@ -146,6 +147,11 @@ void getFeatureData(const unsigned& numFeatures) {
             maxLat = std::max(maxLat, location.lat());
             maxLon = std::max(maxLon, location.lon());
         }
+        naturalFeature type = determineNaturalFeature(getFeatureType(featureIndex));
+        if (type != naturalFeature::NF_TYPECOUNT)
+            gData.addIndexOfNaturalFeature(featureIndex, type);
+        else
+            gData.addIndexOfBuilding(featureIndex);
     }
     gData.addCoordData(minLat, maxLat, minLon, maxLon);
 }
@@ -201,4 +207,19 @@ roadType determineRoadType(const std::string& val) {
         return roadType::path;
     
     return roadType::minorRoad;
+}
+
+naturalFeature determineNaturalFeature(FeatureType type) {
+    if (type == FeatureType::Building)
+        return naturalFeature::NF_TYPECOUNT;
+    else if (type == FeatureType::Island)
+        return naturalFeature::island;
+    else if (type == FeatureType::Beach)
+        return naturalFeature::beach;
+    else if (type == FeatureType::Park)
+        return naturalFeature::park;
+    else if (type == FeatureType::Lake || type == FeatureType::River
+            || type == FeatureType::Stream)
+        return naturalFeature::water;
+    else return naturalFeature::forest;
 }

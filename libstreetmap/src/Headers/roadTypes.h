@@ -12,7 +12,7 @@ enum roadType {
     minorRoad,
     trail,
     path,
-    TYPECOUNT
+    RT_TYPECOUNT
 };
 
 roadType determineRoadType(const std::string& val);
