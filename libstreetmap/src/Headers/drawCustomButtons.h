@@ -13,9 +13,12 @@
 
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"
+#include "ezgl/callback.hpp"
 
 //Connect Zoom buttons to callback functions
 void connectZoomButtons(ezgl::application* app);
+
+void test_call_back(GtkWidget *widget, ezgl::application *app);
 
 #endif /* DRAWCUSTOMBUTTONS_H */
 
