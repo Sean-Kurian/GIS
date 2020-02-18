@@ -14,5 +14,6 @@
 void connectZoomButtons(ezgl::application* app) {
     GtkWidget* zoomInButton = GTK_WIDGET(app->get_object("zoomInButton"));
     g_signal_connect(G_OBJECT(zoomInButton), "clicked", G_CALLBACK(press_zoom_in(zoomInButton, app)), nullptr);
+    std::cout << "Attempt to connect signals" << std::endl;
     
 }
