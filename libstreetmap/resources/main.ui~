@@ -209,7 +209,8 @@
                 <property name="halign">end</property>
                 <property name="valign">end</property>
                 <property name="margin_right">10</property>
-                <property name="margin_bottom">40</property>
+                <property name="margin_bottom">45</property>
+                <signal name="clicked" handler="press_zoom_in" swapped="no"/>
               </object>
             </child>
             <child type="overlay">
@@ -221,7 +222,7 @@
                 <property name="halign">end</property>
                 <property name="valign">end</property>
                 <property name="margin_right">10</property>
-                <property name="margin_top">20</property>
+                <property name="margin_bottom">5</property>
               </object>
               <packing>
                 <property name="index">1</property>
