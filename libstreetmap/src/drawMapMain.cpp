@@ -34,11 +34,14 @@ void draw_map() {
     ezgl::point2d maxPt(xFromLon(gData.getMaxLon()), yFromLat(gData.getMaxLat()));
     std::cout << "Min point: " << minPt.x << " " << minPt.y << "\n";
     std::cout << "Max point: " << maxPt.x << " " << maxPt.y << "\n";
+    std::cout << "LonLat: " << lonFromX(31763.2) << " " << latFromY(24469.7) << "\n"; //test
+    std::cout << "X and Y: " << xFromLon(-79) << " " << yFromLat(43.92) << "\n";//test
     ezgl::rectangle mapCoords{ minPt, maxPt };
     
     application.add_canvas("MainCanvas", drawMainCanvas, mapCoords);
     
     application.run(initialSetup, actOnMousePress, nullptr, nullptr);
+
 }
 
 //
