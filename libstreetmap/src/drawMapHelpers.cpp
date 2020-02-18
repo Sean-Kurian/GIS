@@ -19,9 +19,9 @@ double yFromLat(double lat) {
 }
 
 double lonFromX(double x){
-    return (x / (EARTH_RADIUS_METERS * gData.getLatAspectRatio())) + (gData.getAvgLon() * (DEGREE_TO_RADIAN)); 
+    return (x / (EARTH_RADIUS_METERS * gData.getLatAspectRatio())) * (1/DEGREE_TO_RADIAN) + gData.getAvgLon(); 
 }
 
 double latFromY(double y){
-    return ((y / EARTH_RADIUS_METERS) + (gData.getAvgLat() * (DEGREE_TO_RADIAN))); 
+    return ((y / EARTH_RADIUS_METERS) * (1/DEGREE_TO_RADIAN) + (gData.getAvgLat())); 
 }
