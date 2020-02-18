@@ -32,9 +32,20 @@ void drawStreets(ezgl::renderer* rend, const roadType& type, const unsigned& roa
     std::cout << "x, y is " << xFromLon(lon) << "," << yFromLat(lat) << "\n"; 
 }
 
-void drawFeatures(ezgl::renderer* rend) {
+//
+void drawAllFeatures(ezgl::renderer* rend) {
+    drawFeatures(rend, naturalFeature::park);
+    drawFeatures(rend, naturalFeature::forest);
+    drawFeatures(rend, naturalFeature::water);
+    drawFeatures(rend, naturalFeature::island);
+    drawFeatures(rend, naturalFeature::beach);
+}
+
+//
+void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
     rend->set_line_width(4);
-    for (unsigned featureIndex = 0; featureIndex < getNumFeatures(); ++featureIndex) {
+    std::vector<unsigned> features = gData.getIndexesOfNaturalFeature(type);
+    for (const unsigned featureIndex : features) {
         rend->set_color(getFeatureColour(getFeatureType((featureIndex))));
         LatLon pointLL;
         std::vector<ezgl::point2d> points;
@@ -53,6 +64,9 @@ void drawFeatures(ezgl::renderer* rend) {
         }
     }
 }
+
+//
+void drawBuildings(ezgl::renderer* rend);
 
 //
 ezgl::color getFeatureColour(const FeatureType& type) {
