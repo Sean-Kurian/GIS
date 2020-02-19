@@ -5,7 +5,7 @@
 
 #include "MapData.h"
 #include "m1.h"
-#include "highlightedData.h"
+#include "HighlightedData.h"
 
 #include <algorithm>
 #include <iostream>
@@ -300,7 +300,7 @@ double MapData::getAvgLon() const {
 }
 
 //
-const highlightedData& MapData::getHLData() const {
+const HighlightedData& MapData::getHLData() const {
     return hlData;
 }
 
