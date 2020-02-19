@@ -31,6 +31,9 @@ MapData::~MapData() {
     nodeIndexOfOSMID.clear();
     wayIndexOfOSMID.clear();
     segsOfWayOSMID.clear();
+    hlData.highlightedInts.clear(); 
+    hlData.highlightedSegs.clear(); 
+    
 }
 
 // Clears all data structures. Used to load another map without needing destructor
@@ -45,6 +48,8 @@ void MapData::clearMapData() {
     nodeIndexOfOSMID.clear();
     wayIndexOfOSMID.clear();
     segsOfWayOSMID.clear();
+    hlData.highlightedInts.clear(); 
+    hlData.highlightedSegs.clear(); 
 }
 
 //==============================================================================
@@ -139,6 +144,10 @@ void MapData::addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntI
 //
 void MapData::addHighlightedInt(const IntersectionIndex& intID) {
     hlData.highlightedInts.push_back(intID);
+}
+
+void MapData::removeLastHighlightedInt(){
+    hlData.highlightedInts.erase(hlData.highlightedInts.end()-1); 
 }
 
 //
