@@ -11,6 +11,7 @@
 #include "drawMapHelpers.h"
 #include "drawCustomButtons.h"
 #include "mouseAndKBCtrl.h"
+#include "searchBar.h"
 
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"
@@ -79,5 +80,6 @@ double pixelInMeters(ezgl::renderer* rend) {
 //Initial setup of the application
 void initialSetup(ezgl::application* app, bool newWindow) {
     connectZoomButtons(app);
+    connectSearchBar(app);
 }
 
