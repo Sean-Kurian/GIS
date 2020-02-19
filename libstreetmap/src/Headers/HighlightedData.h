@@ -6,7 +6,7 @@
 //
 //==============================================================================
 
-struct highlightedData {
+struct HighlightedData {
     std::vector<unsigned> highlightedInts;
     std::vector<unsigned> highlightedSegs;
     static bool isHighlighted;

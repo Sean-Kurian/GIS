@@ -6,12 +6,12 @@
 #include "drawMapObjects.h"
 #include "drawMapHelpers.h"
 
-void drawStreets(ezgl::renderer* rend, const roadType& type, const unsigned& roadWidth) {
+void drawStreets(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter) {
     rend->set_color(getRoadColour(type));
     std::vector<std::pair<int, unsigned> > segs = gData.getSegsOfStreetType(type);
     ezgl::point2d fromPos(0, 0), toPos(0, 0);
     for (const auto SSIndex : segs) {
-        rend->set_line_width(roadWidth * SSIndex.second);
+        rend->set_line_width(std::floor(pixelsPerMeter * 5 * SSIndex.second));
         InfoStreetSegment SSData = getInfoStreetSegment(SSIndex.first);
         unsigned numCurves = SSData.curvePointCount;
         LatLon intPos = getIntersectionPosition(SSData.from);
@@ -25,11 +25,7 @@ void drawStreets(ezgl::renderer* rend, const roadType& type, const unsigned& roa
         intPos = getIntersectionPosition(SSData.to);
         toPos = ezgl::point2d(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
         rend->draw_line(fromPos, toPos);
-    }
-    double lon = lonFromX(100); 
-    double lat = latFromY(150); 
-    std::cout << "Lon, lat is " << lon << "," << lat << "\n"; 
-    std::cout << "x, y is " << xFromLon(lon) << "," << yFromLat(lat) << "\n"; 
+    } 
 }
 
 //
@@ -67,13 +63,31 @@ void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
 
 //
 void drawBuildings(ezgl::renderer* rend) {
-    
+    rend->set_color(getFeatureColour(FeatureType::Building));
+    std::vector<unsigned> buildings = gData.getIndexesOfBuildings();
+    for (const unsigned buildingIndex : buildings) {
+        LatLon pointLL;
+        std::vector<ezgl::point2d> points;
+        unsigned numPoints = getFeaturePointCount(buildingIndex);
+        for (unsigned point = 0; point < numPoints; ++point) {
+            pointLL = getFeaturePoint(point, buildingIndex);
+            points.push_back(ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));
+        }
+        
+        if (points.size() > 1) {
+            if (points.front() == points.back())
+                rend->fill_poly(points);
+            else
+                for (unsigned i = 0; i < points.size() - 1; ++i) 
+                    rend->draw_line(points[i], points[i + 1]);
+        }
+    }
 }
 
 //
 void drawHighlightedData(ezgl::renderer* rend) {
     rend->set_color(ezgl::RED);
-    highlightedData data = gData.getHLData();
+    HighlightedData data = gData.getHLData();
     if (!data.highlightedInts.empty()) {
         for (const unsigned intIndex : data.highlightedInts) {
             LatLon pos = getIntersectionPosition(intIndex);

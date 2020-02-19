@@ -10,7 +10,7 @@
 #include "StreetsDatabaseAPI.h"
 #include "OSMDatabaseAPI.h"
 #include "CoordData.h"
-#include "highlightedData.h"
+#include "HighlightedData.h"
 #include "roadTypes.h"
 #include "naturalFeatures.h"
 
@@ -48,7 +48,7 @@ private:
     std::vector<std::unordered_set<int> > adjacentIntsOfIntersection; 
     
     //
-    highlightedData hlData;
+    HighlightedData hlData;
     
     //
     CoordData coordData;
@@ -178,7 +178,7 @@ public:
     double getAvgLon() const;
     
     //
-    const highlightedData& getHLData() const;
+    const HighlightedData& getHLData() const;
     
     //
     const std::vector<unsigned>& getIndexesOfNaturalFeature(const naturalFeature& type) const;

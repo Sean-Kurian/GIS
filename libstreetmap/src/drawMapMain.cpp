@@ -18,6 +18,7 @@
 #include <iostream>
 
 void drawMainCanvas(ezgl::renderer* rend);
+double pixelInMeters(ezgl::renderer* rend);
 void initialSetup(ezgl::application* app, bool newWindow);
 
 //
@@ -49,14 +50,31 @@ void drawMainCanvas(ezgl::renderer* rend) {
     rend->set_line_cap(ezgl::line_cap::round);
     rend->set_line_width(10);
     drawAllFeatures(rend);
-
-    drawStreets(rend, roadType::minorRoad, 5);
-
-    drawStreets(rend, roadType::majorRoad, 6);
-
-    drawStreets(rend, roadType::highway, 7);
     
+    double pixelsPerMeter = pixelInMeters(rend);
+
+    drawStreets(rend, roadType::minorRoad, pixelsPerMeter);
+
+    drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
+
+    drawStreets(rend, roadType::highway, pixelsPerMeter);
+    
+    drawBuildings(rend);
+
     drawHighlightedData(rend);
+}
+
+//
+double pixelInMeters(ezgl::renderer* rend) {
+    ezgl::rectangle world = rend->get_visible_world();
+    
+    ezgl::rectangle oneMeterBox(world.center(), 1, 1);
+    ezgl::rectangle screen1Meter = rend->world_to_screen(oneMeterBox);
+    std::cout << "1M box area: " << oneMeterBox.area() << "\n";
+    std::cout << "Width, height: " << oneMeterBox.width() << ", " << oneMeterBox.height() << "\n"; 
+    std::cout << "Screen1Meter area: " << screen1Meter.area() << "\n";
+    std::cout << "Width, height: " << screen1Meter.width() << ", " << screen1Meter.height() << "\n";
+    return screen1Meter.width();
 }
 
 //Initial setup of the application
