@@ -11,7 +11,7 @@ void drawStreets(ezgl::renderer* rend, const roadType& type, const double& pixel
     std::vector<std::pair<int, unsigned> > segs = gData.getSegsOfStreetType(type);
     ezgl::point2d fromPos(0, 0), toPos(0, 0);
     for (const auto SSIndex : segs) {
-        rend->set_line_width(std::floor(pixelsPerMeter * 5 * SSIndex.second));
+        rend->set_line_width(std::floor(pixelsPerMeter * 5.0 * SSIndex.second));
         InfoStreetSegment SSData = getInfoStreetSegment(SSIndex.first);
         unsigned numCurves = SSData.curvePointCount;
         LatLon intPos = getIntersectionPosition(SSData.from);
@@ -39,7 +39,7 @@ void drawAllFeatures(ezgl::renderer* rend) {
 
 //
 void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
-    rend->set_line_width(4);
+    rend->set_line_width(2);
     std::vector<unsigned> features = gData.getIndexesOfNaturalFeature(type);
     for (const unsigned featureIndex : features) {
         rend->set_color(getFeatureColour(getFeatureType((featureIndex))));
