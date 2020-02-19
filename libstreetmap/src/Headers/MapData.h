@@ -113,6 +113,8 @@ public:
     //
     void addHighlightedInt(const IntersectionIndex& intID);
     
+    void removeLastHighlightedInt(); 
+    
     //
     void addCoordData(const double& _minLat, const double& _maxLat, 
                       const double& _minLon, const double& _maxLon);
