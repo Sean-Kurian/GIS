@@ -66,7 +66,22 @@ void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
 }
 
 //
-void drawBuildings(ezgl::renderer* rend);
+void drawBuildings(ezgl::renderer* rend) {
+    
+}
+
+//
+void drawHighlightedData(ezgl::renderer* rend) {
+    rend->set_color(ezgl::RED);
+    highlightedData data = gData.getHLData();
+    if (!data.highlightedInts.empty()) {
+        for (const unsigned intIndex : data.highlightedInts) {
+            LatLon pos = getIntersectionPosition(intIndex);
+            ezgl::point2d pointPos(xFromLon(pos.lon()) - 3, yFromLat(pos.lat()) - 3);
+            rend->draw_rectangle(pointPos, 7, 7);
+        }
+    }
+}
 
 //
 ezgl::color getFeatureColour(const FeatureType& type) {

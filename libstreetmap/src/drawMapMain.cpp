@@ -55,6 +55,8 @@ void drawMainCanvas(ezgl::renderer* rend) {
     drawStreets(rend, roadType::majorRoad, 6);
 
     drawStreets(rend, roadType::highway, 7);
+    
+    drawHighlightedData(rend);
 }
 
 //Initial setup of the application

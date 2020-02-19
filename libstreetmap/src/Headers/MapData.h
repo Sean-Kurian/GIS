@@ -10,6 +10,7 @@
 #include "StreetsDatabaseAPI.h"
 #include "OSMDatabaseAPI.h"
 #include "CoordData.h"
+#include "highlightedData.h"
 #include "roadTypes.h"
 #include "naturalFeatures.h"
 
@@ -45,6 +46,9 @@ private:
     // Vector which stores all reachable intersections from an intersection in a set
     // Using vector & unord set for O(1) access. Using set guarantees no duplicates
     std::vector<std::unordered_set<int> > adjacentIntsOfIntersection; 
+    
+    //
+    highlightedData hlData;
     
     //
     CoordData coordData;
@@ -105,6 +109,9 @@ public:
     // Adds adjacent intersection to set with all reachable intersections from main intersection
     void addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
                                       const IntersectionIndex& mainIntID);
+    
+    //
+    void addHighlightedInt(const IntersectionIndex& intID);
     
     //
     void addCoordData(const double& _minLat, const double& _maxLat, 
@@ -169,10 +176,13 @@ public:
     double getAvgLon() const;
     
     //
-    const std::vector<unsigned> getIndexesOfNaturalFeature(const naturalFeature& type) const;
+    const highlightedData& getHLData() const;
+    
+    //
+    const std::vector<unsigned>& getIndexesOfNaturalFeature(const naturalFeature& type) const;
     
     // TEMP
-    const std::vector<unsigned> getIndexesOfBuildings() const;
+    const std::vector<unsigned>& getIndexesOfBuildings() const;
     
     //
     const std::vector<std::pair<int, unsigned> >& getSegsOfStreetType(const roadType& type) const;

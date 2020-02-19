@@ -8,6 +8,7 @@
 
 #include "StreetsDatabaseAPI.h"
 #include "globalData.h"
+#include "highlightedData.h"
 #include "roadTypes.h"
 #include "naturalFeatures.h"
 
@@ -18,6 +19,7 @@ void drawStreets(ezgl::renderer* rend, const roadType& type, const unsigned& roa
 void drawAllFeatures(ezgl::renderer* rend);
 void drawFeatures(ezgl::renderer* rend, const naturalFeature& type);
 void drawBuildings(ezgl::renderer* rend);
+void drawHighlightedData(ezgl::renderer* rend);
 
 ezgl::color getFeatureColour(const FeatureType& type);
 ezgl::color getRoadColour(const roadType& type);

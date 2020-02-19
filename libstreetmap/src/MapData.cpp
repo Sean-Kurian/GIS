@@ -5,6 +5,7 @@
 
 #include "MapData.h"
 #include "m1.h"
+#include "highlightedData.h"
 
 #include <algorithm>
 #include <iostream>
@@ -133,6 +134,11 @@ void MapData::addSegToIntersection(const StreetSegmentIndex& segID, const Inters
 void MapData::addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
                                            const IntersectionIndex& mainIntID) {
     adjacentIntsOfIntersection[mainIntID].insert(adjacentIntID);
+}
+
+//
+void MapData::addHighlightedInt(const IntersectionIndex& intID) {
+    hlData.highlightedInts.push_back(intID);
 }
 
 //
@@ -285,12 +291,17 @@ double MapData::getAvgLon() const {
 }
 
 //
-const std::vector<unsigned> MapData::getIndexesOfNaturalFeature(const naturalFeature& type) const {
+const highlightedData& MapData::getHLData() const {
+    return hlData;
+}
+
+//
+const std::vector<unsigned>& MapData::getIndexesOfNaturalFeature(const naturalFeature& type) const {
     return indexesOfNaturalFeatures[type];
 }
 
 // TEMP
-const std::vector<unsigned> MapData::getIndexesOfBuildings() const {
+const std::vector<unsigned>& MapData::getIndexesOfBuildings() const {
     return indexesOfBuildings;
 }
 
