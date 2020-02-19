@@ -77,8 +77,8 @@ void drawHighlightedData(ezgl::renderer* rend) {
     if (!data.highlightedInts.empty()) {
         for (const unsigned intIndex : data.highlightedInts) {
             LatLon pos = getIntersectionPosition(intIndex);
-            ezgl::point2d pointPos(xFromLon(pos.lon()) - 3, yFromLat(pos.lat()) - 3);
-            rend->draw_rectangle(pointPos, 7, 7);
+            ezgl::point2d pointPos(xFromLon(pos.lon()), yFromLat(pos.lat()));
+            rend->draw_elliptic_arc(pointPos, 5, 5, 0, 360);
         }
     }
 }
