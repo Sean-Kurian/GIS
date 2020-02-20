@@ -18,6 +18,7 @@
 
 #include "ezgl/graphics.hpp"
 
+#include <iostream>
 #include <cassert>
 #include <glib.h>
 
@@ -535,6 +536,8 @@ void renderer::draw_text(point2d point, std::string const &text, double bound_x,
 
   // if text width or height is greater than the given bounds, don't draw the text.
   // NOTE: text rotation is NOT taken into account in bounding check (i.e. text width is compared to bound_x)
+  // std::cout << "Scaled width, bound_x: " << scaled_width << " " << bound_x << "\n";
+  // std::cout << "Scaled height, bound_y: " << scaled_height << " " << bound_y << "\n";
   if(scaled_width > bound_x || scaled_height > bound_y) {
     return;
   }
