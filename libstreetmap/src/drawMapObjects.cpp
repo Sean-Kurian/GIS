@@ -48,7 +48,7 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
             fromPosLL = getIntersectionPosition(SSData.from);
             fromPos = ezgl::point2d(xFromLon(fromPosLL.lon()), yFromLat(fromPosLL.lat()));
             height = std::floor(pixelsPerMeter * 6.0 * SSIndex.second);
-            rend->set_font_size(height * 0.75);
+            rend->set_font_size(std::max(height * 0.75, 10.0));
             unsigned numCurves = SSData.curvePointCount;
             if (numCurves == 0) {
                 toPosLL = getIntersectionPosition(SSData.to);
