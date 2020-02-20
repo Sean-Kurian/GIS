@@ -41,7 +41,6 @@ void draw_map() {
     application.add_canvas("MainCanvas", drawMainCanvas, mapCoords);
     
     application.run(initialSetup, actOnMousePress, nullptr, nullptr);
-
 }
 
 //
@@ -49,7 +48,6 @@ void drawMainCanvas(ezgl::renderer* rend) {
     rend->set_color(0xE0, 0xE0, 0xE0);
     rend->fill_rectangle(rend->get_visible_world());
     rend->set_line_cap(ezgl::line_cap::round);
-    rend->set_line_width(10);
     drawAllFeatures(rend);
     
     double pixelsPerMeter = pixelInMeters(rend);
@@ -64,6 +62,12 @@ void drawMainCanvas(ezgl::renderer* rend) {
     
     drawStreets(rend, roadType::highway, pixelsPerMeter);
     drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
+    
+    if (pixelsPerMeter > 0.4) {
+        drawStreetNames(rend, roadType::highway, pixelsPerMeter);
+        drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter);
+        drawStreetNames(rend, roadType::minorRoad, pixelsPerMeter);
+    }
     
     drawHighlightedData(rend);
 }
