@@ -189,6 +189,7 @@ void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
 void drawBuildings(ezgl::renderer* rend) {
     rend->set_color(getFeatureColour(FeatureType::Building));
     std::vector<unsigned> buildings = gData.getIndexesOfBuildings();
+    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/small_image.png"); 
     for (const unsigned buildingIndex : buildings) {
         LatLon pointLL;
         std::vector<ezgl::point2d> points;
@@ -202,11 +203,19 @@ void drawBuildings(ezgl::renderer* rend) {
             if (points.front() == points.back())
                 rend->fill_poly(points);
             else
-                for (unsigned i = 0; i < points.size() - 1; ++i) 
+                for (unsigned i = 0; i < points.size() - 1; ++i){ 
                     rend->draw_line(points[i], points[i + 1]);
+                }
         }
+        rend->draw_surface(test, ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));      
+        //rend->free_surface(test); 
     }
 }
+
+//static surface *load_png(const char *file_path
+//  void draw_surface(surface *surface, point2d top_left);
+//  static void free_surface(surface *surface);
+
 
 //
 void drawHighlightedData(ezgl::renderer* rend) {
