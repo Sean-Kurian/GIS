@@ -72,6 +72,10 @@ void drawMainCanvas(ezgl::renderer* rend) {
         //drawOneWayArrows(rend, roadType::minorRoad, pixelsPerMeter);
     }
     
+    if (pixelsPerMeter > 1.8 && pixelsPerMeter < 1.9){
+        drawPOI(rend); 
+    }
+    
     
     drawHighlightedData(rend);
 }
