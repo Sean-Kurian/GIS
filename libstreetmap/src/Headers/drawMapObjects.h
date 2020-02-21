@@ -25,6 +25,7 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
 void drawAllFeatures(ezgl::renderer* rend);
 void drawFeatures(ezgl::renderer* rend, const naturalFeature& type);
 void drawBuildings(ezgl::renderer* rend);
+void drawPOI(ezgl::renderer* rend); 
 
 void drawHighlightedData(ezgl::renderer* rend);
 

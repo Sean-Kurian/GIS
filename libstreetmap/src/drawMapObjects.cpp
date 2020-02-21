@@ -202,7 +202,7 @@ void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
 void drawBuildings(ezgl::renderer* rend) {
     rend->set_color(getFeatureColour(FeatureType::Building));
     std::vector<unsigned> buildings = gData.getIndexesOfBuildings();
-    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/small_image.png"); 
+    //ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/small_image.png"); 
     for (const unsigned buildingIndex : buildings) {
         LatLon pointLL;
         std::vector<ezgl::point2d> points;
@@ -220,15 +220,20 @@ void drawBuildings(ezgl::renderer* rend) {
                     rend->draw_line(points[i], points[i + 1]);
                 }
         }
-        rend->draw_surface(test, ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));      
+        //rend->draw_surface(test, ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));      
         //rend->free_surface(test); 
     }
 }
 
-//static surface *load_png(const char *file_path
-//  void draw_surface(surface *surface, point2d top_left);
-//  static void free_surface(surface *surface);
-
+void drawPOI(ezgl::renderer* rend){
+    std::vector<unsigned> buildings = gData.getIndexesOfBuildings();
+    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/small_image.png");
+    for (const unsigned buildingIndex : buildings) {
+        LatLon pointLL = getFeaturePoint(0, buildingIndex); 
+        rend->draw_surface(test, ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));
+    }
+    rend->free_surface(test); 
+}
 
 //
 void drawHighlightedData(ezgl::renderer* rend) {
