@@ -46,6 +46,7 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
         bool wasDrawn = false;
         InfoStreetSegment SSData = getInfoStreetSegment(SSIndex.first);
         std::string streetName = getStreetName(SSData.streetID);
+        bool oneWay = SSData.oneWay;
         if (streetName != "<unknown>") { 
             fromPosLL = getIntersectionPosition(SSData.from);
             fromPos = ezgl::point2d(xFromLon(fromPosLL.lon()), yFromLat(fromPosLL.lat()));
@@ -102,28 +103,14 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
                 }
             }
         }
-    } 
-}
-
-void drawOneWayArrows(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter){
-/*    rend->set_horiz_text_just(ezgl::text_just::center);
-    rend->set_vert_text_just(ezgl::text_just::center);
-    rend->set_color(ezgl::BLACK);
-    std::vector<std::pair<int, unsigned> > segs = gData.getSegsOfStreetType(type);
-    double width, height, angle;
-    ezgl::point2d fromPos(0, 0), toPos(0, 0), center(0, 0);
-    LatLon fromPosLL, toPosLL;
-    for (const std::pair<int, unsigned>& SSIndex : segs) {
-        InfoStreetSegment SSData = getInfoStreetSegment(SSIndex.first);
-        bool oneWay = SSData.oneWay;
-        
         if (oneWay){
-        fromPosLL = getIntersectionPosition(SSData.from);
-        fromPos = ezgl::point2d(xFromLon(fromPosLL.lon()), yFromLat(fromPosLL.lat()));
-        height = std::floor(pixelsPerMeter * 6.0 * SSIndex.second);
-        rend->set_font_size(std::max(height * 0.75, 10.0));
-        unsigned numCurves = SSData.curvePointCount;
-        
+            fromPosLL = getIntersectionPosition(SSData.from);
+            fromPos = ezgl::point2d(xFromLon(fromPosLL.lon()), yFromLat(fromPosLL.lat()));
+            height = std::floor(pixelsPerMeter * 5.0 * SSIndex.second);
+            
+            textHeight = std::min(std::max(height * 0.75, 10.0), 24.0);
+            
+            unsigned numCurves = SSData.curvePointCount;
             if (numCurves == 0) {
                 toPosLL = getIntersectionPosition(SSData.to);
                 toPos = ezgl::point2d(xFromLon(toPosLL.lon()), yFromLat(toPosLL.lat()));
@@ -134,7 +121,12 @@ void drawOneWayArrows(ezgl::renderer* rend, const roadType& type, const double& 
                     angle = atan2((fromPos.y - toPos.y), (fromPos.x - toPos.x)) * RAD_TO_DEG;
                 rend->set_text_rotation(angle);
                 center = ezgl::point2d(((toPos.x + fromPos.x) * 0.5), (toPos.y + fromPos.y) * 0.5);
-                rend->draw_text(center, "--->", width, height);
+                
+                /*do {
+                    rend->set_font_size(textHeight);
+                    wasDrawn = rend->draw_text(center, "--->", width, height);
+                    textHeight -= 1.0;
+                } while (!wasDrawn && textHeight >= 14.0);*/
             }
             else {
                 for (unsigned curveIndex = 0; curveIndex < numCurves; ++curveIndex) {
@@ -147,24 +139,29 @@ void drawOneWayArrows(ezgl::renderer* rend, const roadType& type, const double& 
                         angle = atan2((fromPos.y - toPos.y), (fromPos.x - toPos.x)) * RAD_TO_DEG;
                     rend->set_text_rotation(angle);
                     center = ezgl::point2d(((toPos.x + fromPos.x) * 0.5), (toPos.y + fromPos.y) * 0.5);
-                    rend->draw_text(center, "--->", width, height);
+                    wasDrawn = rend->draw_text(center, "------>", width, height);
+                    if (wasDrawn)
+                        break;
                     fromPosLL = toPosLL;
                     fromPos = toPos;
                 }
-                toPosLL = getIntersectionPosition(SSData.to);
-                toPos = ezgl::point2d(xFromLon(toPosLL.lon()), yFromLat(toPosLL.lat()));
-                width = find_distance_between_two_points(std::make_pair(fromPosLL, toPosLL));
-                if (toPos.x > fromPos.x)
-                    angle = atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x)) * RAD_TO_DEG;
-                else
-                    angle = atan2((fromPos.y - toPos.y), (fromPos.x - toPos.x)) * RAD_TO_DEG;
-                rend->set_text_rotation(angle);
-                center = ezgl::point2d(((toPos.x + fromPos.x) * 0.5), (toPos.y + fromPos.y) * 0.5);
-                rend->draw_text(center, "--->", width, height);
+                /*if (!wasDrawn) {
+                    toPosLL = getIntersectionPosition(SSData.to);
+                    toPos = ezgl::point2d(xFromLon(toPosLL.lon()), yFromLat(toPosLL.lat()));
+                    width = find_distance_between_two_points(std::make_pair(fromPosLL, toPosLL));
+                    if (toPos.x > fromPos.x)
+                        angle = atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x)) * RAD_TO_DEG;
+                    else
+                        angle = atan2((fromPos.y - toPos.y), (fromPos.x - toPos.x)) * RAD_TO_DEG;
+                    rend->set_text_rotation(angle);
+                    center = ezgl::point2d(((toPos.x + fromPos.x) * 0.5), (toPos.y + fromPos.y) * 0.5);
+                    wasDrawn = rend->draw_text(center, "----->", width, height);
+                }*/
             }
         }
-    }*/
+    } 
 }
+
 //
 void drawAllFeatures(ezgl::renderer* rend) {
     drawFeatures(rend, naturalFeature::park);
@@ -202,7 +199,6 @@ void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
 void drawBuildings(ezgl::renderer* rend) {
     rend->set_color(getFeatureColour(FeatureType::Building));
     std::vector<unsigned> buildings = gData.getIndexesOfBuildings();
-    //ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/small_image.png"); 
     for (const unsigned buildingIndex : buildings) {
         LatLon pointLL;
         std::vector<ezgl::point2d> points;
@@ -220,8 +216,6 @@ void drawBuildings(ezgl::renderer* rend) {
                     rend->draw_line(points[i], points[i + 1]);
                 }
         }
-        //rend->draw_surface(test, ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));      
-        //rend->free_surface(test); 
     }
 }
 
