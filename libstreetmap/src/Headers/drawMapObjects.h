@@ -16,8 +16,12 @@
 #include "ezgl/graphics.hpp"
 
 void drawStreets(ezgl::renderer* rend, const roadType& type, const double& roadWidth);
+<<<<<<< HEAD
 void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter);
 void drawOneWayArrows(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter);
+=======
+void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter, const bool& clearInts);
+>>>>>>> Implemented drawing over intersection in the draw name function. May remove this as it slows down significantly for marginally better names. Also the function is getting far to big so we have to reduce that
 
 void drawAllFeatures(ezgl::renderer* rend);
 void drawFeatures(ezgl::renderer* rend, const naturalFeature& type);

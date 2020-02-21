@@ -36,6 +36,19 @@ void draw_map() {
     ezgl::point2d maxPt(xFromLon(gData.getMaxLon()), yFromLat(gData.getMaxLat()));
     std::cout << "Min point: " << minPt.x << " " << minPt.y << "\n";
     std::cout << "Max point: " << maxPt.x << " " << maxPt.y << "\n";
+    
+    std::cout << "Segs at int 1700: ";
+    std::vector<int> segs = find_street_segments_of_intersection(1700);
+    for (int seg : segs)
+        std::cout << seg << " ";
+    std::cout << "\n";
+    
+    std::cout << "Segs at int 4991: ";
+    segs = find_street_segments_of_intersection(4991);
+    for (int seg : segs)
+        std::cout << seg << " ";
+    std::cout << "\n";
+    
     ezgl::rectangle mapCoords{ minPt, maxPt };
     
     application.add_canvas("MainCanvas", drawMainCanvas, mapCoords);
@@ -81,7 +94,7 @@ double pixelInMeters(ezgl::renderer* rend) {
     ezgl::rectangle world = rend->get_visible_world();
     ezgl::rectangle oneMeterBox(world.center(), 1, 1);
     ezgl::rectangle screen1Meter = rend->world_to_screen(oneMeterBox);
-    std::cout << "1 meter in pixels: " << screen1Meter.width() << "\n";
+    // std::cout << "1 meter in pixels: " << screen1Meter.width() << "\n";
     return screen1Meter.width();
 }
 
