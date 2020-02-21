@@ -504,7 +504,7 @@ void renderer::draw_text(point2d point, std::string const &text)
   draw_text(point, text, DBL_MAX, DBL_MAX);
 }
 
-void renderer::draw_text(point2d point, std::string const &text, double bound_x, double bound_y)
+bool renderer::draw_text(point2d point, std::string const &text, double bound_x, double bound_y)
 {
   // the center point of the text
   point2d center = point;
@@ -520,7 +520,7 @@ void renderer::draw_text(point2d point, std::string const &text, double bound_x,
     center.y += bound_y/2;
 
   if(rectangle_off_screen({{center.x - bound_x / 2, center.y - bound_y / 2}, bound_x, bound_y}))
-    return;
+    return false;
 
   // get the width and height of the drawn text
   cairo_text_extents_t text_extents{0,0,0,0,0,0};
@@ -539,7 +539,7 @@ void renderer::draw_text(point2d point, std::string const &text, double bound_x,
   // std::cout << "Scaled width, bound_x: " << scaled_width << " " << bound_x << "\n";
   // std::cout << "Scaled height, bound_y: " << scaled_height << " " << bound_y << "\n";
   if(scaled_width > bound_x || scaled_height > bound_y) {
-    return;
+    return false;
   }
 
   // save the current state to undo the rotation needed for drawing rotated text
@@ -588,6 +588,7 @@ void renderer::draw_text(point2d point, std::string const &text, double bound_x,
 
   // restore the old state to undo the performed rotation
   cairo_restore(m_cairo);
+  return true;
 }
 
 void renderer::draw_rectangle_path(point2d start, point2d end, bool fill_flag)
