@@ -36,19 +36,6 @@ void draw_map() {
     ezgl::point2d maxPt(xFromLon(gData.getMaxLon()), yFromLat(gData.getMaxLat()));
     std::cout << "Min point: " << minPt.x << " " << minPt.y << "\n";
     std::cout << "Max point: " << maxPt.x << " " << maxPt.y << "\n";
-    
-    std::cout << "Segs at int 1700: ";
-    std::vector<int> segs = find_street_segments_of_intersection(1700);
-    for (int seg : segs)
-        std::cout << seg << " ";
-    std::cout << "\n";
-    
-    std::cout << "Segs at int 4991: ";
-    segs = find_street_segments_of_intersection(4991);
-    for (int seg : segs)
-        std::cout << seg << " ";
-    std::cout << "\n";
-    
     ezgl::rectangle mapCoords{ minPt, maxPt };
     
     application.add_canvas("MainCanvas", drawMainCanvas, mapCoords);
@@ -77,9 +64,9 @@ void drawMainCanvas(ezgl::renderer* rend) {
     drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
     
     if (pixelsPerMeter > 0.4) {
-        drawStreetNames(rend, roadType::highway, pixelsPerMeter);
-        drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter);
-        drawStreetNames(rend, roadType::minorRoad, pixelsPerMeter);
+        drawStreetNames(rend, roadType::highway, pixelsPerMeter, true);
+        drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter, false);
+        drawStreetNames(rend, roadType::minorRoad, pixelsPerMeter, false);
         //drawOneWayArrows(rend, roadType::highway, pixelsPerMeter); //Check zoom levels, need to avoid overlap between names and arrows
         //drawOneWayArrows(rend, roadType::majorRoad, pixelsPerMeter);
         //drawOneWayArrows(rend, roadType::minorRoad, pixelsPerMeter);
