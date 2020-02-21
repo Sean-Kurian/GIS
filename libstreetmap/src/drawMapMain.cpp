@@ -63,7 +63,7 @@ void drawMainCanvas(ezgl::renderer* rend) {
     drawStreets(rend, roadType::highway, pixelsPerMeter);
     drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
     
-    if (pixelsPerMeter > 0.4) {
+    if (pixelsPerMeter > 1) {
         drawStreetNames(rend, roadType::highway, pixelsPerMeter, true);
         drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter, false);
         drawStreetNames(rend, roadType::minorRoad, pixelsPerMeter, false);
@@ -81,7 +81,7 @@ double pixelInMeters(ezgl::renderer* rend) {
     ezgl::rectangle world = rend->get_visible_world();
     ezgl::rectangle oneMeterBox(world.center(), 1, 1);
     ezgl::rectangle screen1Meter = rend->world_to_screen(oneMeterBox);
-    // std::cout << "1 meter in pixels: " << screen1Meter.width() << "\n";
+    std::cout << "1 meter in pixels: " << screen1Meter.width() << "\n";
     return screen1Meter.width();
 }
 
