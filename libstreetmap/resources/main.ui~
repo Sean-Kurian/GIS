@@ -218,11 +218,14 @@
               </packing>
             </child>
             <child type="overlay">
-              <object class="GtkComboBoxText">
+              <object class="GtkComboBoxText" id="mapDropDown">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="valign">start</property>
+                <items>
+                  <item id="torontoMap" translatable="yes">Toronto</item>
+                </items>
               </object>
               <packing>
                 <property name="index">3</property>
