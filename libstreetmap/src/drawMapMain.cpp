@@ -93,5 +93,6 @@ double pixelInMeters(ezgl::renderer* rend) {
 void initialSetup(ezgl::application* app, bool newWindow) {
     connectZoomButtons(app);
     connectSearchBar(app);
+    setUpDropDown(app);
 }
 

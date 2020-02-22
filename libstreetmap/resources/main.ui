@@ -225,6 +225,7 @@
                 <property name="valign">start</property>
                 <items>
                   <item id="torontoMap" translatable="yes">Toronto</item>
+                  <item id="sydneyMap" translatable="yes">Sydney</item>
                 </items>
               </object>
               <packing>

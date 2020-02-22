@@ -18,5 +18,8 @@
 //Connect Zoom buttons to callback functions
 void connectZoomButtons(ezgl::application* app);
 
+//Set up drop down menu for map switching
+void setUpDropDown(ezgl::application* app);
+
 #endif /* DRAWCUSTOMBUTTONS_H */
 

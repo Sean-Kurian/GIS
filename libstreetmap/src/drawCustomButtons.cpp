@@ -21,3 +21,11 @@ void connectZoomButtons(ezgl::application* app) {
     g_signal_connect(G_OBJECT(zoomInButton), "clicked", G_CALLBACK(ezgl::press_zoom_in), app);
     g_signal_connect(G_OBJECT(zoomOutButton), "clicked", G_CALLBACK(ezgl::press_zoom_out), app);
 }
+
+//Set up drop down menu for map switching
+void setUpDropDown(ezgl::application* app) {
+    GtkComboBox* dropDownMenu = (GtkComboBox*) app->get_object("mapDropDown");
+    
+    //Set the default selection
+    gboolean testSetDefault = gtk_combo_box_set_active_id(dropDownMenu, "torontoMap");
+}
