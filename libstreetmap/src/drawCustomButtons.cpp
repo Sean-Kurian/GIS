@@ -27,5 +27,5 @@ void setUpDropDown(ezgl::application* app) {
     GtkComboBox* dropDownMenu = (GtkComboBox*) app->get_object("mapDropDown");
     
     //Set the default selection
-    gboolean testSetDefault = gtk_combo_box_set_active_id(dropDownMenu, "torontoMap");
+    gtk_combo_box_set_active_id(dropDownMenu, "torontoMap");
 }
