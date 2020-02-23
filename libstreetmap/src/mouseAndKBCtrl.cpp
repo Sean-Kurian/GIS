@@ -16,5 +16,4 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
     displayIntersectionInfo(app, intIndex);
     app -> refresh_drawing(); 
     gData.removeLastHighlightedInt(); 
-    
 }

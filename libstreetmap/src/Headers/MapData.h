@@ -21,6 +21,9 @@
 #include <set>
 #include <unordered_set>
 
+#include "ezgl/graphics.hpp"
+#include "ezgl/application.hpp"
+
 class MapData {
 private:
     // Multimap which stores street names keyed to their street values
@@ -75,6 +78,9 @@ private:
     //String to store map_path
     std::string map_path;
     
+    //Pointer to current dialog box displaying intersection info
+    GtkWidget* intersectionDialog = NULL;
+    
 public:
 //==============================================================================
 // Constructors / Destructors
@@ -92,7 +98,7 @@ public:
     void allocSegmmentVecs(const unsigned& numSegments);
     void allocIntersectionVecs(const unsigned& numIntersections);
     
-    //Sets map path
+    // Sets map path
     void setMapPath(std::string mapPath);
 //==============================================================================
 // Mutators
@@ -143,6 +149,9 @@ public:
     
     // Adds way index (0 to numWays) to map keyed to its OSMID
     void addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID);
+    
+    // Sets pointer to current intersection info dialog box
+    void setIntersectionInfoBox(GtkWidget* dialog);
 //==============================================================================
 // Accessors
 //==============================================================================
@@ -204,8 +213,11 @@ public:
     // Returns way index (0 to numWays) of the OSMID. Outputs error if none found
     unsigned getWayIndexOfOSMID(const OSMID& wayID) const;
     
-    //Returns map path
+    // Returns map path
     std::string getMapPath();
+    
+    // Returns pointer to dialog box displaying currently clicked on intersection
+    GtkWidget* getIntersectionInfoBox();
 };
 
 #endif /* MAPDATA_H */

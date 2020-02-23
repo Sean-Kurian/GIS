@@ -12,6 +12,11 @@
 
 //Displays intersection info when the intersection is clicked
 void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
+    //If there was a previous dialog box displaying another intersection, delete it
+    if (gData.getIntersectionInfoBox() != nullptr) {
+        eraseIntersectionInfo(gData.getIntersectionInfoBox());
+    }
+    
     //Get the name of the intersection
     std::string intersectionName = getIntersectionName(intersectionIndex);
     
@@ -33,4 +38,12 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
     label = gtk_label_new(intersectionName.c_str());
     gtk_container_add(GTK_CONTAINER(content_area), label);
     gtk_widget_show_all(dialog);
+    
+    //Store the pointer to the dialog box just created
+    gData.setIntersectionInfoBox(dialog);
+}
+
+//Erases old intersection info when a new intersection is clicked
+void eraseIntersectionInfo(GtkWidget* dialog) {
+    gtk_widget_destroy(GTK_WIDGET(dialog));
 }
