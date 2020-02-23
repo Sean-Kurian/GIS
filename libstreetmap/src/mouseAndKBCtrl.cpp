@@ -3,6 +3,7 @@
 #include "m1.h"
 #include "drawMapHelpers.h"
 #include "LatLon.h"
+#include "displayInfo.h"
 
 
 void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, double y) {
@@ -12,6 +13,7 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
     unsigned intIndex = find_closest_intersection(clicked);
     std::cout << "Closest intersection: " << intIndex << "\n";
     gData.addHighlightedInt(intIndex);
+    displayIntersectionInfo(app, intIndex);
     app -> refresh_drawing(); 
     gData.removeLastHighlightedInt(); 
     

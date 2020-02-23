@@ -12,6 +12,7 @@
 #include "drawCustomButtons.h"
 #include "mouseAndKBCtrl.h"
 #include "searchBar.h"
+#include "displayInfo.h"
 
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"
