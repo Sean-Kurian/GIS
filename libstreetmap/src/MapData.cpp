@@ -76,7 +76,7 @@ void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
     adjacentIntsOfIntersection.resize(numIntersections);
 }
 
-//Sets map path
+// Sets map path
 void MapData::setMapPath(std::string mapPath) {
     map_path = mapPath;
 }
@@ -201,6 +201,11 @@ void MapData::addNodeIndexToOSMID(const unsigned& nodeIndex, const OSMID& nodeID
 // Adds way index (0 to numWays) to map keyed to its OSMID
 void MapData::addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID) {
     wayIndexOfOSMID.insert(std::make_pair(wayID, wayIndex));
+}
+
+// Sets pointer to current intersection info dialog box
+void MapData::setIntersectionInfoBox(GtkWidget* dialog) {
+    intersectionDialog = dialog;    
 }
 
 //==============================================================================
@@ -360,7 +365,12 @@ unsigned MapData::getWayIndexOfOSMID(const OSMID& wayID) const {
         return mapItr->second;
 }
 
-//Returns map path
+// Returns map path
 std::string MapData::getMapPath() {
     return map_path;
+}
+
+// Returns pointer to dialog box displaying currently clicked on intersection
+GtkWidget* MapData::getIntersectionInfoBox() {
+    return intersectionDialog;
 }
