@@ -76,6 +76,10 @@ void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
     adjacentIntsOfIntersection.resize(numIntersections);
 }
 
+//Sets map path
+void MapData::setMapPath(std::string mapPath) {
+    map_path = mapPath;
+}
 //==============================================================================
 // Mutators
 //==============================================================================
@@ -354,4 +358,9 @@ unsigned MapData::getWayIndexOfOSMID(const OSMID& wayID) const {
     // Found a valid OSMID. Return the way index of the OSMID
     else
         return mapItr->second;
+}
+
+//Returns map path
+std::string MapData::getMapPath() {
+    return map_path;
 }

@@ -224,11 +224,11 @@
                 <property name="halign">end</property>
                 <property name="valign">start</property>
                 <items>
-                  <item id="beijingMap" translatable="yes">Toronto</item>
+                  <item id="beijingMap" translatable="yes">Beijing, China</item>
                   <item id="cairoMap" translatable="yes">Cairo, Egypt</item>
                   <item id="capeTownMap" translatable="yes">Cape Town, South Africa</item>
                   <item id="goldenHorseshoeMap" translatable="yes">Golden Horseshoe, Canada</item>
-                  <item id="hamiltonMap" translatable="yes">Hamilton, Canada</item>
+                  <item id="/cad2/ece297s/public/maps/hamilton_canada.streets.bin" translatable="yes">Hamilton, Canada</item>
                   <item id="hongKongMap" translatable="yes">Hong Kong, China</item>
                   <item id="icelandMap" translatable="yes">Iceland</item>
                   <item id="interlakenMap" translatable="yes">Interlaken, Switzerland</item>
@@ -242,7 +242,7 @@
                   <item id="sydneyMap" translatable="yes">Sydney, Australia</item>
                   <item id="tehranMap" translatable="yes">Tehran, Iran</item>
                   <item id="tokyoMap" translatable="yes">Tokyo, Japan</item>
-                  <item id="torontoMap" translatable="yes">Toronto, Canada</item>
+                  <item id="/cad2/ece297s/public/maps/toronto_canada.streets.bin" translatable="yes">Toronto, Canada</item>
                 </items>
               </object>
               <packing>
