@@ -26,6 +26,8 @@ void connectZoomButtons(ezgl::application* app) {
 void setUpDropDown(ezgl::application* app) {
     GtkComboBox* dropDownMenu = (GtkComboBox*) app->get_object("mapDropDown");
     
-    //Set the default selection
-    gtk_combo_box_set_active_id(dropDownMenu, "torontoMap");
+    //Set the default selection to be the current map
+    std::string mapPath = gData.getMapPath();
+    const char* map_path = mapPath.c_str();
+    gtk_combo_box_set_active_id(dropDownMenu, map_path);
 }

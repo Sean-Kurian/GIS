@@ -72,6 +72,9 @@ private:
     // Unordered map which stores the way indexes of OSMIDs in key, value pairs
     std::unordered_map<OSMID, unsigned> wayIndexOfOSMID;
     
+    //String to store map_path
+    std::string map_path;
+    
 public:
 //==============================================================================
 // Constructors / Destructors
@@ -88,6 +91,9 @@ public:
     void allocStreetVecs(const unsigned& numStreets);
     void allocSegmmentVecs(const unsigned& numSegments);
     void allocIntersectionVecs(const unsigned& numIntersections);
+    
+    //Sets map path
+    void setMapPath(std::string mapPath);
 //==============================================================================
 // Mutators
 //==============================================================================
@@ -197,6 +203,9 @@ public:
     
     // Returns way index (0 to numWays) of the OSMID. Outputs error if none found
     unsigned getWayIndexOfOSMID(const OSMID& wayID) const;
+    
+    //Returns map path
+    std::string getMapPath();
 };
 
 #endif /* MAPDATA_H */

@@ -44,6 +44,9 @@ bool load_map(std::string mapPath) {
         getSegmentData(numSegments);
         getIntersectionData(numIntersections);
         getFeatureData(numFeatures);
+        
+        //Stores the map path
+        gData.setMapPath(mapPath);
     }
     // Changes "streets" to "osm" to load layer 1 data
     mapPath = std::regex_replace(mapPath, std::regex("streets"), "osm");
