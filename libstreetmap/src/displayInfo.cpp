@@ -12,6 +12,10 @@
 
 //Displays intersection info when the intersection is clicked
 void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
+    //Get the name of the intersection
+    std::string intersectionName = getIntersectionName(intersectionIndex);
+    
+    //Create the dialog box and display it to the screen
     GObject* window;
     GtkWidget* content_area;
     GtkWidget* label;
@@ -26,7 +30,7 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
             NULL);
     
     content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-    label = gtk_label_new("My intersection info goes here");
+    label = gtk_label_new(intersectionName.c_str());
     gtk_container_add(GTK_CONTAINER(content_area), label);
     gtk_widget_show_all(dialog);
 }

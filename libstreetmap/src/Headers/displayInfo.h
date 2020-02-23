@@ -17,6 +17,9 @@
 //Displays intersection info when the intersection is clicked
 void displayIntersectionInfo(ezgl::application* app, int intersectionIndex);
 
+//Erases old intersection info when a new intersection is clicked
+void eraseIntersectionInfo(GtkWidget* dialog);
+
 
 #endif /* DISPLAYINFO_H */
 
