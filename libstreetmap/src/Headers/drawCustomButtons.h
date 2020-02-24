@@ -21,5 +21,8 @@ void connectZoomButtons(ezgl::application* app);
 //Set up drop down menu for map switching
 void setUpDropDown(ezgl::application* app);
 
+//Callback function for drop down menu
+void dropDownChanged(GtkComboBox* dropDownMenu, gpointer data);
+
 #endif /* DRAWCUSTOMBUTTONS_H */
 

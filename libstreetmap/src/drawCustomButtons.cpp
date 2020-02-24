@@ -30,4 +30,12 @@ void setUpDropDown(ezgl::application* app) {
     std::string mapPath = gData.getMapPath();
     const char* map_path = mapPath.c_str();
     gtk_combo_box_set_active_id(dropDownMenu, map_path);
+    
+    //Connect object to callback funciton
+    g_signal_connect(G_OBJECT(dropDownMenu), "changed", G_CALLBACK(dropDownChanged), app);
+}
+
+//Callback function for drop down menu
+void dropDownChanged(GtkComboBox* dropDownMenu, gpointer) {
+    const char* currentID = gtk_combo_box_get_active_id(dropDownMenu); //For now, this captures the ID of the active entry
 }
