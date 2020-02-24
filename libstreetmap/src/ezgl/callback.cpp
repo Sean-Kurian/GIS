@@ -130,6 +130,10 @@ gboolean scroll_mouse(GtkWidget *, GdkEvent *event, gpointer data)
 {
 
   if(event->type == GDK_SCROLL) {
+      //Erase the pop up box before any scrolling action
+      if (gData.getIntersectionInfoBox() != nullptr) {
+        eraseIntersectionInfo(gData.getIntersectionInfoBox());
+    }
     auto application = static_cast<ezgl::application *>(data);
 
     std::string main_canvas_id = application->get_main_canvas_id();
