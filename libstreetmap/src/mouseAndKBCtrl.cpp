@@ -21,4 +21,11 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
         gData.removeLastHighlightedInt(); 
     }
     
+    //If it is not a left click, erase the displayed intersection info if it exists
+    else {
+        if (gData.getIntersectionInfoBox() != nullptr) {
+            eraseIntersectionInfo(gData.getIntersectionInfoBox());
+        }
+    }
+    
 }
