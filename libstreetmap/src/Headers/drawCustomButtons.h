@@ -1,15 +1,10 @@
-/* 
- * File:   drawCustomButtons.h
- * Author: green107
- * Header file for functions used to draw custom buttons on top of map
- * Created on February 17, 2020, 3:21 PM
- */
-
 #ifndef DRAWCUSTOMBUTTONS_H
 #define DRAWCUSTOMBUTTONS_H
 
 #include "StreetsDatabaseAPI.h"
 #include "globalData.h"
+#include "gtkObjects.h"
+#include "drawMapHelpers.h"
 
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"
