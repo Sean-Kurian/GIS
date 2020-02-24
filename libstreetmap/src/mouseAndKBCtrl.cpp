@@ -10,10 +10,15 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
     app->update_message("Mouse Clicked");
     std::cout << "User clicked mouse at (" << x << "," << y << ")\n";
     LatLon clicked = LatLon(latFromY(y), lonFromX(x));
-    unsigned intIndex = find_closest_intersection(clicked);
-    std::cout << "Closest intersection: " << intIndex << "\n";
-    gData.addHighlightedInt(intIndex);
-    displayIntersectionInfo(app, intIndex);
-    app -> refresh_drawing(); 
-    gData.removeLastHighlightedInt(); 
+    
+    //If it is a left click, display intersection info
+    if (event->button == 1) {
+        unsigned intIndex = find_closest_intersection(clicked);
+        std::cout << "Closest intersection: " << intIndex << "\n";
+        gData.addHighlightedInt(intIndex);
+        displayIntersectionInfo(app, intIndex);
+        app -> refresh_drawing(); 
+        gData.removeLastHighlightedInt(); 
+    }
+    
 }
