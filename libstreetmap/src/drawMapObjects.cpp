@@ -33,7 +33,7 @@ void drawStreets(ezgl::renderer* rend, const roadType& type, const double& pixel
 }
 
 //
-void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter, const bool& clearInts) {
+void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter) {
     rend->set_horiz_text_just(ezgl::text_just::center);
     rend->set_vert_text_just(ezgl::text_just::center);
     rend->set_color(ezgl::BLACK);
@@ -70,7 +70,7 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
                     rend->set_font_size(textHeight);
                     wasDrawn = rend->draw_text(center, streetName, width, height);
                     textHeight -= 1.0;
-                } while (!wasDrawn && textHeight >= 14.0);
+                } while (!wasDrawn && textHeight >= 16.0);
             }
             else {
                 for (unsigned curveIndex = 0; curveIndex < numCurves; ++curveIndex) {
