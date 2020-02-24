@@ -17,6 +17,7 @@
  */
 
 #include "ezgl/callback.hpp"
+#include "displayInfo.h"
 
 namespace ezgl {
 
