@@ -13,6 +13,7 @@
 #include "mouseAndKBCtrl.h"
 #include "searchBar.h"
 #include "displayInfo.h"
+#include "gtkObjects.h"
 
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"
@@ -89,6 +90,8 @@ double pixelInMeters(ezgl::renderer* rend) {
     std::cout << "1 meter in pixels: " << screen1Meter.width() << "\n";
     return screen1Meter.width();
 }
+
+
 
 //Initial setup of the application
 void initialSetup(ezgl::application* app, bool) {

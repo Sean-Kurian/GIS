@@ -99,7 +99,7 @@ public:
     void allocIntersectionVecs(const unsigned& numIntersections);
     
     // Sets map path
-    void setMapPath(std::string mapPath);
+    void setMapPath(std::string _mapPath);
 //==============================================================================
 // Mutators
 //==============================================================================

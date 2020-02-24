@@ -28,12 +28,14 @@ MapData::~MapData() {
     travelTimeOfSegment.clear();
     segsOfIntersection.clear();
     adjacentIntsOfIntersection.clear();
+    hlData.highlightedInts.clear(); 
+    hlData.highlightedSegs.clear();
+    indexesOfNaturalFeatures.clear();
+    indexesOfBuildings.clear();
+    segsOfStreetType.clear();
+    segsOfWayOSMID.clear();
     nodeIndexOfOSMID.clear();
     wayIndexOfOSMID.clear();
-    segsOfWayOSMID.clear();
-    hlData.highlightedInts.clear(); 
-    hlData.highlightedSegs.clear(); 
-    
 }
 
 // Clears all data structures. Used to load another map without needing destructor
@@ -45,11 +47,14 @@ void MapData::clearMapData() {
     travelTimeOfSegment.clear();
     segsOfIntersection.clear();
     adjacentIntsOfIntersection.clear();
+    hlData.highlightedInts.clear(); 
+    hlData.highlightedSegs.clear();
+    indexesOfNaturalFeatures.clear();
+    indexesOfBuildings.clear();
+    segsOfStreetType.clear();
+    segsOfWayOSMID.clear();
     nodeIndexOfOSMID.clear();
     wayIndexOfOSMID.clear();
-    segsOfWayOSMID.clear();
-    hlData.highlightedInts.clear(); 
-    hlData.highlightedSegs.clear(); 
 }
 
 //==============================================================================
@@ -77,8 +82,8 @@ void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
 }
 
 // Sets map path
-void MapData::setMapPath(std::string map_path) {
-    mapPath = map_path;
+void MapData::setMapPath(std::string _mapPath) {
+    mapPath = _mapPath;
 }
 //==============================================================================
 // Mutators

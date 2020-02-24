@@ -1,10 +1,3 @@
-/* 
- * File:   displayInfo.h
- * Author: green107
- * Header file for functions used to display info on the map
- * Created on February 22, 2020, 10:26 PM
- */
-
 #ifndef DISPLAYINFO_H
 #define DISPLAYINFO_H
 
