@@ -77,8 +77,8 @@ void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
 }
 
 // Sets map path
-void MapData::setMapPath(std::string mapPath) {
-    map_path = mapPath;
+void MapData::setMapPath(std::string map_path) {
+    mapPath = map_path;
 }
 //==============================================================================
 // Mutators
