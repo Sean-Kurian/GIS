@@ -46,4 +46,5 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
 //Erases old intersection info when a new intersection is clicked
 void eraseIntersectionInfo(GtkWidget* dialog) {
     gtk_widget_destroy(GTK_WIDGET(dialog));
+    gData.setIntersectionInfoBox(nullptr);
 }
