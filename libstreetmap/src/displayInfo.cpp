@@ -32,7 +32,7 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
             "",
             (GtkWindow*) window,
             GTK_DIALOG_DESTROY_WITH_PARENT,
-            NULL);
+            NULL, NULL);
     
     content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
     label = gtk_label_new(intersectionName.c_str());
