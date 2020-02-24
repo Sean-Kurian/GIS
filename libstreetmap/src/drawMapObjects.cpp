@@ -103,7 +103,7 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
                 }
             }
         }
-        if (oneWay){
+        /*if (oneWay){
             fromPosLL = getIntersectionPosition(SSData.from);
             fromPos = ezgl::point2d(xFromLon(fromPosLL.lon()), yFromLat(fromPosLL.lat()));
             height = std::floor(pixelsPerMeter * 5.0 * SSIndex.second);
@@ -122,11 +122,11 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
                 rend->set_text_rotation(angle);
                 center = ezgl::point2d(((toPos.x + fromPos.x) * 0.5), (toPos.y + fromPos.y) * 0.5);
                 
-                /*do {
+                do {
                     rend->set_font_size(textHeight);
                     wasDrawn = rend->draw_text(center, "--->", width, height);
                     textHeight -= 1.0;
-                } while (!wasDrawn && textHeight >= 14.0);*/
+                } while (!wasDrawn && textHeight >= 14.0);
             }
             else {
                 for (unsigned curveIndex = 0; curveIndex < numCurves; ++curveIndex) {
@@ -145,7 +145,7 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
                     fromPosLL = toPosLL;
                     fromPos = toPos;
                 }
-                /*if (!wasDrawn) {
+                if (!wasDrawn) {
                     toPosLL = getIntersectionPosition(SSData.to);
                     toPos = ezgl::point2d(xFromLon(toPosLL.lon()), yFromLat(toPosLL.lat()));
                     width = find_distance_between_two_points(std::make_pair(fromPosLL, toPosLL));
@@ -156,9 +156,9 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
                     rend->set_text_rotation(angle);
                     center = ezgl::point2d(((toPos.x + fromPos.x) * 0.5), (toPos.y + fromPos.y) * 0.5);
                     wasDrawn = rend->draw_text(center, "----->", width, height);
-                }*/
+                }
             }
-        }
+        }*/
     } 
 }
 
@@ -218,7 +218,7 @@ void drawBuildings(ezgl::renderer* rend) {
         }
     }
 }
-
+ //Example, replace with relevant indices and icons
 void drawPOI(ezgl::renderer* rend){
     std::vector<unsigned> buildings = gData.getIndexesOfBuildings();
     ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/small_image.png");
