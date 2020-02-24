@@ -76,7 +76,7 @@ private:
     std::unordered_map<OSMID, unsigned> wayIndexOfOSMID;
     
     //String to store map_path
-    std::string map_path;
+    std::string mapPath;
     
     //Pointer to current dialog box displaying intersection info
     GtkWidget* intersectionDialog = NULL;

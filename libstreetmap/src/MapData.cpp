@@ -367,7 +367,7 @@ unsigned MapData::getWayIndexOfOSMID(const OSMID& wayID) const {
 
 // Returns map path
 std::string MapData::getMapPath() {
-    return map_path;
+    return mapPath;
 }
 
 // Returns pointer to dialog box displaying currently clicked on intersection
