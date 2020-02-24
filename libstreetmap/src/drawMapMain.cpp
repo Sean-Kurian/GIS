@@ -65,9 +65,9 @@ void drawMainCanvas(ezgl::renderer* rend) {
     drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
     
     if (pixelsPerMeter > 1) {
-        drawStreetNames(rend, roadType::highway, pixelsPerMeter, true);
-        drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter, false);
-        drawStreetNames(rend, roadType::minorRoad, pixelsPerMeter, false);
+        drawStreetNames(rend, roadType::highway, pixelsPerMeter);
+        drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter);
+        drawStreetNames(rend, roadType::minorRoad, pixelsPerMeter);
         //drawOneWayArrows(rend, roadType::highway, pixelsPerMeter); //Check zoom levels, need to avoid overlap between names and arrows
         //drawOneWayArrows(rend, roadType::majorRoad, pixelsPerMeter);
         //drawOneWayArrows(rend, roadType::minorRoad, pixelsPerMeter);
