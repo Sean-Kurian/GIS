@@ -20,8 +20,6 @@ void drawStreets(ezgl::renderer* rend, const roadType& type, const double& roadW
 void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter);
 void drawOneWayArrows(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter);
 
-void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter, const bool& clearInts);
-
 void drawAllFeatures(ezgl::renderer* rend);
 void drawFeatures(ezgl::renderer* rend, const naturalFeature& type);
 void drawBuildings(ezgl::renderer* rend);
