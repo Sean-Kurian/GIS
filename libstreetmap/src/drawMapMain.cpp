@@ -57,7 +57,7 @@ void drawMainCanvas(ezgl::renderer* rend) {
     if (pixelsPerMeter > 0.4) {
         drawBuildings(rend);
     }
-    
+   
     if (pixelsPerMeter > 0.07) {
         drawStreets(rend, roadType::minorRoad, pixelsPerMeter);
     }
