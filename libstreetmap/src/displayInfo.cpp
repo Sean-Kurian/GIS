@@ -41,10 +41,24 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
     
     //Store the pointer to the dialog box just created
     gData.setIntersectionInfoBox(dialog);
+    
+    //Connect dialog box to call when "x" button is clicked
+    g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(closeIntersectionInfo), app);
 }
 
 //Erases old intersection info when a new intersection is clicked
 void eraseIntersectionInfo(GtkWidget* dialog) {
     gtk_widget_destroy(GTK_WIDGET(dialog));
     gData.setIntersectionInfoBox(nullptr);
+}
+
+//Erases intersection dialog when "x" button is clicked on dialog box
+void closeIntersectionInfo(GtkDialog* dialog, gint responseID, gpointer) {
+    if (responseID == GTK_RESPONSE_DELETE_EVENT) {
+        //If there was a previous dialog box displaying another intersection, delete it
+        if (gData.getIntersectionInfoBox() != nullptr) {
+            eraseIntersectionInfo(gData.getIntersectionInfoBox());
+        }
+    }
+    
 }
