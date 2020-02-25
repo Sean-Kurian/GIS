@@ -22,7 +22,8 @@ void getStreetData(const unsigned& numStreets);
 void getSegmentData(const unsigned& numStreetSegments);
 void getIntersectionData(const unsigned& numIntersections);
 void getFeatureData(const unsigned& numFeatures);
-void getLayer1Data(const unsigned& numNodes, const unsigned& numWays);
+void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, 
+                   const unsigned& numRelations);
 
 // Loads layer 1 and 2 data into gData's data structures
 bool load_map(std::string mapPath) {
@@ -32,7 +33,6 @@ bool load_map(std::string mapPath) {
         const unsigned numStreets = getNumStreets();
         const unsigned numSegments = getNumStreetSegments();
         const unsigned numIntersections = getNumIntersections();
-        const unsigned numFeatures = getNumFeatures();
         
         // Sizes vectors in gData to correct size to avoid indexing errors
         gData.allocStreetVecs(numStreets);
@@ -43,7 +43,6 @@ bool load_map(std::string mapPath) {
         getStreetData(numStreets);
         getSegmentData(numSegments);
         getIntersectionData(numIntersections);
-        getFeatureData(numFeatures);
         
         //Stores the map path
         gData.setMapPath(mapPath);
@@ -55,8 +54,12 @@ bool load_map(std::string mapPath) {
     if (loadSuccessful) {
         const unsigned numNodes = getNumberOfNodes();
         const unsigned numWays = getNumberOfWays();
+        const unsigned numRelations = getNumberOfRelations();
+        const unsigned numFeatures = getNumFeatures();
         // Loops over all nodes and ways to store OSMIDs keyed to their index
-        getLayer1Data(numNodes, numWays);
+        getLayer1Data(numNodes, numWays, numRelations);
+        //
+        getFeatureData(numFeatures);
     }
     return loadSuccessful;
 }
@@ -150,7 +153,7 @@ void getFeatureData(const unsigned& numFeatures) {
             maxLat = std::max(maxLat, location.lat());
             maxLon = std::max(maxLon, location.lon());
         }
-        naturalFeature type = determineNaturalFeature(getFeatureType(featureIndex));
+        naturalFeature type = determineNaturalFeature(featureIndex);
         if (type != naturalFeature::NF_TYPECOUNT)
             gData.addIndexOfNaturalFeature(featureIndex, type);
         else
@@ -160,9 +163,10 @@ void getFeatureData(const unsigned& numFeatures) {
 }
 
 // Loads maps in gData which connect the node/way indexes with their OSMIDs
-void getLayer1Data(const unsigned& numNodes, const unsigned& numWays) {
+void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsigned& numRelations) {
     const OSMNode* node;
     const OSMWay* way;
+    const OSMRelation* relation;
     // Loops over all nodes and stores their index with their OSMID
     for (unsigned nodeIndex = 0; nodeIndex < numNodes; ++nodeIndex) {
         node = getNodeByIndex(nodeIndex);
@@ -185,7 +189,8 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays) {
                     numLanes = std::stoi(val);
                 }
                 catch (const std::exception& e) {
-                    std::cerr << "Exception thrown when determining number of lanes\n" 
+                    std::cerr << "Exception thrown when determining number of lanes\n"
+                              << "Value: " << val << "\n"
                               << "Exception: " << e.what() << "\n";
                 }
             }
@@ -194,6 +199,11 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays) {
         }
         for (const int segIndex : segs)
             gData.addSegToStreetType(segIndex, numLanes, type);
+    }
+    //
+    for (unsigned relationIndex = 0; relationIndex < numRelations; ++relationIndex) {
+        relation = getRelationByIndex(relationIndex);
+        gData.addRelationIndexToOSMID(relationIndex, relation->id());
     }
 }
 
@@ -219,17 +229,35 @@ roadType determineRoadType(const std::string& val) {
     return roadType::minorRoad;
 }
 
-naturalFeature determineNaturalFeature(FeatureType type) {
+naturalFeature determineNaturalFeature(const unsigned& featureIndex) {
+    FeatureType type = getFeatureType(featureIndex);
+    
     if (type == FeatureType::Building)
         return naturalFeature::NF_TYPECOUNT;
+    
+    else if (type == FeatureType::Greenspace)
+        return naturalFeature::forest;
+    
+    else if (type == FeatureType::Park || type == FeatureType::Golfcourse)
+        return naturalFeature::park;
+    
     else if (type == FeatureType::Island)
         return naturalFeature::island;
+    
     else if (type == FeatureType::Beach)
         return naturalFeature::beach;
-    else if (type == FeatureType::Park)
-        return naturalFeature::park;
-    else if (type == FeatureType::Lake || type == FeatureType::River
-            || type == FeatureType::Stream)
-        return naturalFeature::water;
-    else return naturalFeature::forest;
+    
+//    else {
+//        TypedOSMID featureOSM = getFeatureOSMID(featureIndex);
+//        
+//    }
+    
+    else if (type == FeatureType::Lake)
+        return naturalFeature::lake;
+    
+    else if (type == FeatureType::River)
+        return naturalFeature::river;
+    
+    else if (type == FeatureType::Stream)
+        return naturalFeature::minorWater;
 }

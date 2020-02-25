@@ -13,11 +13,13 @@ enum naturalFeature {
     park,
     island,
     beach,
-    water,
+    lake,
+    river,
+    minorWater,
     NF_TYPECOUNT
 };
 
-naturalFeature determineNaturalFeature(FeatureType type);
+naturalFeature determineNaturalFeature(const unsigned& featureIndex);
 
 #endif /* FEATURETYPES_H */
 
