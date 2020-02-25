@@ -16,7 +16,7 @@
 //==============================================================================
 
 MapData::MapData() {
-    // Currently nothing needed as all data is stored during load_map
+    intersectionDialog = nullptr;
 }
 
 // Only called on program exit

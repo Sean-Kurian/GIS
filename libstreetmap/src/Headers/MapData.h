@@ -79,7 +79,7 @@ private:
     std::string mapPath;
     
     //Pointer to current dialog box displaying intersection info
-    GtkWidget* intersectionDialog = NULL;
+    GtkWidget* intersectionDialog;
     
 public:
 //==============================================================================
