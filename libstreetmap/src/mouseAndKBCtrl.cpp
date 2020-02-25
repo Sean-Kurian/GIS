@@ -29,3 +29,18 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
     }
     
 }
+
+//
+void actOnKeyPress(ezgl::application* app, GdkEventKey* event, char* key) {
+    if (event->type == GdkEventType::GDK_KEY_PRESS) {
+        ezgl::canvas* canvas = app->get_canvas(app->get_main_canvas_id());
+        if (strcmp(key, "Up") == 0)
+            ezgl::translate_up(canvas, 5.0);
+        else if (strcmp(key, "Down") == 0)
+            ezgl::translate_down(canvas, 5.0);
+        else if (strcmp(key, "Left") == 0)
+            ezgl::translate_left(canvas, 5.0);
+        else if (strcmp(key, "Right") == 0)
+            ezgl::translate_right(canvas, 5.0);
+    }
+}
