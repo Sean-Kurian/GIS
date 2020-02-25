@@ -12,6 +12,9 @@
 //
 void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, double y);
 
+//
+void actOnKeyPress(ezgl::application* app, GdkEventKey* event, char* key);
+
 
 #endif /* MOUSEANDKEYBOARDCONTROL_H */
 

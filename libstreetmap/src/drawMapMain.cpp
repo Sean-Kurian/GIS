@@ -42,7 +42,7 @@ void draw_map() {
     
     application.add_canvas("MainCanvas", drawMainCanvas, mapCoords);
     
-    application.run(initialSetup, actOnMousePress, nullptr, nullptr);
+    application.run(initialSetup, actOnMousePress, nullptr, actOnKeyPress);
 }
 
 //
@@ -90,8 +90,6 @@ double pixelInMeters(ezgl::renderer* rend) {
     std::cout << "1 meter in pixels: " << screen1Meter.width() << "\n";
     return screen1Meter.width();
 }
-
-
 
 //Initial setup of the application
 void initialSetup(ezgl::application* app, bool) {
