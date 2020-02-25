@@ -164,11 +164,13 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
 
 //
 void drawAllFeatures(ezgl::renderer* rend) {
-    drawFeatures(rend, naturalFeature::park);
-    drawFeatures(rend, naturalFeature::forest);
-    drawFeatures(rend, naturalFeature::water);
+    drawFeatures(rend, naturalFeature::lake);
     drawFeatures(rend, naturalFeature::island);
+    drawFeatures(rend, naturalFeature::river);
+    drawFeatures(rend, naturalFeature::forest);
+    drawFeatures(rend, naturalFeature::park);
     drawFeatures(rend, naturalFeature::beach);
+    drawFeatures(rend, naturalFeature::minorWater);
 }
 
 //
@@ -256,7 +258,7 @@ ezgl::color getFeatureColour(const FeatureType& type) {
         case River:
             return ezgl::color(0xA2, 0xCD, 0xFC);
         case Island:
-            return ezgl::color(0x8A, 0xC7, 0x63);
+            return ezgl::color(0xCB, 0xE6, 0xA3);
         case Building:
             return ezgl::color(0x84, 0x94, 0xA4);
         case Greenspace:

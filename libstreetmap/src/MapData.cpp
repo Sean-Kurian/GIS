@@ -208,6 +208,11 @@ void MapData::addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID) {
     wayIndexOfOSMID.insert(std::make_pair(wayID, wayIndex));
 }
 
+//
+void MapData::addRelationIndexToOSMID(const unsigned& relationIndex, const OSMID& relationID) {
+    relationIndexOfOSMID.insert(std::make_pair(relationID, relationIndex));
+}
+
 // Sets pointer to current intersection info dialog box
 void MapData::setIntersectionInfoBox(GtkWidget* dialog) {
     intersectionDialog = dialog;    
@@ -369,6 +374,20 @@ unsigned MapData::getWayIndexOfOSMID(const OSMID& wayID) const {
     else
         return mapItr->second;
 }
+
+//
+unsigned MapData::getRelationIndexOfOSMID(const OSMID& relationID) const {
+    const auto mapItr = relationIndexOfOSMID.find(relationID);
+    // If no OSMID match is found the itr will point to end
+    if (mapItr == relationIndexOfOSMID.end()) {
+        std::cerr << "No relation found with OSMID " << relationID << "\n";
+        return 0;
+    }
+    // Found a valid OSMID. Return the relation index of the OSMID
+    else
+        return mapItr->second;
+}
+
 
 // Returns map path
 std::string MapData::getMapPath() {

@@ -75,6 +75,9 @@ private:
     // Unordered map which stores the way indexes of OSMIDs in key, value pairs
     std::unordered_map<OSMID, unsigned> wayIndexOfOSMID;
     
+    //
+    std::unordered_map<OSMID, unsigned> relationIndexOfOSMID;
+    
     //String to store map_path
     std::string mapPath;
     
@@ -125,6 +128,7 @@ public:
     //
     void addHighlightedInt(const IntersectionIndex& intID);
     
+    //
     void removeLastHighlightedInt(); 
     
     //
@@ -149,6 +153,9 @@ public:
     
     // Adds way index (0 to numWays) to map keyed to its OSMID
     void addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID);
+    
+    //
+    void addRelationIndexToOSMID(const unsigned& relationIndex, const OSMID& relationID);
     
     // Sets pointer to current intersection info dialog box
     void setIntersectionInfoBox(GtkWidget* dialog);
@@ -212,6 +219,9 @@ public:
     
     // Returns way index (0 to numWays) of the OSMID. Outputs error if none found
     unsigned getWayIndexOfOSMID(const OSMID& wayID) const;
+    
+    //
+    unsigned getRelationIndexOfOSMID(const OSMID& relationID) const;
     
     // Returns map path
     std::string getMapPath();
