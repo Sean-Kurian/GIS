@@ -180,8 +180,15 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays) {
         for (unsigned tagNum = 0; tagNum < getTagCount(way); ++tagNum) {
             std::string key, val;
             std::tie(key, val) = getTagPair(way, tagNum);
-            if (key == "lanes") 
-                numLanes = std::stoi(val);
+            if (key == "lanes") {
+                try {
+                    numLanes = std::stoi(val);
+                }
+                catch (const std::exception& e) {
+                    std::cerr << "Exception thrown when determining number of lanes\n" 
+                              << "Exception: " << e.what() << "\n";
+                }
+            }
             else if (key == "highway") 
                 type = determineRoadType(val);
         }
