@@ -163,7 +163,7 @@ gboolean press_zoom_fit(GtkWidget *, gpointer data)
 
   std::string main_canvas_id = application->get_main_canvas_id();
   auto canvas = application->get_canvas(main_canvas_id);
-
+  
   ezgl::zoom_fit(canvas, canvas->get_camera().get_initial_world());
 
   return TRUE;
