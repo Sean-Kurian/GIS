@@ -3,7 +3,6 @@
 
 #include "StreetsDatabaseAPI.h"
 #include "globalData.h"
-#include "gtkObjects.h"
 #include "drawMapHelpers.h"
 
 #include "ezgl/application.hpp"

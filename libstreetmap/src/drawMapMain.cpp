@@ -13,7 +13,6 @@
 #include "mouseAndKBCtrl.h"
 #include "searchBar.h"
 #include "displayInfo.h"
-#include "gtkObjects.h"
 
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"
@@ -69,9 +68,6 @@ void drawMainCanvas(ezgl::renderer* rend) {
         drawStreetNames(rend, roadType::highway, pixelsPerMeter);
         drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter);
         drawStreetNames(rend, roadType::minorRoad, pixelsPerMeter);
-        //drawOneWayArrows(rend, roadType::highway, pixelsPerMeter); //Check zoom levels, need to avoid overlap between names and arrows
-        //drawOneWayArrows(rend, roadType::majorRoad, pixelsPerMeter);
-        //drawOneWayArrows(rend, roadType::minorRoad, pixelsPerMeter);
     }
     
     if (pixelsPerMeter > 1.8 && pixelsPerMeter < 1.9){

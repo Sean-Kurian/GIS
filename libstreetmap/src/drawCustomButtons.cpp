@@ -4,10 +4,6 @@
 
 #include "drawCustomButtons.h"
 
-namespace gtkObjects {
-    GtkComboBox* dropDownMenu;
-}
-
 //Connect Zoom buttons to callback functions
 void connectZoomButtons(ezgl::application* app) {
     GtkWidget* zoomInButton = GTK_WIDGET(app->get_object("zoomInButton"));
@@ -21,13 +17,13 @@ void connectZoomButtons(ezgl::application* app) {
 
 //Set up drop down menu for map switching
 void setUpDropDown(ezgl::application* app) {
-    gtkObjects::dropDownMenu = (GtkComboBox*) app->get_object("mapDropDown");
+    GtkComboBox* dropDownMenu = (GtkComboBox*) app->get_object("mapDropDown");
     GtkWidget* switchMapButton = GTK_WIDGET(app->get_object("switchMapButton"));
     
     //Set the default selection to be the current map
     std::string mapPath = gData.getMapPath();
     const char* mapPathCstr = mapPath.c_str();
-    gtk_combo_box_set_active_id(gtkObjects::dropDownMenu, mapPathCstr);
+    gtk_combo_box_set_active_id(dropDownMenu, mapPathCstr);
     
     g_signal_connect(G_OBJECT(switchMapButton), "clicked", G_CALLBACK(switchMap), app);
 }
