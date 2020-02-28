@@ -176,7 +176,6 @@
             </child>
             <child type="overlay">
               <object class="GtkButton" id="zoomInButton">
-                <property name="label" translatable="yes">+</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
@@ -184,6 +183,14 @@
                 <property name="valign">end</property>
                 <property name="margin_right">10</property>
                 <property name="margin_bottom">45</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="width_request">0</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">minus.png</property>
+                  </object>
+                </child>
               </object>
             </child>
             <child type="overlay">
@@ -224,24 +231,24 @@
                 <property name="halign">end</property>
                 <property name="valign">start</property>
                 <items>
-                  <item id="beijingMap" translatable="yes">Beijing, China</item>
-                  <item id="cairoMap" translatable="yes">Cairo, Egypt</item>
-                  <item id="capeTownMap" translatable="yes">Cape Town, South Africa</item>
-                  <item id="goldenHorseshoeMap" translatable="yes">Golden Horseshoe, Canada</item>
+                  <item id="/cad2/ece297s/public/maps/beijing_china.streets.bin" translatable="yes">Beijing, China</item>
+                  <item id="/cad2/ece297s/public/maps/cairo_egypt.streets.bin" translatable="yes">Cairo, Egypt</item>
+                  <item id="/cad2/ece297s/public/maps/cape-town_south-africa.streets.bin" translatable="yes">Cape Town, South Africa</item>
+                  <item id="/cad2/ece297s/public/maps/golden-horseshoe_canada.streets.bin" translatable="yes">Golden Horseshoe, Canada</item>
                   <item id="/cad2/ece297s/public/maps/hamilton_canada.streets.bin" translatable="yes">Hamilton, Canada</item>
-                  <item id="hongKongMap" translatable="yes">Hong Kong, China</item>
-                  <item id="icelandMap" translatable="yes">Iceland</item>
-                  <item id="interlakenMap" translatable="yes">Interlaken, Switzerland</item>
-                  <item id="londonMap" translatable="yes">London, England</item>
-                  <item id="moscowMap" translatable="yes">Moscow, Russia</item>
-                  <item id="newDelhiMap" translatable="yes">New Delhi, India</item>
-                  <item id="newYorkMap" translatable="yes">New York, USA</item>
-                  <item id="rioDeJanerioMap" translatable="yes">Rio De Janerio, Brazil</item>
-                  <item id="saintHelenaMap" translatable="yes">Saint Helena</item>
-                  <item id="singaporeMap" translatable="yes">Singapore</item>
-                  <item id="sydneyMap" translatable="yes">Sydney, Australia</item>
-                  <item id="tehranMap" translatable="yes">Tehran, Iran</item>
-                  <item id="tokyoMap" translatable="yes">Tokyo, Japan</item>
+                  <item id="/cad2/ece297s/public/maps/hong-kong_china.streets.bin" translatable="yes">Hong Kong, China</item>
+                  <item id="/cad2/ece297s/public/maps/iceland.streets.bin" translatable="yes">Iceland</item>
+                  <item id="/cad2/ece297s/public/maps/interlaken_switzerland.streets.bin" translatable="yes">Interlaken, Switzerland</item>
+                  <item id="/cad2/ece297s/public/maps/london_england.streets.bin" translatable="yes">London, England</item>
+                  <item id="/cad2/ece297s/public/maps/moscow_russia.streets.bin" translatable="yes">Moscow, Russia</item>
+                  <item id="/cad2/ece297s/public/maps/new-delhi_india.streets.bin" translatable="yes">New Delhi, India</item>
+                  <item id="/cad2/ece297s/public/maps/new-york_usa.streets.bin" translatable="yes">New York, USA</item>
+                  <item id="/cad2/ece297s/public/maps/rio-de-janeiro_brazil.streets.bin" translatable="yes">Rio De Janerio, Brazil</item>
+                  <item id="/cad2/ece297s/public/maps/saint-helena.streets.bin" translatable="yes">Saint Helena</item>
+                  <item id="/cad2/ece297s/public/maps/singapore.streets.bin" translatable="yes">Singapore</item>
+                  <item id="/cad2/ece297s/public/maps/sydney_australia.streets.bin" translatable="yes">Sydney, Australia</item>
+                  <item id="/cad2/ece297s/public/maps/tehran_iran.streets.bin" translatable="yes">Tehran, Iran</item>
+                  <item id="/cad2/ece297s/public/maps/tokyo_japan.streets.bin" translatable="yes">Tokyo, Japan</item>
                   <item id="/cad2/ece297s/public/maps/toronto_canada.streets.bin" translatable="yes">Toronto, Canada</item>
                 </items>
               </object>
