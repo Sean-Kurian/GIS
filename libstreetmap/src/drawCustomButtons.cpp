@@ -12,9 +12,11 @@ namespace gtkObjects {
 void connectZoomButtons(ezgl::application* app) {
     GtkWidget* zoomInButton = GTK_WIDGET(app->get_object("zoomInButton"));
     GtkWidget* zoomOutButton = GTK_WIDGET(app->get_object("zoomOutButton"));
+    GtkWidget* zoomFitButton = GTK_WIDGET(app->get_object("zoomFitButton"));
     
     g_signal_connect(G_OBJECT(zoomInButton), "clicked", G_CALLBACK(ezgl::press_zoom_in), app);
     g_signal_connect(G_OBJECT(zoomOutButton), "clicked", G_CALLBACK(ezgl::press_zoom_out), app);
+    g_signal_connect(G_OBJECT(zoomFitButton), "clicked", G_CALLBACK(ezgl::press_zoom_fit), app);
 }
 
 //Set up drop down menu for map switching

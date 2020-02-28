@@ -249,8 +249,8 @@ void application::register_default_events_callbacks(ezgl::application *applicati
 void application::register_default_buttons_callbacks(ezgl::application *application)
 {
   // Connect press_zoom_fit function to the Zoom-fit button
-  GObject *zoom_fit_button = application->get_object("ZoomFitButton");
-  g_signal_connect(zoom_fit_button, "clicked", G_CALLBACK(press_zoom_fit), application);
+  //GObject *zoom_fit_button = application->get_object("ZoomFitButton");
+  //g_signal_connect(zoom_fit_button, "clicked", G_CALLBACK(press_zoom_fit), application);
 
   // Connect press_zoom_in function to the Zoom-in button
   //GObject *zoom_in_button = application->get_object("ZoomInButton");
