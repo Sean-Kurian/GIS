@@ -18,6 +18,10 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
     //Remove any instances of "<unknown>" from string
     intersectionName = removeUnknown(intersectionName);
     
+    //Don't draw dialog boxes if the name is ">" 
+    if (intersectionName == ">") {
+        return;
+    }
     //Create the dialog box and display it to the screen
     GObject* window;
     GtkWidget* content_area;
