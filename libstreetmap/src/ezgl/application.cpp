@@ -261,24 +261,24 @@ void application::register_default_buttons_callbacks(ezgl::application *applicat
   //g_signal_connect(zoom_out_button, "clicked", G_CALLBACK(press_zoom_out), application);
 
   // Connect press_up function to the Up button
-  GObject *shift_up_button = application->get_object("UpButton");
-  g_signal_connect(shift_up_button, "clicked", G_CALLBACK(press_up), application);
+  //GObject *shift_up_button = application->get_object("UpButton");
+  //g_signal_connect(shift_up_button, "clicked", G_CALLBACK(press_up), application);
 
   // Connect press_down function to the Down button
-  GObject *shift_down_button = application->get_object("DownButton");
-  g_signal_connect(shift_down_button, "clicked", G_CALLBACK(press_down), application);
+  //GObject *shift_down_button = application->get_object("DownButton");
+  //g_signal_connect(shift_down_button, "clicked", G_CALLBACK(press_down), application);
 
   // Connect press_left function to the Left button
-  GObject *shift_left_button = application->get_object("LeftButton");
-  g_signal_connect(shift_left_button, "clicked", G_CALLBACK(press_left), application);
+  //GObject *shift_left_button = application->get_object("LeftButton");
+  //g_signal_connect(shift_left_button, "clicked", G_CALLBACK(press_left), application);
 
   // Connect press_right function to the Right button
-  GObject *shift_right_button = application->get_object("RightButton");
-  g_signal_connect(shift_right_button, "clicked", G_CALLBACK(press_right), application);
+  //GObject *shift_right_button = application->get_object("RightButton");
+  //g_signal_connect(shift_right_button, "clicked", G_CALLBACK(press_right), application);
 
   // Connect press_proceed function to the Proceed button
-  GObject *proceed_button = application->get_object("ProceedButton");
-  g_signal_connect(proceed_button, "clicked", G_CALLBACK(press_proceed), application);
+  //GObject *proceed_button = application->get_object("ProceedButton");
+  //g_signal_connect(proceed_button, "clicked", G_CALLBACK(press_proceed), application);
 }
 
 void application::update_message(std::string const &message)
