@@ -19,5 +19,11 @@ double latFromY(double y);
 
 void switchMap(GtkWidget *, gpointer data);
 
+//Displays a loading screen while map switching
+void displayMapLoadScreen(ezgl::application* app);
+
+//Destroys the loading screen displayed while map switching
+void destoryMapLoadScreen(ezgl::application* app);
+
 #endif /* DRAWMAPHELPERS_H */
 

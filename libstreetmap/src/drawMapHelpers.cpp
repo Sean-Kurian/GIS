@@ -31,6 +31,7 @@ void switchMap(GtkWidget *, gpointer data) {
     std::string mapName = gtk_combo_box_get_active_id(gtkObjects::dropDownMenu);
     
     if (!mapName.empty()) {
+        displayMapLoadScreen(app);
         close_map();
         std::cout << "Loading: " << mapName << "\n";
         bool loadSuccess = load_map(mapName);
@@ -52,4 +53,39 @@ void switchMap(GtkWidget *, gpointer data) {
         else 
             std::cerr << "Error loading new map\n";
     }
+}
+
+//Displays a loading screen while map switching
+void displayMapLoadScreen(ezgl::application* app) {
+    //Determine the map being loaded
+    GtkComboBox* dropDownMenu = (GtkComboBox*) app->get_object("mapDropDown");
+    //GtkTreeIter* iter;
+    //gtk_combo_box_get_active_iter(dropDownMenu, iter);
+    //GtkTreeModel* model = gtk_combo_box_get_model(dropDownMenu);
+    const gchar* map_name = gtk_combo_box_get_active_id(dropDownMenu);
+    
+    
+    //Create the loading screen and display it to the screen
+    GObject* window;
+    GtkWidget* content_area;
+    GtkWidget* label;
+    GtkWidget* dialog;
+    
+    window = app->get_object(app->get_main_window_id().c_str());
+    
+    dialog = gtk_dialog_new_with_buttons(
+            "One moment, please",
+            (GtkWindow*) window,
+            GTK_DIALOG_DESTROY_WITH_PARENT,
+            NULL, NULL);
+    
+    content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+    label = gtk_label_new(map_name);
+    gtk_container_add(GTK_CONTAINER(content_area), label);
+    gtk_widget_show_all(dialog);
+}
+
+//Destroys the loading screen displayed while map switching
+void destoryMapLoadScreen(ezgl::application* app) {
+    
 }
