@@ -42,6 +42,9 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
     
     //Connect dialog box to call when "x" button is clicked
     g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(closeIntersectionInfo), app);
+    
+    //TESTING alternative display message in the status bar
+    app->update_message(intersectionName);
 }
 
 //Erases old intersection info when a new intersection is clicked
