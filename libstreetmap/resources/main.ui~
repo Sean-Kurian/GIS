@@ -96,12 +96,9 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
+                <property name="top_attach">3</property>
                 <property name="width">3</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
             <child>
               <placeholder/>
@@ -226,6 +223,7 @@
                 <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="valign">start</property>
+                <property name="margin_right">30</property>
                 <items>
                   <item id="/cad2/ece297s/public/maps/toronto_canada.streets.bin" translatable="yes">Toronto, Canada</item>
                   <item id="/cad2/ece297s/public/maps/beijing_china.streets.bin" translatable="yes">Beijing, China</item>
@@ -270,6 +268,25 @@
               </object>
               <packing>
                 <property name="index">4</property>
+              </packing>
+            </child>
+            <child type="overlay">
+              <object class="GtkButton" id="switchMapButton">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">end</property>
+                <property name="valign">start</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="stock">gtk-ok</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="index">5</property>
               </packing>
             </child>
           </object>
