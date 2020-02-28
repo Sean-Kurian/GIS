@@ -165,11 +165,12 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
 //
 void drawAllFeatures(ezgl::renderer* rend) {
     drawFeatures(rend, naturalFeature::lake);
-    drawFeatures(rend, naturalFeature::island);
     drawFeatures(rend, naturalFeature::river);
+    drawFeatures(rend, naturalFeature::island);
     drawFeatures(rend, naturalFeature::forest);
     drawFeatures(rend, naturalFeature::park);
     drawFeatures(rend, naturalFeature::beach);
+    drawFeatures(rend, naturalFeature::pond);
     drawFeatures(rend, naturalFeature::minorWater);
 }
 

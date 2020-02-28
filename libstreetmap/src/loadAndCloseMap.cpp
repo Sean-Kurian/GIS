@@ -154,6 +154,10 @@ void getFeatureData(const unsigned& numFeatures) {
             maxLon = std::max(maxLon, location.lon());
         }
         naturalFeature type = determineNaturalFeature(featureIndex);
+        if (getFeatureName(featureIndex) == "The Lake") {
+            std::cout << "The Lake: " << featureIndex << " " << numPoints << "\n";
+            type = naturalFeature::minorWater;
+        }
         if (type != naturalFeature::NF_TYPECOUNT)
             gData.addIndexOfNaturalFeature(featureIndex, type);
         else
@@ -247,17 +251,38 @@ naturalFeature determineNaturalFeature(const unsigned& featureIndex) {
     else if (type == FeatureType::Beach)
         return naturalFeature::beach;
     
-//    else {
-//        TypedOSMID featureOSM = getFeatureOSMID(featureIndex);
-//        
-//    }
-    
-    else if (type == FeatureType::Lake)
-        return naturalFeature::lake;
-    
+    else if (type == FeatureType::Lake) {
+        const OSMEntity* feature = NULL;
+        TypedOSMID featureOSM = getFeatureOSMID(featureIndex);
+        if (featureOSM.type() == TypedOSMID::EntityType::Node)
+            feature = getNodeByIndex(gData.getNodeIndexOfOSMID(featureOSM));
+        else if (featureOSM.type() == TypedOSMID::EntityType::Way)
+            feature = getWayByIndex(gData.getWayIndexOfOSMID(featureOSM));
+        else if (featureOSM.type() == TypedOSMID::EntityType::Relation)
+            feature = getRelationByIndex(gData.getRelationIndexOfOSMID(featureOSM));
+        
+        if (feature != NULL) {
+            for (unsigned tagNum = 0; tagNum < getTagCount(feature); ++tagNum) {
+                std::string key, val;
+                std::tie(key, val) = getTagPair(feature, tagNum);
+
+                if (key == "water") {
+                    if (val == "pond" || val == "reservoir" || val == "lake;pond")
+                        return naturalFeature::pond;
+                    else 
+                        return naturalFeature::lake;
+                }
+            }
+        }
+        else
+            return naturalFeature::lake;
+    }
+        
     else if (type == FeatureType::River)
         return naturalFeature::river;
     
     else if (type == FeatureType::Stream)
         return naturalFeature::minorWater;
+    
+    return naturalFeature::forest;
 }
