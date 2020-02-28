@@ -88,19 +88,6 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton" id="ZoomFitButton">
-                <property name="label" translatable="yes">Zoom Fit</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">0</property>
-                <property name="top_attach">3</property>
-                <property name="width">3</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkButton" id="ProceedButton">
                 <property name="label" translatable="yes">Proceed</property>
                 <property name="visible">True</property>
@@ -109,7 +96,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">4</property>
+                <property name="top_attach">3</property>
                 <property name="width">3</property>
               </packing>
             </child>
@@ -182,7 +169,7 @@
                 <property name="halign">end</property>
                 <property name="valign">end</property>
                 <property name="margin_right">10</property>
-                <property name="margin_bottom">45</property>
+                <property name="margin_bottom">80</property>
                 <child>
                   <object class="GtkImage">
                     <property name="width_request">0</property>
@@ -201,7 +188,7 @@
                 <property name="halign">end</property>
                 <property name="valign">end</property>
                 <property name="margin_right">10</property>
-                <property name="margin_bottom">5</property>
+                <property name="margin_bottom">40</property>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>
@@ -237,6 +224,7 @@
                 <property name="halign">end</property>
                 <property name="valign">start</property>
                 <items>
+                  <item id="/cad2/ece297s/public/maps/toronto_canada.streets.bin" translatable="yes">Toronto, Canada</item>
                   <item id="/cad2/ece297s/public/maps/beijing_china.streets.bin" translatable="yes">Beijing, China</item>
                   <item id="/cad2/ece297s/public/maps/cairo_egypt.streets.bin" translatable="yes">Cairo, Egypt</item>
                   <item id="/cad2/ece297s/public/maps/cape-town_south-africa.streets.bin" translatable="yes">Cape Town, South Africa</item>
@@ -255,11 +243,30 @@
                   <item id="/cad2/ece297s/public/maps/sydney_australia.streets.bin" translatable="yes">Sydney, Australia</item>
                   <item id="/cad2/ece297s/public/maps/tehran_iran.streets.bin" translatable="yes">Tehran, Iran</item>
                   <item id="/cad2/ece297s/public/maps/tokyo_japan.streets.bin" translatable="yes">Tokyo, Japan</item>
-                  <item id="/cad2/ece297s/public/maps/toronto_canada.streets.bin" translatable="yes">Toronto, Canada</item>
                 </items>
               </object>
               <packing>
                 <property name="index">3</property>
+              </packing>
+            </child>
+            <child type="overlay">
+              <object class="GtkButton" id="zoomFitButton">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">end</property>
+                <property name="valign">end</property>
+                <property name="margin_right">10</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">restore.png</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="index">4</property>
               </packing>
             </child>
           </object>
