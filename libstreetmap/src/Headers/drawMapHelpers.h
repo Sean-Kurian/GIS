@@ -9,8 +9,6 @@
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"
 
-#include "gtkObjects.h"
-
 // Coordinate Functions
 double xFromLon(double lon);
 double yFromLat(double lat);

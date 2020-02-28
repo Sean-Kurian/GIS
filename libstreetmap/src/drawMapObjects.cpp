@@ -103,62 +103,6 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
                 }
             }
         }
-        /*if (oneWay){
-            fromPosLL = getIntersectionPosition(SSData.from);
-            fromPos = ezgl::point2d(xFromLon(fromPosLL.lon()), yFromLat(fromPosLL.lat()));
-            height = std::floor(pixelsPerMeter * 5.0 * SSIndex.second);
-            
-            textHeight = std::min(std::max(height * 0.75, 10.0), 24.0);
-            
-            unsigned numCurves = SSData.curvePointCount;
-            if (numCurves == 0) {
-                toPosLL = getIntersectionPosition(SSData.to);
-                toPos = ezgl::point2d(xFromLon(toPosLL.lon()), yFromLat(toPosLL.lat()));
-                width = find_distance_between_two_points(std::make_pair(fromPosLL, toPosLL));
-                if (toPos.x > fromPos.x)
-                    angle = atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x)) * RAD_TO_DEG;
-                else
-                    angle = atan2((fromPos.y - toPos.y), (fromPos.x - toPos.x)) * RAD_TO_DEG;
-                rend->set_text_rotation(angle);
-                center = ezgl::point2d(((toPos.x + fromPos.x) * 0.5), (toPos.y + fromPos.y) * 0.5);
-                
-                do {
-                    rend->set_font_size(textHeight);
-                    wasDrawn = rend->draw_text(center, "--->", width, height);
-                    textHeight -= 1.0;
-                } while (!wasDrawn && textHeight >= 14.0);
-            }
-            else {
-                for (unsigned curveIndex = 0; curveIndex < numCurves; ++curveIndex) {
-                    toPosLL = getStreetSegmentCurvePoint(curveIndex, SSIndex.first);
-                    toPos = ezgl::point2d(xFromLon(toPosLL.lon()), yFromLat(toPosLL.lat()));
-                    width = find_distance_between_two_points(std::make_pair(fromPosLL, toPosLL));
-                    if (toPos.x > fromPos.x)
-                        angle = atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x)) * RAD_TO_DEG;
-                    else
-                        angle = atan2((fromPos.y - toPos.y), (fromPos.x - toPos.x)) * RAD_TO_DEG;
-                    rend->set_text_rotation(angle);
-                    center = ezgl::point2d(((toPos.x + fromPos.x) * 0.5), (toPos.y + fromPos.y) * 0.5);
-                    wasDrawn = rend->draw_text(center, "------>", width, height);
-                    if (wasDrawn)
-                        break;
-                    fromPosLL = toPosLL;
-                    fromPos = toPos;
-                }
-                if (!wasDrawn) {
-                    toPosLL = getIntersectionPosition(SSData.to);
-                    toPos = ezgl::point2d(xFromLon(toPosLL.lon()), yFromLat(toPosLL.lat()));
-                    width = find_distance_between_two_points(std::make_pair(fromPosLL, toPosLL));
-                    if (toPos.x > fromPos.x)
-                        angle = atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x)) * RAD_TO_DEG;
-                    else
-                        angle = atan2((fromPos.y - toPos.y), (fromPos.x - toPos.x)) * RAD_TO_DEG;
-                    rend->set_text_rotation(angle);
-                    center = ezgl::point2d(((toPos.x + fromPos.x) * 0.5), (toPos.y + fromPos.y) * 0.5);
-                    wasDrawn = rend->draw_text(center, "----->", width, height);
-                }
-            }
-        }*/
     } 
 }
 

@@ -18,24 +18,20 @@ double yFromLat(double lat) {
     return EARTH_RADIUS_METERS * latRelative;
 }
 
-double lonFromX(double x){
+double lonFromX(double x) {
     return (x / (EARTH_RADIUS_METERS * gData.getLatAspectRatio())) * (1/DEGREE_TO_RADIAN) + gData.getAvgLon(); 
 }
 
-double latFromY(double y){
+double latFromY(double y) {
     return ((y / EARTH_RADIUS_METERS) * (1/DEGREE_TO_RADIAN) + (gData.getAvgLat())); 
 }
 
-void switchMap(GtkWidget *, gpointer data) {
+void switchMap(GtkWidget*, gpointer data) {
     ezgl::application* app = static_cast<ezgl::application *>(data);
-    auto rend = app->get_renderer();
-    std::string mapName = gtk_combo_box_get_active_id(gtkObjects::dropDownMenu);
+    GtkComboBox* box = (GtkComboBox*) app->get_object("mapDropDown");
+    std::string mapName = gtk_combo_box_get_active_id(box);
     
     if (!mapName.empty()) {
-        rend->set_color(ezgl::BLACK);
-        rend->fill_rectangle(rend->get_visible_world());
-        rend->set_color(ezgl::WHITE);
-        rend->draw_text(rend->get_visible_world().center(), "Please Wait...");
         displayMapLoadScreen(app);
         close_map();
         std::cout << "Loading: " << mapName << "\n";
