@@ -28,9 +28,14 @@ double latFromY(double y){
 
 void switchMap(GtkWidget *, gpointer data) {
     ezgl::application* app = static_cast<ezgl::application *>(data);
+    auto rend = app->get_renderer();
     std::string mapName = gtk_combo_box_get_active_id(gtkObjects::dropDownMenu);
     
     if (!mapName.empty()) {
+        rend->set_color(ezgl::BLACK);
+        rend->fill_rectangle(rend->get_visible_world());
+        rend->set_color(ezgl::WHITE);
+        rend->draw_text(rend->get_visible_world().center(), "Please Wait...");
         displayMapLoadScreen(app);
         close_map();
         std::cout << "Loading: " << mapName << "\n";

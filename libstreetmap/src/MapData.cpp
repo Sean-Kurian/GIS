@@ -36,6 +36,7 @@ MapData::~MapData() {
     segsOfWayOSMID.clear();
     nodeIndexOfOSMID.clear();
     wayIndexOfOSMID.clear();
+    relationIndexOfOSMID.clear();
 }
 
 // Clears all data structures. Used to load another map without needing destructor
@@ -55,6 +56,7 @@ void MapData::clearMapData() {
     segsOfWayOSMID.clear();
     nodeIndexOfOSMID.clear();
     wayIndexOfOSMID.clear();
+    relationIndexOfOSMID.clear();
 }
 
 //==============================================================================
