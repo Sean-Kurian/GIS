@@ -1,5 +1,7 @@
 #include "ezgl/graphics.hpp"
 #include "ezgl/application.hpp"
+#include <string>
+#include <regex>
 
 #include "displayInfo.h"
 
@@ -12,6 +14,9 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
     
     //Get the name of the intersection
     std::string intersectionName = getIntersectionName(intersectionIndex);
+    
+    //Remove any instances of "<unknown>" from string
+    intersectionName = removeUnknown(intersectionName);
     
     //Create the dialog box and display it to the screen
     GObject* window;
@@ -54,4 +59,20 @@ void closeIntersectionInfo(GtkDialog* dialog, gint responseID, gpointer) {
         }
     }
     
+}
+
+//Removes any instances of "<unknown>" from an intersection name
+std::string removeUnknown(std::string intersectionName) {
+    //Declare all the possible <unknown> with & positioning patterns
+    std::regex unknownDouble("& <unknown> &");
+    std::regex unknownLeft("& <unknown>");
+    std::regex unknownRight("<unknown> &");
+    std::regex unknown("<unknown");
+    
+    intersectionName = std::regex_replace(intersectionName, unknownDouble, "");
+    intersectionName = std::regex_replace(intersectionName, unknownLeft, "");
+    intersectionName = std::regex_replace(intersectionName, unknownRight, "");
+    intersectionName = std::regex_replace(intersectionName, unknown, "");
+    
+    return intersectionName;
 }
