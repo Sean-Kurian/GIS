@@ -22,11 +22,13 @@ void connectZoomButtons(ezgl::application* app) {
 //Set up drop down menu for map switching
 void setUpDropDown(ezgl::application* app) {
     gtkObjects::dropDownMenu = (GtkComboBox*) app->get_object("mapDropDown");
+    GtkWidget* switchMapButton = GTK_WIDGET(app->get_object("switchMapButton"));
     
     //Set the default selection to be the current map
     std::string mapPath = gData.getMapPath();
     std::replace(mapPath.begin(), mapPath.end(), ' ', '_');
     const char* mapPathCstr = mapPath.c_str();
     gtk_combo_box_set_active_id(gtkObjects::dropDownMenu, mapPathCstr);
-    g_signal_connect(G_OBJECT(gtkObjects::dropDownMenu), "changed", G_CALLBACK(switchMap), app);
+    
+    g_signal_connect(G_OBJECT(switchMapButton), "clicked", G_CALLBACK(switchMap), app);
 }
