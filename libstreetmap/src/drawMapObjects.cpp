@@ -408,7 +408,7 @@ void PrintTTCVehicleInfo(ptree &ptRoot, ezgl::renderer* rend) {
     string busName;
     int busID = 0;
     double longitude = 0, latitude = 0;
-    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/plus.png");
+    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 20 20 .png");
     
     BOOST_FOREACH(ptree::value_type &featVal, ptRoot.get_child("features")) {
         // "features" maps to a JSON array, so each child should have no name
@@ -430,6 +430,10 @@ void PrintTTCVehicleInfo(ptree &ptRoot, ezgl::renderer* rend) {
 
         rend->draw_surface(test, ezgl::point2d(xFromLon(longitude), yFromLat(latitude)));
         rend->draw_surface(test, ezgl::point2d(-79.4325, 43.6525)); 
+        
+                // Print bus info
+        cout << "Bus " << busName << " with ID " << busID <<
+            " is at coordinates: " << longitude << ", " << latitude << endl;
           
     }
     rend->free_surface(test); 
