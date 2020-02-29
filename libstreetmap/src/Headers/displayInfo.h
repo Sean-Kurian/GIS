@@ -19,6 +19,12 @@ void closeIntersectionInfo(GtkDialog*, gint responseID, gpointer);
 //Removes any instances of "<unknown>" from an intersection name
 std::string removeUnknown(std::string intersectionName);
 
+//Finds an intersection based on the name
+int find_intersection_from_name(std::string intersectionName);
+
+//Alerts user intersection was not found
+void intersectionNotFound(ezgl::application* app);
+
 
 #endif /* DISPLAYINFO_H */
 

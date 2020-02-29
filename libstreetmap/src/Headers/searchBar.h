@@ -20,5 +20,11 @@ void connectSearchBar(ezgl::application* app);
 //Callback function update search entry content
 void updateSearchEntry(GtkSearchEntry* searchEntry, GdkEvent* event);
 
+//Callback function for when the user hits the enter key in the search bar
+void searchEnter(GtkEntry* searchEntry, gpointer data);
+
+//Parses intersection search to format it properly
+std::string parseIntersectionSearch(std::string search);
+
 #endif /* SEARCHBAR_H */
 

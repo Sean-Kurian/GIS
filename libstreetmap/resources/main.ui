@@ -83,15 +83,15 @@
             </child>
             <child type="overlay">
               <object class="GtkSearchEntry" id="searchBar">
-                <property name="width_request">275</property>
+                <property name="width_request">300</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="margin_left">10</property>
                 <property name="margin_top">10</property>
-                <property name="primary_icon_stock">gtk-find</property>
-                <property name="primary_icon_name">edit-find-symbolic</property>
+                <property name="primary_icon_stock">gtk-dialog-question</property>
+                <property name="secondary_icon_stock">gtk-find</property>
                 <property name="placeholder_text" translatable="yes">Enter Address, Intersection, POI, etc</property>
                 <property name="input_hints">GTK_INPUT_HINT_SPELLCHECK | GTK_INPUT_HINT_WORD_COMPLETION | GTK_INPUT_HINT_NONE</property>
               </object>
