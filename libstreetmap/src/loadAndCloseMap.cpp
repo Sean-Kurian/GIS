@@ -235,7 +235,7 @@ roadType determineRoadType(const std::string& val) {
 
 naturalFeature determineNaturalFeature(const unsigned& featureIndex) {
     FeatureType type = getFeatureType(featureIndex);
-    
+        
     if (type == FeatureType::Building)
         return naturalFeature::NF_TYPECOUNT;
     
@@ -252,30 +252,7 @@ naturalFeature determineNaturalFeature(const unsigned& featureIndex) {
         return naturalFeature::beach;
     
     else if (type == FeatureType::Lake) {
-        const OSMEntity* feature = NULL;
-        TypedOSMID featureOSM = getFeatureOSMID(featureIndex);
-        if (featureOSM.type() == TypedOSMID::EntityType::Node)
-            feature = getNodeByIndex(gData.getNodeIndexOfOSMID(featureOSM));
-        else if (featureOSM.type() == TypedOSMID::EntityType::Way)
-            feature = getWayByIndex(gData.getWayIndexOfOSMID(featureOSM));
-        else if (featureOSM.type() == TypedOSMID::EntityType::Relation)
-            feature = getRelationByIndex(gData.getRelationIndexOfOSMID(featureOSM));
-        
-        if (feature != NULL) {
-            for (unsigned tagNum = 0; tagNum < getTagCount(feature); ++tagNum) {
-                std::string key, val;
-                std::tie(key, val) = getTagPair(feature, tagNum);
-
-                if (key == "water") {
-                    if (val == "pond" || val == "reservoir" || val == "lake;pond")
-                        return naturalFeature::pond;
-                    else 
-                        return naturalFeature::lake;
-                }
-            }
-        }
-        else
-            return naturalFeature::lake;
+        return naturalFeature::lake;
     }
         
     else if (type == FeatureType::River)
@@ -286,3 +263,31 @@ naturalFeature determineNaturalFeature(const unsigned& featureIndex) {
     
     return naturalFeature::forest;
 }
+
+
+//    else if (type == FeatureType::Lake) {
+//        const OSMEntity* feature = NULL;
+//        TypedOSMID featureOSM = getFeatureOSMID(featureIndex);
+//        if (featureOSM.type() == TypedOSMID::EntityType::Node)
+//            feature = getNodeByIndex(gData.getNodeIndexOfOSMID(featureOSM));
+//        else if (featureOSM.type() == TypedOSMID::EntityType::Way)
+//            feature = getWayByIndex(gData.getWayIndexOfOSMID(featureOSM));
+//        else if (featureOSM.type() == TypedOSMID::EntityType::Relation)
+//            feature = getRelationByIndex(gData.getRelationIndexOfOSMID(featureOSM));
+//        
+//        if (feature != NULL) {
+//            for (unsigned tagNum = 0; tagNum < getTagCount(feature); ++tagNum) {
+//                std::string key, val;
+//                std::tie(key, val) = getTagPair(feature, tagNum);
+//
+//                if (key == "water") {
+//                    if (val == "pond" || val == "reservoir" || val == "lake;pond")
+//                        return naturalFeature::minorWater;
+//                    else 
+//                        return naturalFeature::lake;
+//                }
+//            }
+//        }
+//        else
+//            return naturalFeature::lake;
+//    }
