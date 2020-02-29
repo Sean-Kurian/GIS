@@ -52,7 +52,7 @@ double getAngle(ezgl::point2d fromPos, ezgl::point2d toPos, bool& wasFlipped) {
 //
 std::string addArrows(std::string name, unsigned numArrows, std::string arrow) {
     for (unsigned i = 0; i < numArrows; ++i)
-        name = arrow + " " + name + " " + arrow;
+        name = arrow + "  " + name + "  " + arrow;
     return name;
 }
 
