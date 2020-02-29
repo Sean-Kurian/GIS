@@ -14,7 +14,6 @@ enum naturalFeature {
     island,
     beach,
     lake,
-    pond,
     river,
     minorWater,
     NF_TYPECOUNT

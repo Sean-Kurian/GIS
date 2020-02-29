@@ -114,7 +114,6 @@ void drawAllFeatures(ezgl::renderer* rend) {
     drawFeatures(rend, naturalFeature::forest);
     drawFeatures(rend, naturalFeature::park);
     drawFeatures(rend, naturalFeature::beach);
-    drawFeatures(rend, naturalFeature::pond);
     drawFeatures(rend, naturalFeature::minorWater);
 }
 
