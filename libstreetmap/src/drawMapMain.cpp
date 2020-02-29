@@ -60,42 +60,77 @@ void drawMainCanvas(ezgl::renderer* rend) {
     //
     double pixelsPerMeter = pixelInMeters(rend);
     
-    drawAllFeatures(rend, pixelsPerMeter);
+    drawFeatures(rend);
 
-
-
-    if (pixelsPerMeter > 0.4) {
-        drawAllBuildings(rend);
-        PrintTTCVehicleInfo(ptRoot, rend); 
-        drawPOI30(rend, buildingType::school); 
-        drawPOI30(rend, buildingType::hospital); 
+    if (pixelsPerMeter < 0.01) {
+        drawStreets(rend, roadType::highway, pixelsPerMeter);
     }
-    else if (pixelsPerMeter > 0.25) {
+    
+    else if (pixelsPerMeter < 0.1) {
+        drawStreams(rend, pixelsPerMeter);
+        
+        drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
+        drawStreets(rend, roadType::highway, pixelsPerMeter);
+    }
+    
+    else if (pixelsPerMeter < 0.2) {
+        drawStreets(rend, roadType::minorRoad, pixelsPerMeter);
+        drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
+        drawStreets(rend, roadType::highway, pixelsPerMeter);
+    }
+    
+    else if (pixelsPerMeter < 0.4) {
+        drawStreams(rend, pixelsPerMeter);
+        
         drawBuildings(rend, buildingType::school);
         drawBuildings(rend, buildingType::hospital);
-    }
-    
-   
-    if (pixelsPerMeter > 0.07) {
+        
         drawStreets(rend, roadType::minorRoad, pixelsPerMeter);
+        drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
+        drawStreets(rend, roadType::highway, pixelsPerMeter);
+        
+        drawPOI(rend, buildingType::school);
+        drawPOI(rend, buildingType::hospital);
+        PrintTTCVehicleInfo(ptRoot, rend); 
+        
     }
-    
-    drawStreets(rend, roadType::highway, pixelsPerMeter);
-    drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
-    
-    if (pixelsPerMeter > 0.7) {
-        drawPaths(rend, pixelsPerMeter);
-        drawStreetNames(rend, roadType::highway, pixelsPerMeter);
+    else if (pixelsPerMeter < 0.75) {
+        drawStreams(rend, pixelsPerMeter);
+        
+        drawBuildings(rend, buildingType::school);
+        drawBuildings(rend, buildingType::hospital);
+        drawBuildings(rend, buildingType::other);
+        
+        drawStreets(rend, roadType::minorRoad, pixelsPerMeter);
+        drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
         drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter);
+        drawStreets(rend, roadType::highway, pixelsPerMeter);
+        drawStreetNames(rend, roadType::highway, pixelsPerMeter);
+        
+        drawPOI(rend, buildingType::school);
+        drawPOI(rend, buildingType::hospital);
+        PrintTTCVehicleInfo(ptRoot, rend); 
+    }
+    
+    else {
+        drawStreams(rend, pixelsPerMeter);
+        
+        drawBuildings(rend, buildingType::school);
+        drawBuildings(rend, buildingType::hospital);
+        drawBuildings(rend, buildingType::other);
+        
+        drawPaths(rend, pixelsPerMeter);
+        drawStreets(rend, roadType::minorRoad, pixelsPerMeter);
         drawStreetNames(rend, roadType::minorRoad, pixelsPerMeter);
-
+        drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
+        drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter);
+        drawStreets(rend, roadType::highway, pixelsPerMeter);
+        drawStreetNames(rend, roadType::highway, pixelsPerMeter);
+        
+        drawPOI(rend, buildingType::school);
+        drawPOI(rend, buildingType::hospital);
+        PrintTTCVehicleInfo(ptRoot, rend); 
     }
-    
-    if (pixelsPerMeter > 1.8 && pixelsPerMeter < 1.9){
-        //drawPOI(rend); 
-    }
-    
-    
     drawHighlightedData(rend);
 }
 
