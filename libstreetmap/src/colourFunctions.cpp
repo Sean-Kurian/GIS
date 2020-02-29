@@ -45,7 +45,7 @@ ezgl::color getRoadColour(const roadType& type) {
         case trail:
             return ezgl::BLACK;
         case path:
-            return ezgl::BLACK;
+            return ezgl::color(0x77, 0x19, 0x19);
         default:
             std::cerr << "Error: no matching street type\n";
     }

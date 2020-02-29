@@ -34,6 +34,31 @@ void drawStreets(ezgl::renderer* rend, const roadType& type, const double& pixel
 }
 
 //
+void drawPaths(ezgl::renderer* rend, const double& pixelsPerMeter) {
+    rend->set_line_dash(ezgl::line_dash::asymmetric_5_3);
+    rend->set_color(getRoadColour(roadType::path));
+    
+    std::vector<std::pair<int, unsigned> > segs = gData.getSegsOfStreetType(roadType::path);
+    ezgl::point2d fromPos(0, 0), toPos(0, 0);
+    for (const std::pair<int, unsigned>& SSIndex : segs) {
+        rend->set_line_width(std::floor(pixelsPerMeter * 2.0));
+        InfoStreetSegment SSData = getInfoStreetSegment(SSIndex.first);
+        unsigned numCurves = SSData.curvePointCount;
+        LatLon intPos = getIntersectionPosition(SSData.from);
+        fromPos = ezgl::point2d(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
+        for (unsigned curveIndex = 0; curveIndex < numCurves; ++curveIndex) {
+            LatLon curvePos = getStreetSegmentCurvePoint(curveIndex, SSIndex.first);
+            toPos = ezgl::point2d(xFromLon(curvePos.lon()), yFromLat(curvePos.lat()));
+            rend->draw_line(fromPos, toPos);
+            fromPos = toPos;
+        }
+        intPos = getIntersectionPosition(SSData.to);
+        toPos = ezgl::point2d(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
+        rend->draw_line(fromPos, toPos);
+    } 
+}
+
+//
 void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter) {
     rend->set_horiz_text_just(ezgl::text_just::center);
     rend->set_vert_text_just(ezgl::text_just::center);
