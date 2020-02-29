@@ -282,25 +282,6 @@ buildingType determineBuildingType(const unsigned& buildingIndex) {
             std::string key, val;
             std::tie(key, val) = getTagPair(feature, tagNum);
             
-            if (key == "building") {
-                if (val == "retail" || val == "supermarket" || val == "church" 
-                 || val == "hotel")
-                    return buildingType::commercial;
-                
-                else if (val == "residential" || val == "house" || val == "apartments"
-                      || val == "terrace")
-                    return buildingType::residental;
-                
-                else if (val == "office" || val == "commercial")
-                    return buildingType::office;
-                
-                else if (val == "school" || val == "university" || val == "kindergarten")
-                    return buildingType::school;
-                
-                else if (val == "hospital")
-                    return buildingType::hospital;
-            }
-            
             if (key == "amenity") {
                 if (val == "hostpital" || val == "clinic")
                     return buildingType::hospital;
@@ -310,17 +291,19 @@ buildingType determineBuildingType(const unsigned& buildingIndex) {
                       || val == "driving_school" || val == "music_school")
                     return buildingType::school;
             }
-            // Less common tags checked last to save computation time
+            
             if (key == "building") {
-                if (val == "dormatory" || val == "houseboat" || val == "cabin" || val == "farm" 
-                 || val == "semidetached_house" || val == "bungalo" || val == "ger")
-                    return buildingType::residental;
+                if (val == "school" || val == "university" || val == "kindergarten")
+                    return buildingType::school;
+                
+                else if (val == "hospital")
+                    return buildingType::hospital;
             }
         }
-        return buildingType::misc;
+        return buildingType::other;
     }
     else
-        return buildingType::misc;
+        return buildingType::other;
 }
 
 

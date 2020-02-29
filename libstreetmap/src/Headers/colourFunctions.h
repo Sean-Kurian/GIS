@@ -1,27 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/* 
- * File:   colourFunctions.h
- * Author: goodfe27
- *
- * Created on February 28, 2020, 5:40 PM
- */
-
 #ifndef COLOURFUNCTIONS_H
 #define COLOURFUNCTIONS_H
 
-class colourFunctions {
-public:
-    colourFunctions();
-    colourFunctions(const colourFunctions& orig);
-    virtual ~colourFunctions();
-private:
+//==============================================================================
+// File Description: 
+//
+//==============================================================================
 
-};
+#include "ezgl/application.hpp"
+#include "ezgl/graphics.hpp"
+
+#include "roadTypes.h"
+#include "buildingTypes.h"
+
+ezgl::color getFeatureColour(const FeatureType& type);
+
+ezgl::color getRoadColour(const roadType& type);
+
+ezgl::color getBuildingColour(const buildingType& type);
 
 #endif /* COLOURFUNCTIONS_H */
 

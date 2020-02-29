@@ -5,6 +5,7 @@
 
 #include "drawMapObjects.h"
 #include "drawMapHelpers.h"
+#include "colourFunctions.h"
 #include "m1.h"
 #include <cmath>
 
@@ -143,17 +144,14 @@ void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
 
 //
 void drawAllBuildings(ezgl::renderer* rend) {
-    drawBuildings(rend, buildingType::residental);
-    drawBuildings(rend, buildingType::commercial);
-    drawBuildings(rend, buildingType::office);
+    drawBuildings(rend, buildingType::other);
     drawBuildings(rend, buildingType::school);
     drawBuildings(rend, buildingType::hospital);
-    drawBuildings(rend, buildingType::misc);
 }
 
 //
 void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
-    rend->set_color(ezgl::color(0x84, 0x94, 0xA4));
+    rend->set_color(getBuildingColour(type));
     std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     for (const unsigned buildingIndex : buildings) {
         LatLon pointLL;
@@ -176,7 +174,7 @@ void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
 }
  //Example, replace with relevant indices and icons
 void drawPOI(ezgl::renderer* rend){
-    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(buildingType::commercial);
+    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(buildingType::other);
     ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/small_image.png");
     for (const unsigned buildingIndex : buildings) {
         LatLon pointLL = getFeaturePoint(0, buildingIndex); 
@@ -198,49 +196,3 @@ void drawHighlightedData(ezgl::renderer* rend) {
     }
 }
 
-//
-ezgl::color getFeatureColour(const FeatureType& type) {
-    switch (type) {
-        case Unknown:
-            return ezgl::RED;
-        case Park:
-            return ezgl::color(0xCB, 0xE6, 0xA3);
-        case Beach:
-            return ezgl::color(0xFF, 0xEF, 0xC3);
-        case Lake:
-            return ezgl::color(0xA2, 0xCD, 0xFC);
-        case River:
-            return ezgl::color(0xA2, 0xCD, 0xFC);
-        case Island:
-            return ezgl::color(0xCB, 0xE6, 0xA3);
-        case Building:
-            return ezgl::color(0x84, 0x94, 0xA4);
-        case Greenspace:
-            return ezgl::color(0xCB, 0xE6, 0xA3);
-        case Golfcourse:
-            return ezgl::color(0xCB, 0xE6, 0xA3);
-        case Stream:
-            return ezgl::color(0xA2, 0xCD, 0xFC);
-        default:
-            std::cerr << "Error: No matching feature type\n";
-    }
-    return ezgl::RED;
-}
-
-ezgl::color getRoadColour(const roadType& type) {
-    switch (type) {
-        case highway:
-            return ezgl::color(0xFF, 0xF1, 0xBA);
-        case majorRoad:
-            return ezgl::color(0xFF, 0xFF, 0xFF);
-        case minorRoad:
-            return ezgl::color(0xF2, 0xF2, 0xF2);
-        case trail:
-            return ezgl::BLACK;
-        case path:
-            return ezgl::BLACK;
-        default:
-            std::cerr << "Error: no matching street type\n";
-    }
-    return ezgl::RED;
-}
