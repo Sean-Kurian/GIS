@@ -8,9 +8,9 @@
 //Displays intersection info when the intersection is clicked
 void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
     //If there was a previous dialog box displaying another intersection, delete it
-    if (gData.getIntersectionInfoBox() != nullptr) {
-        eraseIntersectionInfo(gData.getIntersectionInfoBox());
-    }
+    //if (gData.getIntersectionInfoBox() != nullptr) {
+    //    eraseIntersectionInfo(gData.getIntersectionInfoBox());
+    //}
     
     //Get the name of the intersection
     std::string intersectionName = getIntersectionName(intersectionIndex);
@@ -18,11 +18,11 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
     //Remove any instances of "<unknown>" from string
     intersectionName = removeUnknown(intersectionName);
     
-    //Don't draw dialog boxes if the name is ">" 
+    //Don't output info if the name is ">" 
     if (intersectionName == ">") {
         return;
     }
-    //Create the dialog box and display it to the screen
+    /*//Create the dialog box and display it to the screen
     GObject* window;
     GtkWidget* content_area;
     GtkWidget* label;
@@ -46,6 +46,7 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
     
     //Connect dialog box to call when "x" button is clicked
     g_signal_connect(G_OBJECT(dialog), "response", G_CALLBACK(closeIntersectionInfo), app);
+    */
     
     //TESTING alternative display message in the status bar
     app->update_message(intersectionName);
