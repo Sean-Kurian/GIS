@@ -15,6 +15,7 @@
 #include "ezgl/graphics.hpp"
 
 void drawStreets(ezgl::renderer* rend, const roadType& type, const double& roadWidth);
+void drawPaths(ezgl::renderer* rend, const double& pixelsPerMeter);
 
 void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter);
 void drawOneWayArrows(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter);
@@ -25,6 +26,7 @@ void drawStreams(ezgl::renderer* rend, const double& pixelsPerMeter);
 
 void drawAllBuildings(ezgl::renderer* rend);
 void drawBuildings(ezgl::renderer* rend, const buildingType& type);
+
 void drawPOI(ezgl::renderer* rend); 
 
 void drawHighlightedData(ezgl::renderer* rend);

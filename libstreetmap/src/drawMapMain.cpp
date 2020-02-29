@@ -72,6 +72,7 @@ void drawMainCanvas(ezgl::renderer* rend) {
     drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
     
     if (pixelsPerMeter > 0.7) {
+        drawPaths(rend, pixelsPerMeter);
         drawStreetNames(rend, roadType::highway, pixelsPerMeter);
         drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter);
         drawStreetNames(rend, roadType::minorRoad, pixelsPerMeter);
