@@ -8,6 +8,7 @@
 #include "colourFunctions.h"
 #include "m1.h"
 #include <cmath>
+#include "libcurl.h"
 
 void drawStreets(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter) {
     rend->set_color(getRoadColour(type));
@@ -304,3 +305,34 @@ void drawHighlightedData(ezgl::renderer* rend) {
     }
 }
 
+void PrintTTCVehicleInfo(ptree &ptRoot, ezgl::renderer* rend) {
+    string busName;
+    int busID = 0;
+    double longitude = 0, latitude = 0;
+    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/plus.png");
+    
+    BOOST_FOREACH(ptree::value_type &featVal, ptRoot.get_child("features")) {
+        // "features" maps to a JSON array, so each child should have no name
+        
+        if ( !featVal.first.empty() )
+            throw "\"features\" child node has a name";
+
+        busName = featVal.second.get<string>("properties.route_name");
+        busID = featVal.second.get<int>("properties.vehicle_id");
+
+        // Get GPS coordinates (stored as JSON array of 2 values)
+        // Sanity checks: Only 2 values
+        ptree coordinates = featVal.second.get_child("geometry.coordinates");
+        if (coordinates.size() != 2)
+            throw "Coordinates node does not contain 2 items";
+
+        longitude = coordinates.front().second.get_value<double>();
+        latitude = coordinates.back().second.get_value<double>();
+
+        rend->draw_surface(test, ezgl::point2d(xFromLon(longitude), yFromLat(latitude)));
+        rend->draw_surface(test, ezgl::point2d(-79.4325, 43.6525)); 
+          
+    }
+    rend->free_surface(test); 
+    
+}
