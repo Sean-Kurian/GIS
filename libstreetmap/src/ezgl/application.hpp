@@ -366,7 +366,7 @@ private:
   static void activate(GtkApplication *gtk_app, gpointer user_data);
 
   // Called during application activation to setup the default callbacks for the prebuilt buttons
-  static void register_default_buttons_callbacks(application *application);
+  static void register_default_buttons_callbacks(application*);
 
   // Called during application activation to setup the default callbacks for the mouse and key events
   static void register_default_events_callbacks(application *application);

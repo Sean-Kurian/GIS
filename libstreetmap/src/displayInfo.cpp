@@ -58,7 +58,7 @@ void eraseIntersectionInfo(GtkWidget* dialog) {
 }
 
 //Erases intersection dialog when "x" button is clicked on dialog box
-void closeIntersectionInfo(GtkDialog* dialog, gint responseID, gpointer) {
+void closeIntersectionInfo(GtkDialog*, gint responseID, gpointer) {
     if (responseID == GTK_RESPONSE_DELETE_EVENT) {
         //If there was a previous dialog box displaying another intersection, delete it
         if (gData.getIntersectionInfoBox() != nullptr) {
