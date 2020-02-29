@@ -62,7 +62,7 @@ void drawMainCanvas(ezgl::renderer* rend) {
     
     drawAllFeatures(rend, pixelsPerMeter);
 
-    
+
     if (pixelsPerMeter > 0.4) {
         drawAllBuildings(rend);
     }

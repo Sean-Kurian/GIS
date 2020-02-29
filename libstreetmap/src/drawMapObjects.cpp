@@ -383,7 +383,7 @@ void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
  //Example, replace with relevant indices and icons
 void drawPOI(ezgl::renderer* rend){
     std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(buildingType::other);
-    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/small_image.png");
+    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 50 50 .png");
     for (const unsigned buildingIndex : buildings) {
         LatLon pointLL = getFeaturePoint(0, buildingIndex); 
         rend->draw_surface(test, ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));
@@ -408,7 +408,7 @@ void PrintTTCVehicleInfo(ptree &ptRoot, ezgl::renderer* rend) {
     string busName;
     int busID = 0;
     double longitude = 0, latitude = 0;
-    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 20 20 .png");
+    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 30 30.png");
     
     BOOST_FOREACH(ptree::value_type &featVal, ptRoot.get_child("features")) {
         // "features" maps to a JSON array, so each child should have no name
@@ -424,7 +424,7 @@ void PrintTTCVehicleInfo(ptree &ptRoot, ezgl::renderer* rend) {
         ptree coordinates = featVal.second.get_child("geometry.coordinates");
         if (coordinates.size() != 2)
             throw "Coordinates node does not contain 2 items";
-
+        
         longitude = coordinates.front().second.get_value<double>();
         latitude = coordinates.back().second.get_value<double>();
 
