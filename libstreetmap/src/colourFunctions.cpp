@@ -56,7 +56,7 @@ ezgl::color getBuildingColour(const buildingType& type) {
     switch (type) {
  //ezgl::color(0x35, 0x6C, 0xA3);
         case school:
-            return ezgl::color(0x40, 0x9F, 0xC4);
+            return ezgl::color(0x57, 0x90, 0xC5);
         case hospital:
             return ezgl::color(0xC4, 0x68, 0x96);
         case other:

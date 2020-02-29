@@ -12,7 +12,6 @@
 #include "CoordData.h"
 #include "HighlightedData.h"
 #include "roadTypes.h"
-#include "naturalFeatures.h"
 #include "buildingTypes.h"
 
 #include <vector>
@@ -73,13 +72,12 @@ private:
     std::unordered_map<OSMID, std::vector<int> > segsOfWayOSMID;
     
     // Unordered map which stores the node indexes of OSMIDs in key, value pairs
-    // Unordered map has O(1) insertion/access. Not using vector because can't index an OSMID
     std::unordered_map<OSMID, unsigned> nodeIndexOfOSMID;
     
     // Unordered map which stores the way indexes of OSMIDs in key, value pairs
     std::unordered_map<OSMID, unsigned> wayIndexOfOSMID;
     
-    //
+    // Unordered map which stores the relation indexes of OSMIDs in key, value pairs
     std::unordered_map<OSMID, unsigned> relationIndexOfOSMID;
     
     //String to store map_path
@@ -234,10 +232,10 @@ public:
     unsigned getRelationIndexOfOSMID(const OSMID& relationID) const;
     
     // Returns map path
-    std::string getMapPath();
+    const std::string getMapPath() const;
     
     // Returns pointer to dialog box displaying currently clicked on intersection
-    GtkWidget* getIntersectionInfoBox();
+    GtkWidget* getIntersectionInfoBox() const;
 };
 
 #endif /* MAPDATA_H */

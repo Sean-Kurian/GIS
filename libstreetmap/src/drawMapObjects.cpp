@@ -108,18 +108,12 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
 }
 
 //
-void drawAllFeatures(ezgl::renderer* rend) {
-//    drawFeatures(rend, naturalFeature::lake);
-//    drawFeatures(rend, naturalFeature::river);
-//    drawFeatures(rend, naturalFeature::island);
-//    drawFeatures(rend, naturalFeature::forest);
-//    drawFeatures(rend, naturalFeature::park);
-//    drawFeatures(rend, naturalFeature::beach);
-    drawFeat(rend);
-    drawFeatures(rend, naturalFeature::minorWater);
+void drawAllFeatures(ezgl::renderer* rend, const double& pixelsPerMeter) {
+    drawFeatures(rend);
+    drawStreams(rend, pixelsPerMeter);
 }
 
-void drawFeat(ezgl::renderer* rend) {
+void drawFeatures(ezgl::renderer* rend) {
     std::multimap<double, unsigned> areaOfFeatures = gData.getAreaOfFeatures();
     
     for (auto itr = areaOfFeatures.rbegin(); itr != areaOfFeatures.rend(); ++itr) {
@@ -143,16 +137,19 @@ void drawFeat(ezgl::renderer* rend) {
 }
 
 //
-void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
-    rend->set_line_width(2);
-    std::vector<unsigned> features = gData.getIndexesOfStreams();
-    for (const unsigned featureIndex : features) {
-        rend->set_color(getFeatureColour(getFeatureType((featureIndex))));
+void drawStreams(ezgl::renderer* rend, const double& pixelsPerMeter) {
+    // OSM States that for water to be a stream its width should be jumpable by
+    // an average person. After testing it was found I can jump around 2.5 meters
+    rend->set_line_width(std::floor(pixelsPerMeter * 2.5));
+    rend->set_color(getFeatureColour(FeatureType::Stream));
+    
+    std::vector<unsigned> streams = gData.getIndexesOfStreams();
+    for (const unsigned streamIndex : streams) {    
         LatLon pointLL;
         std::vector<ezgl::point2d> points;
-        unsigned numPoints = getFeaturePointCount(featureIndex);
+        unsigned numPoints = getFeaturePointCount(streamIndex);
         for (unsigned point = 0; point < numPoints; ++point) {
-            pointLL = getFeaturePoint(point, featureIndex);
+            pointLL = getFeaturePoint(point, streamIndex);
             points.push_back(ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));
         }
         

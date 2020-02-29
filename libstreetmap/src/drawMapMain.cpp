@@ -49,13 +49,20 @@ void drawMainCanvas(ezgl::renderer* rend) {
     rend->set_color(0xE0, 0xE0, 0xE0);
     rend->fill_rectangle(rend->get_visible_world());
     rend->set_line_cap(ezgl::line_cap::round);
-    drawAllFeatures(rend);
     
+    //
     double pixelsPerMeter = pixelInMeters(rend);
+    
+    drawAllFeatures(rend, pixelsPerMeter);
     
     if (pixelsPerMeter > 0.4) {
         drawAllBuildings(rend);
     }
+    else if (pixelsPerMeter > 0.25) {
+        drawBuildings(rend, buildingType::school);
+        drawBuildings(rend, buildingType::hospital);
+    }
+    
    
     if (pixelsPerMeter > 0.07) {
         drawStreets(rend, roadType::minorRoad, pixelsPerMeter);
