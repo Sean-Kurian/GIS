@@ -31,7 +31,7 @@ MapData::~MapData() {
     hlData.highlightedInts.clear(); 
     hlData.highlightedSegs.clear();
     indexesOfNaturalFeatures.clear();
-    indexesOfBuildings.clear();
+    indexesOfBuildingTypes.clear();
     segsOfStreetType.clear();
     segsOfWayOSMID.clear();
     nodeIndexOfOSMID.clear();
@@ -51,7 +51,7 @@ void MapData::clearMapData() {
     hlData.highlightedInts.clear(); 
     hlData.highlightedSegs.clear();
     indexesOfNaturalFeatures.clear();
-    indexesOfBuildings.clear();
+    indexesOfBuildingTypes.clear();
     segsOfStreetType.clear();
     segsOfWayOSMID.clear();
     nodeIndexOfOSMID.clear();
@@ -69,6 +69,7 @@ void MapData::allocStreetVecs(const unsigned& numStreets) {
     intersectionsOfStreet.resize(numStreets);
     segsOfStreetType.resize(roadType::RT_TYPECOUNT);
     indexesOfNaturalFeatures.resize(naturalFeature::NF_TYPECOUNT);
+    indexesOfBuildingTypes.resize(buildingType::BF_TYPECOUNT);
 }
 
 // Sizes segment vectors to their appropriate size to avoid out of index access
@@ -174,17 +175,17 @@ void MapData::addCoordData(const double& _minLat, const double& _maxLat,
 }
 
 //
-void MapData::addIndexOfNaturalFeature(const FeatureIndex& featID, naturalFeature feature) {
+void MapData::addIndexOfNaturalFeature(const FeatureIndex& featID, const naturalFeature& feature) {
     indexesOfNaturalFeatures[feature].push_back(featID);
 }
 
 //
-void MapData::addIndexOfBuilding(const FeatureIndex& buildingID) {
-    indexesOfBuildings.push_back(buildingID);
+void MapData::addIndexOfBuildingType(const FeatureIndex& buildingID, const buildingType& type) {
+    indexesOfBuildingTypes[type].push_back(buildingID);
 }
 
 //
-void MapData::addSegToStreetType(const StreetSegmentIndex& segID, const unsigned& numLanes, 
+void MapData::addSegOfStreetType(const StreetSegmentIndex& segID, const unsigned& numLanes, 
                                  const roadType& type) {
     segsOfStreetType[type].push_back(std::make_pair(segID, numLanes));
 }
@@ -330,9 +331,9 @@ const std::vector<unsigned>& MapData::getIndexesOfNaturalFeature(const naturalFe
     return indexesOfNaturalFeatures[type];
 }
 
-// TEMP
-const std::vector<unsigned>& MapData::getIndexesOfBuildings() const {
-    return indexesOfBuildings;
+// 
+const std::vector<unsigned>& MapData::getIndexesOfBuildingType(const buildingType& type) const {
+    return indexesOfBuildingTypes[type];
 }
 
 //

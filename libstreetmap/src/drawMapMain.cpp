@@ -54,7 +54,7 @@ void drawMainCanvas(ezgl::renderer* rend) {
     double pixelsPerMeter = pixelInMeters(rend);
     
     if (pixelsPerMeter > 0.4) {
-        drawBuildings(rend);
+        drawAllBuildings(rend);
     }
    
     if (pixelsPerMeter > 0.07) {

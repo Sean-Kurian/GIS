@@ -142,9 +142,19 @@ void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
 }
 
 //
-void drawBuildings(ezgl::renderer* rend) {
-    rend->set_color(getFeatureColour(FeatureType::Building));
-    std::vector<unsigned> buildings = gData.getIndexesOfBuildings();
+void drawAllBuildings(ezgl::renderer* rend) {
+    drawBuildings(rend, buildingType::residental);
+    drawBuildings(rend, buildingType::commercial);
+    drawBuildings(rend, buildingType::office);
+    drawBuildings(rend, buildingType::school);
+    drawBuildings(rend, buildingType::hospital);
+    drawBuildings(rend, buildingType::misc);
+}
+
+//
+void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
+    rend->set_color(ezgl::color(0x84, 0x94, 0xA4));
+    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     for (const unsigned buildingIndex : buildings) {
         LatLon pointLL;
         std::vector<ezgl::point2d> points;
@@ -166,7 +176,7 @@ void drawBuildings(ezgl::renderer* rend) {
 }
  //Example, replace with relevant indices and icons
 void drawPOI(ezgl::renderer* rend){
-    std::vector<unsigned> buildings = gData.getIndexesOfBuildings();
+    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(buildingType::commercial);
     ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/small_image.png");
     for (const unsigned buildingIndex : buildings) {
         LatLon pointLL = getFeaturePoint(0, buildingIndex); 
