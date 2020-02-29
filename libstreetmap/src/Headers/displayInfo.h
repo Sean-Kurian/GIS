@@ -14,7 +14,7 @@ void displayIntersectionInfo(ezgl::application* app, int intersectionIndex);
 void eraseIntersectionInfo(GtkWidget* dialog);
 
 //Erases intersection dialog when "x" button is clicked on dialog box
-void closeIntersectionInfo(GtkDialog* dialog, gint responseID, gpointer);
+void closeIntersectionInfo(GtkDialog*, gint responseID, gpointer);
 
 //Removes any instances of "<unknown>" from an intersection name
 std::string removeUnknown(std::string intersectionName);

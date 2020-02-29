@@ -35,10 +35,11 @@ void switchMap(GtkWidget*, gpointer data) {
     std::string mapName = gtk_combo_box_get_active_id(box);
     
     if (!mapName.empty()) {
+        //Display a loading screen before closing map
         GtkWidget* load_screen = displayMapLoadScreen(app);
+        
         close_map();
         
-        std::cout << "Loading: " << mapName << "\n";
         bool loadSuccess = load_map(mapName);
         if (loadSuccess) {
             
@@ -56,6 +57,7 @@ void switchMap(GtkWidget*, gpointer data) {
             camera.reset_world(newMapCoords);
             ezgl::zoom_fit(canvas, camera.get_initial_world());
             
+            //Erase loading screen now that the map has been switched
             destroyMapLoadScreen(load_screen);
         }
         else 
@@ -81,7 +83,6 @@ GtkWidget* displayMapLoadScreen(ezgl::application* app) {
             (GtkWindow*) window,
             GTK_DIALOG_DESTROY_WITH_PARENT,
             NULL, NULL);
-    gtk_widget_set_name(dialog, "loadingScreen");
     
     //Add the content to the loading screen
     content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
