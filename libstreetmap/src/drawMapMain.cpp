@@ -63,8 +63,12 @@ void drawMainCanvas(ezgl::renderer* rend) {
     drawAllFeatures(rend, pixelsPerMeter);
 
 
+
     if (pixelsPerMeter > 0.4) {
         drawAllBuildings(rend);
+        PrintTTCVehicleInfo(ptRoot, rend); 
+        drawPOI(rend, buildingType::school); 
+        drawPOI(rend, buildingType::hospital); 
     }
     else if (pixelsPerMeter > 0.25) {
         drawBuildings(rend, buildingType::school);
@@ -84,11 +88,11 @@ void drawMainCanvas(ezgl::renderer* rend) {
         drawStreetNames(rend, roadType::highway, pixelsPerMeter);
         drawStreetNames(rend, roadType::majorRoad, pixelsPerMeter);
         drawStreetNames(rend, roadType::minorRoad, pixelsPerMeter);
-        PrintTTCVehicleInfo(ptRoot, rend); 
+
     }
     
     if (pixelsPerMeter > 1.8 && pixelsPerMeter < 1.9){
-        drawPOI(rend); 
+        //drawPOI(rend); 
     }
     
     
@@ -199,16 +203,12 @@ ptree getRoot(){
             read_json(issJsonData, ptRoot);
 
             // Parsing and printing the data
-            cout << "Current TTC vehicle locations are as follows:" << endl;
-            cout << "====================" << endl << endl;
 /*            try {
                 PrintTTCVehicleInfo(ptRoot);
             } catch (const char *errMsg) {
                 cout << "ERROR: Unable to fully parse the TTC JSON data" << endl;
                 cout << "Thrown message: " << errMsg << endl;
             }*/
-            cout << endl << "====================" << endl;
-            cout << "Done!" << endl;
         } else {
             cout << "ERROR: res == " << res << endl;
             cout << errbuf << endl;

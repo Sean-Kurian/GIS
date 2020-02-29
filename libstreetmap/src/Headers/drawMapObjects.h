@@ -27,7 +27,7 @@ void drawStreams(ezgl::renderer* rend, const double& pixelsPerMeter);
 void drawAllBuildings(ezgl::renderer* rend);
 void drawBuildings(ezgl::renderer* rend, const buildingType& type);
 
-void drawPOI(ezgl::renderer* rend); 
+void drawPOI(ezgl::renderer* rend, const buildingType& type); 
 
 void drawHighlightedData(ezgl::renderer* rend);
 

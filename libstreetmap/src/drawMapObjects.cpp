@@ -283,14 +283,21 @@ void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
     }
 }
  //Example, replace with relevant indices and icons
-void drawPOI(ezgl::renderer* rend){
-    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(buildingType::other);
-    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 50 50 .png");
+void drawPOI(ezgl::renderer* rend, const buildingType& type){
+    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
+    ezgl::surface* test; 
+    if (type == buildingType::school){
+       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 30 30.png");
+    }
+    else if (type == buildingType::hospital){
+       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/hospital2 30 30.png"); 
+    }
     for (const unsigned buildingIndex : buildings) {
         LatLon pointLL = getFeaturePoint(0, buildingIndex); 
         rend->draw_surface(test, ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));
     }
     rend->free_surface(test); 
+    std::cout <<"Im drawing!"<<endl; 
 }
 
 //
@@ -334,8 +341,8 @@ void PrintTTCVehicleInfo(ptree &ptRoot, ezgl::renderer* rend) {
         rend->draw_surface(test, ezgl::point2d(-79.4325, 43.6525)); 
         
                 // Print bus info
-        cout << "Bus " << busName << " with ID " << busID <<
-            " is at coordinates: " << longitude << ", " << latitude << endl;
+        //cout << "Bus " << busName << " with ID " << busID <<
+            //" is at coordinates: " << longitude << ", " << latitude << endl;
           
     }
     rend->free_surface(test); 
