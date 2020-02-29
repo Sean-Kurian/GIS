@@ -5,64 +5,67 @@
 
 #include "colourFunctions.h"
 
+namespace nightMode {
+    bool isOn = false;
+}
+
 //
 ezgl::color getFeatureColour(const FeatureType& type) {
     switch (type) {
         case Unknown:
-            return ezgl::RED;
+            return ERROR_COLOUR;
         case Park:
-            return ezgl::color(0xCB, 0xE6, 0xA3);
+            return nightMode::isOn ? NIGHT_GRASS_COLOUR : DAY_GRASS_COLOUR;
         case Beach:
-            return ezgl::color(0xFF, 0xEF, 0xC3);
+            return nightMode::isOn ? NIGHT_BEACH_COLOUR : DAY_BEACH_COLOUR;
         case Lake:
-            return ezgl::color(0xA2, 0xCD, 0xFC);
+            return nightMode::isOn ? NIGHT_WATER_COLOUR : DAY_WATER_COLOUR;
         case River:
-            return ezgl::color(0xA2, 0xCD, 0xFC);
+            return nightMode::isOn ? NIGHT_WATER_COLOUR : DAY_WATER_COLOUR;
         case Island:
-            return ezgl::color(0xE0, 0xE0, 0xE0);
+            return nightMode::isOn ? NIGHT_BACKGROUND_COLOUR : DAY_BACKGROUND_COLOUR;
         case Building:
-            return ezgl::color(0x84, 0x94, 0xA4);
+            return nightMode::isOn ? NIGHT_BUILDING_COLOUR : DAY_BUILDING_COLOUR;
         case Greenspace:
-            return ezgl::color(0xCB, 0xE6, 0xA3);
+            return nightMode::isOn ? NIGHT_GRASS_COLOUR : DAY_GRASS_COLOUR;
         case Golfcourse:
-            return ezgl::color(0xCB, 0xE6, 0xA3);
+            return nightMode::isOn ? NIGHT_GRASS_COLOUR : DAY_GRASS_COLOUR;
         case Stream:
-            return ezgl::color(0xA2, 0xCD, 0xFC);
+            return nightMode::isOn ? NIGHT_WATER_COLOUR : DAY_WATER_COLOUR;
         default:
             std::cerr << "Error: No matching feature type\n";
     }
-    return ezgl::RED;
+    return ERROR_COLOUR;
 }
 
 ezgl::color getRoadColour(const roadType& type) {
     switch (type) {
         case highway:
-            return ezgl::color(0xFF, 0xF1, 0xBA);
+            return nightMode::isOn ? NIGHT_HIGHWAY_COLOUR : DAY_HIGHWAY_COLOUR;
         case majorRoad:
-            return ezgl::color(0xFF, 0xFF, 0xFF);
+            return nightMode::isOn ? NIGHT_MAJOR_ROAD_COLOUR : DAY_MAJOR_ROAD_COLOUR;
         case minorRoad:
-            return ezgl::color(0xF2, 0xF2, 0xF2);
+            return nightMode::isOn ? NIGHT_MINOR_ROAD_COLOUR : DAY_MINOR_ROAD_COLOUR;
         case trail:
-            return ezgl::BLACK;
+            return nightMode::isOn ? NIGHT_TRAIL_COLOUR : DAY_TRAIL_COLOUR;
         case path:
-            return ezgl::color(0x77, 0x19, 0x19);
+            return nightMode::isOn ? NIGHT_PATH_COLOUR : DAY_PATH_COLOUR;
         default:
             std::cerr << "Error: no matching street type\n";
     }
-    return ezgl::RED;
+    return ERROR_COLOUR;
 }
 
 ezgl::color getBuildingColour(const buildingType& type) {
     switch (type) {
- //ezgl::color(0x35, 0x6C, 0xA3);
         case school:
-            return ezgl::color(0x57, 0x90, 0xC5);
+            return nightMode::isOn ? NIGHT_SCHOOL_COLOUR : DAY_SCHOOL_COLOUR;
         case hospital:
-            return ezgl::color(0xC4, 0x68, 0x96);
+            return nightMode::isOn ? NIGHT_HOSPITAL_COLOUR : DAY_HOSPITAL_COLOUR;
         case other:
-            return ezgl::color(0x84, 0x94, 0xA4);
+            return nightMode::isOn ? NIGHT_BUILDING_COLOUR : DAY_BUILDING_COLOUR;
         default:
             std::cerr << "Error: no matching building type\n";
     }
-    return ezgl::RED;
+    return ERROR_COLOUR;
 }

@@ -10,6 +10,7 @@
 #include "drawMapObjects.h"
 #include "drawMapHelpers.h"
 #include "drawCustomButtons.h"
+#include "colourFunctions.h"
 #include "mouseAndKBCtrl.h"
 #include "searchBar.h"
 #include "displayInfo.h"
@@ -19,6 +20,7 @@
 #include "ezgl/graphics.hpp"
 
 #include <iostream>
+#include <ctime>
 
 
 void drawMainCanvas(ezgl::renderer* rend);
@@ -50,7 +52,7 @@ void draw_map() {
 
 //
 void drawMainCanvas(ezgl::renderer* rend) {
-    rend->set_color(0xE0, 0xE0, 0xE0);
+    rend->set_color(nightMode::isOn ? NIGHT_BACKGROUND_COLOUR : DAY_BACKGROUND_COLOUR);
     rend->fill_rectangle(rend->get_visible_world());
     rend->set_line_cap(ezgl::line_cap::round);
     ptree ptRoot = getRoot(); 
@@ -104,6 +106,13 @@ double pixelInMeters(ezgl::renderer* rend) {
 
 //Initial setup of the application
 void initialSetup(ezgl::application* app, bool) {
+    time_t now = time(0);
+    tm* localTime = localtime(&now);
+    if (localTime->tm_hour > 19 || localTime->tm_hour < 7)
+        nightMode::isOn = true;
+    else
+        nightMode::isOn = false;
+    
     connectZoomButtons(app);
     connectSearchBar(app);
     setUpDropDown(app);
