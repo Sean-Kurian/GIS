@@ -104,22 +104,18 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
                         wasDrawn = rend->draw_text(center, streetName, width * 0.8, height);
                     textHeight -= 1.0;
                     } while (!wasDrawn && textHeight >= minTextHeight);
-            }
-            else {
+                }
+                else {
                     std::string streetNameArrows;
-                    for (unsigned arrowCount = 3; arrowCount >= 1; --arrowCount) {
-                        if (wasFlipped) 
-                            streetNameArrows = addArrows(streetName, arrowCount, leftArrow);
-                        else
-                            streetNameArrows = addArrows(streetName, arrowCount, rightArrow);
-                        do {
-                            rend->set_font_size(textHeight);
-                            wasDrawn = rend->draw_text(center, streetNameArrows, width, height);
-                            textHeight -= 1.0;
-                        } while (!wasDrawn && textHeight >= minTextHeight);
-                        if (wasDrawn)
-                            break;
-                    }
+                    if (wasFlipped) 
+                        streetNameArrows = addArrows(streetName, 1, leftArrow);
+                    else
+                        streetNameArrows = addArrows(streetName, 1, rightArrow);
+                    do {
+                        rend->set_font_size(textHeight);
+                        wasDrawn = rend->draw_text(center, streetNameArrows, width, height);
+                        textHeight -= 1.0;
+                    } while (!wasDrawn && textHeight >= minTextHeight);
                 }
             }
             else {
@@ -169,31 +165,27 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
                 rend->set_text_rotation(avgAngle);
                 center = ezgl::point2d((maxPoint.x + fromPos.x) * 0.5, (maxPoint.y + fromPos.y) * 0.5);
                 if (!oneWay) {
-                do {
+                    do {
                     rend->set_font_size(textHeight);
                         wasDrawn = rend->draw_text(center, streetName, maxWidth * 0.8, height);
                     textHeight -= 1.0;
                     } while (!wasDrawn && textHeight >= minTextHeight);
-            }
+                }
                 else {
                     std::string streetNameArrows;
-                    for (unsigned arrowCount = 3; arrowCount >= 1; --arrowCount) {
-                        if (wasFlipped) 
-                            streetNameArrows = addArrows(streetName, arrowCount, leftArrow);
-                        else
-                            streetNameArrows = addArrows(streetName, arrowCount, rightArrow);
-                        do {
-                            rend->set_font_size(textHeight);
-                            wasDrawn = rend->draw_text(center, streetNameArrows, maxWidth, height);
-                            textHeight -= 1.0;
-                        } while (!wasDrawn && textHeight >= minTextHeight);
-                        if (wasDrawn)
-                            break;
-                    }
+                    if (wasFlipped) 
+                        streetNameArrows = addArrows(streetName, 1, leftArrow);
+                    else
+                        streetNameArrows = addArrows(streetName, 1, rightArrow);
+                    do {
+                        rend->set_font_size(textHeight);
+                        wasDrawn = rend->draw_text(center, streetNameArrows, maxWidth, height);
+                        textHeight -= 1.0;
+                    } while (!wasDrawn && textHeight >= minTextHeight);
                 } 
             }
         }
-    } 
+    }
 }
 
 //
