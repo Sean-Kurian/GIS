@@ -4,6 +4,7 @@
 #include <regex>
 
 #include "displayInfo.h"
+#include "m1.h"
 
 //Displays intersection info when the intersection is clicked
 void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
@@ -83,4 +84,36 @@ std::string removeUnknown(std::string intersectionName) {
     intersectionName = std::regex_replace(intersectionName, unknown, "");
     
     return intersectionName;
+}
+
+//Finds an intersection based on the name
+int find_intersection_from_name(std::string intersectionName) {
+    int and_text = intersectionName.find("&");
+    std::string first_street = intersectionName.substr(0, and_text - 1);
+    std::string second_street = intersectionName.substr(and_text + 2);
+    
+    std::cout << "First street: " << first_street << "\n";
+    std::cout << "Second street: " << second_street << "\n";
+    
+    std::vector<int> first_street_ids = find_street_ids_from_partial_street_name(first_street);
+    std::vector<int> second_street_ids = find_street_ids_from_partial_street_name(second_street);
+    
+    for (int street_id : first_street_ids) {
+        for (int second_street_id: second_street_ids) {
+            std::vector<int> intersections = find_intersections_of_two_streets(std::make_pair(street_id, second_street_id));
+            
+            //If there is an intersection, return it
+            if (!intersections.empty()) {
+                return intersections[0];
+            }
+        }
+    }
+    
+    //If there was no intersection, return -1
+    return -1;
+}
+
+//Alerts user intersection was not found
+void intersectionNotFound(ezgl::application* app) {
+    app->update_message("Intersection Not Found");
 }

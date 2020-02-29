@@ -48,7 +48,7 @@
                 <property name="receives_default">True</property>
                 <property name="halign">end</property>
                 <property name="valign">end</property>
-                <property name="margin_right">10</property>
+                <property name="margin_right">15</property>
                 <property name="margin_bottom">85</property>
                 <child>
                   <object class="GtkImage">
@@ -67,7 +67,7 @@
                 <property name="receives_default">True</property>
                 <property name="halign">end</property>
                 <property name="valign">end</property>
-                <property name="margin_right">10</property>
+                <property name="margin_right">15</property>
                 <property name="margin_bottom">45</property>
                 <child>
                   <object class="GtkImage">
@@ -90,8 +90,8 @@
                 <property name="valign">start</property>
                 <property name="margin_left">10</property>
                 <property name="margin_top">10</property>
-                <property name="primary_icon_stock">gtk-find</property>
-                <property name="primary_icon_name">edit-find-symbolic</property>
+                <property name="primary_icon_stock">gtk-dialog-question</property>
+                <property name="secondary_icon_stock">gtk-find</property>
                 <property name="placeholder_text" translatable="yes">Enter Address, Intersection, POI, etc</property>
                 <property name="input_hints">GTK_INPUT_HINT_SPELLCHECK | GTK_INPUT_HINT_WORD_COMPLETION | GTK_INPUT_HINT_NONE</property>
               </object>
@@ -140,7 +140,7 @@
                 <property name="receives_default">True</property>
                 <property name="halign">end</property>
                 <property name="valign">end</property>
-                <property name="margin_right">10</property>
+                <property name="margin_right">15</property>
                 <property name="margin_bottom">5</property>
                 <child>
                   <object class="GtkImage">
