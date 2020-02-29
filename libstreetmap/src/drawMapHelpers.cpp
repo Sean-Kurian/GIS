@@ -7,6 +7,9 @@
 #include "globalData.h"
 #include "m1.h"
 
+#include <string>
+#include <regex>
+
 // Coordinate Functions
 double xFromLon(double lon) {
     double lonRelative = (lon - gData.getAvgLon()) * DEGREE_TO_RADIAN;
@@ -32,11 +35,13 @@ void switchMap(GtkWidget*, gpointer data) {
     std::string mapName = gtk_combo_box_get_active_id(box);
     
     if (!mapName.empty()) {
-        displayMapLoadScreen(app);
+        GtkWidget* load_screen = displayMapLoadScreen(app);
         close_map();
+        
         std::cout << "Loading: " << mapName << "\n";
         bool loadSuccess = load_map(mapName);
         if (loadSuccess) {
+            
             std::string canvasID = app->get_main_canvas_id();
             ezgl::canvas* canvas = app->get_canvas(canvasID);
             ezgl::camera& camera = canvas->get_camera();
@@ -50,6 +55,8 @@ void switchMap(GtkWidget*, gpointer data) {
             
             camera.reset_world(newMapCoords);
             ezgl::zoom_fit(canvas, camera.get_initial_world());
+            
+            destroyMapLoadScreen(load_screen);
         }
         else 
             std::cerr << "Error loading new map\n";
@@ -57,36 +64,60 @@ void switchMap(GtkWidget*, gpointer data) {
 }
 
 //Displays a loading screen while map switching
-void displayMapLoadScreen(ezgl::application* app) {
-    //Determine the map being loaded
+GtkWidget* displayMapLoadScreen(ezgl::application* app) {
+    //Determine the map being loaded, and create a loading message
     GtkComboBox* dropDownMenu = (GtkComboBox*) app->get_object("mapDropDown");
-    //GtkTreeIter* iter;
-    //gtk_combo_box_get_active_iter(dropDownMenu, iter);
-    //GtkTreeModel* model = gtk_combo_box_get_model(dropDownMenu);
-    const gchar* map_name = gtk_combo_box_get_active_id(dropDownMenu);
+    const gchar* map_id = gtk_combo_box_get_active_id(dropDownMenu);
+    std::string load_message = "Now loading: " + parseMapName(map_id);
     
-    
-    //Create the loading screen and display it to the screen
+    //Create the loading screen
     GObject* window;
     GtkWidget* content_area;
     GtkWidget* label;
     GtkWidget* dialog;
-    
     window = app->get_object(app->get_main_window_id().c_str());
-    
     dialog = gtk_dialog_new_with_buttons(
-            "One moment, please",
+            "Loading",
             (GtkWindow*) window,
             GTK_DIALOG_DESTROY_WITH_PARENT,
             NULL, NULL);
+    gtk_widget_set_name(dialog, "loadingScreen");
     
+    //Add the content to the loading screen
     content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-    label = gtk_label_new(map_name);
+    label = gtk_label_new(load_message.c_str());
     gtk_container_add(GTK_CONTAINER(content_area), label);
+    
+    //Display the loading screen
     gtk_widget_show_all(dialog);
+    app->refresh_drawing();
+    app->flush_drawing();
+    
+    return dialog;
 }
 
 //Destroys the loading screen displayed while map switching
-void destoryMapLoadScreen(ezgl::application* app) {
+void destroyMapLoadScreen(GtkWidget* dialog) {
+    gtk_widget_destroy(dialog);
+}
+
+//Parses the map path to return the map name
+std::string parseMapName(std::string newMap) {
+    const int MAP_NAME_BEGINS = 26;
+    const int MAP_NAME_ENDS = newMap.find(".");
+    const int NEXT_INDEX = 1;
+    newMap = newMap.substr(MAP_NAME_BEGINS, MAP_NAME_ENDS - MAP_NAME_BEGINS);
     
+    std::regex dash("-");
+    std::regex underscore("_");
+    newMap = std::regex_replace(newMap, dash, " ");
+    newMap = std::regex_replace(newMap, underscore, ", ");
+
+    newMap[0] = toupper(newMap[0]);
+    int capitalIndex = newMap.find(" ") + NEXT_INDEX;
+    while (capitalIndex != 0) {
+        newMap[capitalIndex] = toupper(newMap[capitalIndex]);
+        capitalIndex = newMap.find(" ", capitalIndex) + NEXT_INDEX;
+    }
+    return newMap;
 }
