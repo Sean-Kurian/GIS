@@ -275,7 +275,7 @@ void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
     }
 }
  //Example, replace with relevant indices and icons
-void drawPOI(ezgl::renderer* rend, const buildingType& type){
+void drawPOI30(ezgl::renderer* rend, const buildingType& type){
     std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
     if (type == buildingType::school){
@@ -283,6 +283,40 @@ void drawPOI(ezgl::renderer* rend, const buildingType& type){
     }
     else if (type == buildingType::hospital){
        test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/hospital2 30 30.png"); 
+    }
+    for (const unsigned buildingIndex : buildings) {
+        LatLon pointLL = getFeaturePoint(0, buildingIndex); 
+        rend->draw_surface(test, ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));
+    }
+    rend->free_surface(test); 
+    std::cout <<"Im drawing!"<<endl; 
+}
+
+void drawPOI50(ezgl::renderer* rend, const buildingType& type){
+    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
+    ezgl::surface* test; 
+    if (type == buildingType::school){
+       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 50 50.png");
+    }
+    else if (type == buildingType::hospital){
+       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/hospital2 50 50.png"); 
+    }
+    for (const unsigned buildingIndex : buildings) {
+        LatLon pointLL = getFeaturePoint(0, buildingIndex); 
+        rend->draw_surface(test, ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));
+    }
+    rend->free_surface(test); 
+    std::cout <<"Im drawing!"<<endl; 
+}
+
+void drawPOI70(ezgl::renderer* rend, const buildingType& type){
+    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
+    ezgl::surface* test; 
+    if (type == buildingType::school){
+       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 70 70.png");
+    }
+    else if (type == buildingType::hospital){
+       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/hospital2 70 70.png"); 
     }
     for (const unsigned buildingIndex : buildings) {
         LatLon pointLL = getFeaturePoint(0, buildingIndex); 
@@ -305,11 +339,83 @@ void drawHighlightedData(ezgl::renderer* rend) {
     }
 }
 
-void PrintTTCVehicleInfo(ptree &ptRoot, ezgl::renderer* rend) {
+void PrintTTCVehicleInfo30(ptree &ptRoot, ezgl::renderer* rend) {
     string busName;
     int busID = 0;
     double longitude = 0, latitude = 0;
     ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 30 30.png");
+    
+    BOOST_FOREACH(ptree::value_type &featVal, ptRoot.get_child("features")) {
+        // "features" maps to a JSON array, so each child should have no name
+        
+        if ( !featVal.first.empty() )
+            throw "\"features\" child node has a name";
+
+        busName = featVal.second.get<string>("properties.route_name");
+        busID = featVal.second.get<int>("properties.vehicle_id");
+
+        // Get GPS coordinates (stored as JSON array of 2 values)
+        // Sanity checks: Only 2 values
+        ptree coordinates = featVal.second.get_child("geometry.coordinates");
+        if (coordinates.size() != 2)
+            throw "Coordinates node does not contain 2 items";
+        
+        longitude = coordinates.front().second.get_value<double>();
+        latitude = coordinates.back().second.get_value<double>();
+
+        rend->draw_surface(test, ezgl::point2d(xFromLon(longitude), yFromLat(latitude)));
+        rend->draw_surface(test, ezgl::point2d(-79.4325, 43.6525)); 
+        
+                // Print bus info
+        //cout << "Bus " << busName << " with ID " << busID <<
+            //" is at coordinates: " << longitude << ", " << latitude << endl;
+          
+    }
+    rend->free_surface(test); 
+    
+}
+
+void PrintTTCVehicleInfo50(ptree &ptRoot, ezgl::renderer* rend) {
+    string busName;
+    int busID = 0;
+    double longitude = 0, latitude = 0;
+    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 50 50.png");
+    
+    BOOST_FOREACH(ptree::value_type &featVal, ptRoot.get_child("features")) {
+        // "features" maps to a JSON array, so each child should have no name
+        
+        if ( !featVal.first.empty() )
+            throw "\"features\" child node has a name";
+
+        busName = featVal.second.get<string>("properties.route_name");
+        busID = featVal.second.get<int>("properties.vehicle_id");
+
+        // Get GPS coordinates (stored as JSON array of 2 values)
+        // Sanity checks: Only 2 values
+        ptree coordinates = featVal.second.get_child("geometry.coordinates");
+        if (coordinates.size() != 2)
+            throw "Coordinates node does not contain 2 items";
+        
+        longitude = coordinates.front().second.get_value<double>();
+        latitude = coordinates.back().second.get_value<double>();
+
+        rend->draw_surface(test, ezgl::point2d(xFromLon(longitude), yFromLat(latitude)));
+        rend->draw_surface(test, ezgl::point2d(-79.4325, 43.6525)); 
+        
+                // Print bus info
+        //cout << "Bus " << busName << " with ID " << busID <<
+            //" is at coordinates: " << longitude << ", " << latitude << endl;
+          
+    }
+    rend->free_surface(test); 
+    
+}
+
+void PrintTTCVehicleInfo70(ptree &ptRoot, ezgl::renderer* rend) {
+    string busName;
+    int busID = 0;
+    double longitude = 0, latitude = 0;
+    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 70 70.png");
     
     BOOST_FOREACH(ptree::value_type &featVal, ptRoot.get_child("features")) {
         // "features" maps to a JSON array, so each child should have no name

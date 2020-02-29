@@ -67,8 +67,8 @@ void drawMainCanvas(ezgl::renderer* rend) {
     if (pixelsPerMeter > 0.4) {
         drawAllBuildings(rend);
         PrintTTCVehicleInfo(ptRoot, rend); 
-        drawPOI(rend, buildingType::school); 
-        drawPOI(rend, buildingType::hospital); 
+        drawPOI30(rend, buildingType::school); 
+        drawPOI30(rend, buildingType::hospital); 
     }
     else if (pixelsPerMeter > 0.25) {
         drawBuildings(rend, buildingType::school);
