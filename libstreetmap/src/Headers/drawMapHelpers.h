@@ -18,10 +18,13 @@ double latFromY(double y);
 void switchMap(GtkWidget *, gpointer data);
 
 //Displays a loading screen while map switching
-void displayMapLoadScreen(ezgl::application* app);
+GtkWidget* displayMapLoadScreen(ezgl::application* app);
 
 //Destroys the loading screen displayed while map switching
-void destoryMapLoadScreen(ezgl::application* app);
+void destroyMapLoadScreen(GtkWidget* dialog);
+
+//Parses the map path to return the map name
+std::string parseMapName(std::string newMap);
 
 #endif /* DRAWMAPHELPERS_H */
 
