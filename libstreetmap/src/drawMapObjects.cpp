@@ -109,19 +109,43 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
 
 //
 void drawAllFeatures(ezgl::renderer* rend) {
-    drawFeatures(rend, naturalFeature::lake);
-    drawFeatures(rend, naturalFeature::river);
-    drawFeatures(rend, naturalFeature::island);
-    drawFeatures(rend, naturalFeature::forest);
-    drawFeatures(rend, naturalFeature::park);
-    drawFeatures(rend, naturalFeature::beach);
+//    drawFeatures(rend, naturalFeature::lake);
+//    drawFeatures(rend, naturalFeature::river);
+//    drawFeatures(rend, naturalFeature::island);
+//    drawFeatures(rend, naturalFeature::forest);
+//    drawFeatures(rend, naturalFeature::park);
+//    drawFeatures(rend, naturalFeature::beach);
+    drawFeat(rend);
     drawFeatures(rend, naturalFeature::minorWater);
+}
+
+void drawFeat(ezgl::renderer* rend) {
+    std::multimap<double, unsigned> areaOfFeatures = gData.getAreaOfFeatures();
+    
+    for (auto itr = areaOfFeatures.rbegin(); itr != areaOfFeatures.rend(); ++itr) {
+        rend->set_color(getFeatureColour(getFeatureType((itr->second))));
+        LatLon pointLL;
+        std::vector<ezgl::point2d> points;
+        unsigned numPoints = getFeaturePointCount(itr->second);
+        for (unsigned point = 0; point < numPoints; ++point) {
+            pointLL = getFeaturePoint(point, itr->second);
+            points.push_back(ezgl::point2d(xFromLon(pointLL.lon()), yFromLat(pointLL.lat())));
+        }
+        
+        if (points.size() > 1) {
+            if (points.front() == points.back())
+                rend->fill_poly(points);
+            else
+                for (unsigned i = 0; i < points.size() - 1; ++i) 
+                    rend->draw_line(points[i], points[i + 1]);
+        }
+    }
 }
 
 //
 void drawFeatures(ezgl::renderer* rend, const naturalFeature& type) {
     rend->set_line_width(2);
-    std::vector<unsigned> features = gData.getIndexesOfNaturalFeature(type);
+    std::vector<unsigned> features = gData.getIndexesOfStreams();
     for (const unsigned featureIndex : features) {
         rend->set_color(getFeatureColour(getFeatureType((featureIndex))));
         LatLon pointLL;

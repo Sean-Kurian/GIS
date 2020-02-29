@@ -30,7 +30,8 @@ MapData::~MapData() {
     adjacentIntsOfIntersection.clear();
     hlData.highlightedInts.clear(); 
     hlData.highlightedSegs.clear();
-    indexesOfNaturalFeatures.clear();
+    indexesOfStreams.clear();
+    areaOfFeatures.clear();
     indexesOfBuildingTypes.clear();
     segsOfStreetType.clear();
     segsOfWayOSMID.clear();
@@ -50,7 +51,8 @@ void MapData::clearMapData() {
     adjacentIntsOfIntersection.clear();
     hlData.highlightedInts.clear(); 
     hlData.highlightedSegs.clear();
-    indexesOfNaturalFeatures.clear();
+    indexesOfStreams.clear();
+    areaOfFeatures.clear();
     indexesOfBuildingTypes.clear();
     segsOfStreetType.clear();
     segsOfWayOSMID.clear();
@@ -68,7 +70,6 @@ void MapData::allocStreetVecs(const unsigned& numStreets) {
     segsOfStreet.resize(numStreets);
     intersectionsOfStreet.resize(numStreets);
     segsOfStreetType.resize(roadType::RT_TYPECOUNT);
-    indexesOfNaturalFeatures.resize(naturalFeature::NF_TYPECOUNT);
     indexesOfBuildingTypes.resize(buildingType::BF_TYPECOUNT);
 }
 
@@ -175,8 +176,13 @@ void MapData::addCoordData(const double& _minLat, const double& _maxLat,
 }
 
 //
-void MapData::addIndexOfNaturalFeature(const FeatureIndex& featID, const naturalFeature& feature) {
-    indexesOfNaturalFeatures[feature].push_back(featID);
+void MapData::addIndexOfStream(const FeatureIndex& streamID) {
+    indexesOfStreams.push_back(streamID);
+}
+
+//
+void MapData::addAreaOfFeature(const double& area, const FeatureIndex& featureID) {
+    areaOfFeatures.insert(std::make_pair(area, featureID));
 }
 
 //
@@ -327,8 +333,13 @@ const HighlightedData& MapData::getHLData() const {
 }
 
 //
-const std::vector<unsigned>& MapData::getIndexesOfNaturalFeature(const naturalFeature& type) const {
-    return indexesOfNaturalFeatures[type];
+const std::multimap<double, unsigned>& MapData::getAreaOfFeatures() const {
+    return areaOfFeatures;
+}
+
+//
+const std::vector<unsigned>& MapData::getIndexesOfStreams() const {
+    return indexesOfStreams;
 }
 
 // 

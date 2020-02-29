@@ -15,6 +15,7 @@
 
 #include <algorithm>
 #include <regex>
+#include <chrono>
 
 MapData gData; // Global data object used to store data in load map
 
@@ -28,6 +29,7 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays,
 
 // Loads layer 1 and 2 data into gData's data structures
 bool load_map(std::string mapPath) {
+    auto start = std::chrono::high_resolution_clock::now();
     bool loadSuccessful = loadStreetsDatabaseBIN(mapPath);
     
     if (loadSuccessful) {
@@ -62,6 +64,9 @@ bool load_map(std::string mapPath) {
         //
         getFeatureData(numFeatures);
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Time taken to load map: " 
+              << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms\n";
     return loadSuccessful;
 }
 
@@ -145,8 +150,10 @@ void getFeatureData(const unsigned& numFeatures) {
     double maxLat = minLat;
     double maxLon = minLon;
     
+    auto start = std::chrono::high_resolution_clock::now();
     for (unsigned featureIndex = 0; featureIndex < numFeatures; ++featureIndex) {
         unsigned numPoints = getFeaturePointCount(featureIndex);
+        FeatureType type = getFeatureType(featureIndex);
         for (unsigned pointIndex = 0; pointIndex < numPoints; ++pointIndex) {
             location = getFeaturePoint(pointIndex, featureIndex);
             minLat = std::min(minLat, location.lat());
@@ -154,19 +161,31 @@ void getFeatureData(const unsigned& numFeatures) {
             maxLat = std::max(maxLat, location.lat());
             maxLon = std::max(maxLon, location.lon());
         }
-        naturalFeature nfType = determineNaturalFeature(featureIndex);
-        if (getFeatureName(featureIndex) == "The Lake") {
-            std::cout << "The Lake: " << featureIndex << " " << numPoints << "\n";
-            nfType = naturalFeature::minorWater;
+        if (type != FeatureType::Building && type != FeatureType::Stream) {
+            double area = find_feature_area(featureIndex);
+            gData.addAreaOfFeature(area, featureIndex);
         }
-        if (nfType != naturalFeature::NF_TYPECOUNT)
-            gData.addIndexOfNaturalFeature(featureIndex, nfType);
-        else {
-            buildingType type = determineBuildingType(featureIndex);
-            gData.addIndexOfBuildingType(featureIndex, type);
+        else if (type == FeatureType::Stream)
+            gData.addIndexOfStream(featureIndex);
+        else if (type == FeatureType::Building) {
+            buildingType bType = determineBuildingType(featureIndex);
+            gData.addIndexOfBuildingType(featureIndex, bType);
         }
+            
+        
+//        naturalFeature nfType = determineNaturalFeature(featureIndex);
+//        if (nfType != naturalFeature::NF_TYPECOUNT)
+//            gData.addIndexOfNaturalFeature(featureIndex, nfType);
+//        else {
+//            buildingType type = determineBuildingType(featureIndex);
+//            gData.addIndexOfBuildingType(featureIndex, type);
+//        }
     }
     gData.addCoordData(minLat, maxLat, minLon, maxLon);
+    
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Time taken to load feature data: " 
+                  << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms\n";
 }
 
 // Loads maps in gData which connect the node/way indexes with their OSMIDs
@@ -257,7 +276,7 @@ naturalFeature determineNaturalFeature(const unsigned& featureIndex) {
     else if (type == FeatureType::Lake) {
         return naturalFeature::lake;
     }
-        
+    
     else if (type == FeatureType::River)
         return naturalFeature::river;
     

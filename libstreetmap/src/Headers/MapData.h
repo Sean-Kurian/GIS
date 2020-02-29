@@ -58,7 +58,10 @@ private:
     CoordData coordData;
     
     //
-    std::vector<std::vector<unsigned> > indexesOfNaturalFeatures;
+    std::multimap<double, unsigned> areaOfFeatures;
+    
+    //
+    std::vector<unsigned> indexesOfStreams;
     
     //
     std::vector<std::vector<unsigned> > indexesOfBuildingTypes;
@@ -137,9 +140,12 @@ public:
                       const double& _minLon, const double& _maxLon);
     
     //
-    void addIndexOfNaturalFeature(const FeatureIndex& featID, const naturalFeature& feature);
+    void addIndexOfStream(const FeatureIndex& streamID);
     
-    // TEMP
+    //
+    void addAreaOfFeature(const double& area, const FeatureIndex& featureID);
+    
+    //
     void addIndexOfBuildingType(const FeatureIndex& buildingID, const buildingType& type);
     
     //
@@ -204,7 +210,10 @@ public:
     const HighlightedData& getHLData() const;
     
     //
-    const std::vector<unsigned>& getIndexesOfNaturalFeature(const naturalFeature& type) const;
+    const std::vector<unsigned>& getIndexesOfStreams() const;
+    
+    //
+    const std::multimap<double, unsigned>& getAreaOfFeatures() const;
     
     //
     const std::vector<unsigned>& getIndexesOfBuildingType(const buildingType& type) const;
