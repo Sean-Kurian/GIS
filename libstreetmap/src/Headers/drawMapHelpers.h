@@ -12,8 +12,10 @@
 // Coordinate Functions
 double xFromLon(double lon);
 double yFromLat(double lat);
-double lonFromX(double x); 
-double latFromY(double y); 
+double lonFromX(double x);
+double latFromY(double y);
+
+double getDistFromLine(ezgl::point2d lineStart, ezgl::point2d lineEnd, ezgl::point2d pt);
 
 void switchMap(GtkWidget *, gpointer data);
 
