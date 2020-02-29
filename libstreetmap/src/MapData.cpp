@@ -404,11 +404,11 @@ unsigned MapData::getRelationIndexOfOSMID(const OSMID& relationID) const {
 
 
 // Returns map path
-std::string MapData::getMapPath() {
+const std::string MapData::getMapPath() const {
     return mapPath;
 }
 
 // Returns pointer to dialog box displaying currently clicked on intersection
-GtkWidget* MapData::getIntersectionInfoBox() {
+GtkWidget* MapData::getIntersectionInfoBox() const {
     return intersectionDialog;
 }

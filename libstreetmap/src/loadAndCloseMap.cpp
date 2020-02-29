@@ -10,7 +10,6 @@
 #include "OSMDatabaseAPI.h"
 #include "globalData.h"
 #include "roadTypes.h"
-#include "naturalFeatures.h"
 #include "buildingTypes.h"
 
 #include <algorithm>
@@ -29,7 +28,9 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays,
 
 // Loads layer 1 and 2 data into gData's data structures
 bool load_map(std::string mapPath) {
+    
     auto start = std::chrono::high_resolution_clock::now();
+    
     bool loadSuccessful = loadStreetsDatabaseBIN(mapPath);
     
     if (loadSuccessful) {
@@ -64,9 +65,11 @@ bool load_map(std::string mapPath) {
         //
         getFeatureData(numFeatures);
     }
+    
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Time taken to load map: " 
               << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms\n";
+    
     return loadSuccessful;
 }
 
@@ -151,9 +154,10 @@ void getFeatureData(const unsigned& numFeatures) {
     double maxLon = minLon;
     
     auto start = std::chrono::high_resolution_clock::now();
+    
     for (unsigned featureIndex = 0; featureIndex < numFeatures; ++featureIndex) {
         unsigned numPoints = getFeaturePointCount(featureIndex);
-        FeatureType type = getFeatureType(featureIndex);
+        FeatureType featType = getFeatureType(featureIndex);
         for (unsigned pointIndex = 0; pointIndex < numPoints; ++pointIndex) {
             location = getFeaturePoint(pointIndex, featureIndex);
             minLat = std::min(minLat, location.lat());
@@ -161,31 +165,23 @@ void getFeatureData(const unsigned& numFeatures) {
             maxLat = std::max(maxLat, location.lat());
             maxLon = std::max(maxLon, location.lon());
         }
-        if (type != FeatureType::Building && type != FeatureType::Stream) {
-            double area = find_feature_area(featureIndex);
-            gData.addAreaOfFeature(area, featureIndex);
-        }
-        else if (type == FeatureType::Stream)
-            gData.addIndexOfStream(featureIndex);
-        else if (type == FeatureType::Building) {
+        if (featType == FeatureType::Building) {
             buildingType bType = determineBuildingType(featureIndex);
             gData.addIndexOfBuildingType(featureIndex, bType);
         }
-            
-        
-//        naturalFeature nfType = determineNaturalFeature(featureIndex);
-//        if (nfType != naturalFeature::NF_TYPECOUNT)
-//            gData.addIndexOfNaturalFeature(featureIndex, nfType);
-//        else {
-//            buildingType type = determineBuildingType(featureIndex);
-//            gData.addIndexOfBuildingType(featureIndex, type);
-//        }
+        else if (featType == FeatureType::Stream) {
+            gData.addIndexOfStream(featureIndex);
+        }
+        else {
+            double area = find_feature_area(featureIndex);
+            gData.addAreaOfFeature(area, featureIndex);
+        }
     }
     gData.addCoordData(minLat, maxLat, minLon, maxLon);
     
     auto end = std::chrono::high_resolution_clock::now();
     std::cout << "Time taken to load feature data: " 
-                  << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms\n";
+              << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms\n";
 }
 
 // Loads maps in gData which connect the node/way indexes with their OSMIDs
@@ -193,6 +189,9 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
     const OSMNode* node;
     const OSMWay* way;
     const OSMRelation* relation;
+    
+    auto start = std::chrono::high_resolution_clock::now();
+    
     // Loops over all nodes and stores their index with their OSMID
     for (unsigned nodeIndex = 0; nodeIndex < numNodes; ++nodeIndex) {
         node = getNodeByIndex(nodeIndex);
@@ -204,7 +203,7 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
         // Stores way's index with its OSMID
         gData.addWayIndexToOSMID(wayIndex, way->id());
         std::vector<int> segs = gData.getSegsOfWayOSMID(way->id());
-        unsigned numLanes = 2;
+        int numLanes = 2;
         roadType type;
         
         for (unsigned tagNum = 0; tagNum < getTagCount(way); ++tagNum) {
@@ -223,14 +222,19 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
             else if (key == "highway") 
                 type = determineRoadType(val);
         }
+        // Adds segment data to gData. The min is to avoid OSM data issues
         for (const int segIndex : segs)
-            gData.addSegOfStreetType(segIndex, numLanes, type);
+            gData.addSegOfStreetType(segIndex, std::min(numLanes, 8), type);
     }
     //
     for (unsigned relationIndex = 0; relationIndex < numRelations; ++relationIndex) {
         relation = getRelationByIndex(relationIndex);
         gData.addRelationIndexToOSMID(relationIndex, relation->id());
     }
+    
+    auto end = std::chrono::high_resolution_clock::now();
+    std::cout << "Time taken to load layer1 data: " 
+              << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms\n";
 }
 
 roadType determineRoadType(const std::string& val) {
@@ -253,37 +257,6 @@ roadType determineRoadType(const std::string& val) {
         return roadType::path;
     
     return roadType::minorRoad;
-}
-
-naturalFeature determineNaturalFeature(const unsigned& featureIndex) {
-    FeatureType type = getFeatureType(featureIndex);
-        
-    if (type == FeatureType::Building)
-        return naturalFeature::NF_TYPECOUNT;
-    
-    else if (type == FeatureType::Greenspace)
-        return naturalFeature::forest;
-    
-    else if (type == FeatureType::Park || type == FeatureType::Golfcourse)
-        return naturalFeature::park;
-    
-    else if (type == FeatureType::Island)
-        return naturalFeature::island;
-    
-    else if (type == FeatureType::Beach)
-        return naturalFeature::beach;
-    
-    else if (type == FeatureType::Lake) {
-        return naturalFeature::lake;
-    }
-    
-    else if (type == FeatureType::River)
-        return naturalFeature::river;
-    
-    else if (type == FeatureType::Stream)
-        return naturalFeature::minorWater;
-    
-    return naturalFeature::forest;
 }
 
 buildingType determineBuildingType(const unsigned& buildingIndex) {
