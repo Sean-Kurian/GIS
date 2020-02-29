@@ -2,7 +2,7 @@
 #define MOUSEANDKEYBOARDCONTROL_H
 
 //==============================================================================
-// File Description: 
+// File Description: Defines events to capture mouse clicks and keyboard presses
 //
 //==============================================================================
 

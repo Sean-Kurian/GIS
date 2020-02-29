@@ -1,3 +1,8 @@
+//==============================================================================
+// File Description: Defines events to capture mouse clicks and keyboard presses
+//
+//==============================================================================
+
 #include "mouseAndKBCtrl.h"
 #include "globalData.h"
 #include "m1.h"

@@ -2,7 +2,7 @@
 #define COLOURFUNCTIONS_H
 
 //==============================================================================
-// File Description: 
+// File Description: Sets colour themes for map, night and normal mode
 //
 //==============================================================================
 

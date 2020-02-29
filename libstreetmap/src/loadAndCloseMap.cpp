@@ -297,38 +297,3 @@ buildingType determineBuildingType(const unsigned& buildingIndex) {
     else
         return buildingType::other;
 }
-
-
-
-
-
-
-
-
-
-//    else if (type == FeatureType::Lake) {
-//        const OSMEntity* feature = NULL;
-//        TypedOSMID featureOSM = getFeatureOSMID(featureIndex);
-//        if (featureOSM.type() == TypedOSMID::EntityType::Node)
-//            feature = getNodeByIndex(gData.getNodeIndexOfOSMID(featureOSM));
-//        else if (featureOSM.type() == TypedOSMID::EntityType::Way)
-//            feature = getWayByIndex(gData.getWayIndexOfOSMID(featureOSM));
-//        else if (featureOSM.type() == TypedOSMID::EntityType::Relation)
-//            feature = getRelationByIndex(gData.getRelationIndexOfOSMID(featureOSM));
-//        
-//        if (feature != NULL) {
-//            for (unsigned tagNum = 0; tagNum < getTagCount(feature); ++tagNum) {
-//                std::string key, val;
-//                std::tie(key, val) = getTagPair(feature, tagNum);
-//
-//                if (key == "water") {
-//                    if (val == "pond" || val == "reservoir" || val == "lake;pond")
-//                        return naturalFeature::minorWater;
-//                    else 
-//                        return naturalFeature::lake;
-//                }
-//            }
-//        }
-//        else
-//            return naturalFeature::lake;
-//    }

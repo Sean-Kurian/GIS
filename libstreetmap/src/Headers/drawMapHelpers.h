@@ -2,8 +2,8 @@
 #define DRAWMAPHELPERS_H
 
 //==============================================================================
-// File Description: 
-//
+// File Description: Helper functions to convert from latlon to cartesian coordinates and back
+// as well as angles and a boolean to check whether a segment is displayed on screen
 //==============================================================================
 
 #include "ezgl/application.hpp"

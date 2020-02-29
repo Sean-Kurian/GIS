@@ -1,3 +1,8 @@
+//==============================================================================
+// File Description: Sets up buttons and callback function using gtk 
+// 
+//==============================================================================
+
 #include "ezgl/graphics.hpp"
 #include "ezgl/application.hpp"
 #include "ezgl/callback.hpp"

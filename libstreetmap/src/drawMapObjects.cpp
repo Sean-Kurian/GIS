@@ -1,5 +1,5 @@
 //==============================================================================
-// File Description: 
+// File Description: Functions to draw individual objects on map such as streets, buildings, icons etc.
 //
 //==============================================================================
 
@@ -278,6 +278,7 @@ void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
 void drawPOI30(ezgl::renderer* rend, const buildingType& type){
     std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
+    test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 30 30.png");
     if (type == buildingType::school){
        test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 30 30.png");
     }
@@ -295,6 +296,7 @@ void drawPOI30(ezgl::renderer* rend, const buildingType& type){
 void drawPOI50(ezgl::renderer* rend, const buildingType& type){
     std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
+    test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 30 30.png");
     if (type == buildingType::school){
        test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 50 50.png");
     }
@@ -312,6 +314,7 @@ void drawPOI50(ezgl::renderer* rend, const buildingType& type){
 void drawPOI70(ezgl::renderer* rend, const buildingType& type){
     std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
+    test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 30 30.png");
     if (type == buildingType::school){
        test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 70 70.png");
     }
