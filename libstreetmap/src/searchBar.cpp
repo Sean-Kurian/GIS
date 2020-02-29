@@ -18,15 +18,7 @@
 //Connect search bar to callback function
 void connectSearchBar(ezgl::application* app) {
     GtkSearchEntry* searchBar = (GtkSearchEntry*) app->get_object("searchBar");
-    g_signal_connect(G_OBJECT(searchBar), "search-changed", G_CALLBACK(updateSearchEntry), app);
     g_signal_connect(G_OBJECT(searchBar), "activate", G_CALLBACK(searchEnter), app);
-}
-
-//Callback function on updated search entry content
-void updateSearchEntry(GtkSearchEntry* searchEntry, GdkEvent*) {
-    GtkEntry* entry = (GtkEntry*) searchEntry;
-    const char* text = gtk_entry_get_text(entry); //For now, this captures the text entered in the search bar
-    
 }
 
 //Callback function for when the user hits the enter key in the search bar
