@@ -28,9 +28,5 @@ void drawPOI(ezgl::renderer* rend);
 
 void drawHighlightedData(ezgl::renderer* rend);
 
-ezgl::color getFeatureColour(const FeatureType& type);
-ezgl::color getRoadColour(const roadType& type);
-
-
 #endif /* DRAWMAPOBJECTS_H */
 

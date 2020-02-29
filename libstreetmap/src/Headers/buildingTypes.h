@@ -9,12 +9,9 @@
 #include "StreetsDatabaseAPI.h"
 
 enum buildingType {
-    residental = 0,
-    commercial,
-    office,
-    school,
+    school = 0,
     hospital,
-    misc,
+    other,
     BF_TYPECOUNT
 };
 
