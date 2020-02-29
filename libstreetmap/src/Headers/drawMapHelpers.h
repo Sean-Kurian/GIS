@@ -20,13 +20,19 @@ double getDistFromLine(ezgl::point2d lineStart, ezgl::point2d lineEnd, ezgl::poi
 void switchMap(GtkWidget *, gpointer data);
 
 //Displays a loading screen while map switching
-GtkWidget* displayMapLoadScreen(ezgl::application* app);
+GtkWidget* displayMapLoadScreen(ezgl::application* app, GtkWidget* progressBar);
 
 //Destroys the loading screen displayed while map switching
 void destroyMapLoadScreen(GtkWidget* dialog);
 
 //Parses the map path to return the map name
 std::string parseMapName(std::string newMap);
+
+//Creates a progress bar for the load screen
+GtkWidget* createProgressBar();
+
+//Increase progress bar
+void increaseProgress(ezgl::application* app, GtkWidget* progress);
 
 #endif /* DRAWMAPHELPERS_H */
 

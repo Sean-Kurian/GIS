@@ -45,12 +45,16 @@ void switchMap(GtkWidget*, gpointer data) {
     
     if (!mapName.empty()) {
         //Display a loading screen before closing map
-        GtkWidget* load_screen = displayMapLoadScreen(app);
+        GtkWidget* progressBar = createProgressBar();
+        GtkWidget* load_screen = displayMapLoadScreen(app, progressBar);
         
         close_map();
         
+        increaseProgress(app, progressBar);
+        
         bool loadSuccess = load_map(mapName);
         if (loadSuccess) {
+            increaseProgress(app, progressBar);
             
             std::string canvasID = app->get_main_canvas_id();
             ezgl::canvas* canvas = app->get_canvas(canvasID);
@@ -75,7 +79,7 @@ void switchMap(GtkWidget*, gpointer data) {
 }
 
 //Displays a loading screen while map switching
-GtkWidget* displayMapLoadScreen(ezgl::application* app) {
+GtkWidget* displayMapLoadScreen(ezgl::application* app, GtkWidget* progressBar) {
     //Determine the map being loaded, and create a loading message
     GtkComboBox* dropDownMenu = (GtkComboBox*) app->get_object("mapDropDown");
     const gchar* map_id = gtk_combo_box_get_active_id(dropDownMenu);
@@ -86,7 +90,10 @@ GtkWidget* displayMapLoadScreen(ezgl::application* app) {
     GtkWidget* content_area;
     GtkWidget* label;
     GtkWidget* dialog;
+    GtkWidget* grid;
+
     window = app->get_object(app->get_main_window_id().c_str());
+    grid = gtk_grid_new();
     dialog = gtk_dialog_new_with_buttons(
             "Loading",
             (GtkWindow*) window,
@@ -96,7 +103,10 @@ GtkWidget* displayMapLoadScreen(ezgl::application* app) {
     //Add the content to the loading screen
     content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
     label = gtk_label_new(load_message.c_str());
-    gtk_container_add(GTK_CONTAINER(content_area), label);
+    gtk_grid_set_row_spacing(GTK_GRID(grid), 10);
+    gtk_grid_attach(GTK_GRID(grid), progressBar, 0, 0, 1, 1);
+    gtk_grid_attach(GTK_GRID(grid), label, 0, 1, 1, 1);
+    gtk_container_add(GTK_CONTAINER(content_area), grid);
     
     //Display the loading screen
     gtk_widget_show_all(dialog);
@@ -130,4 +140,20 @@ std::string parseMapName(std::string newMap) {
         capitalIndex = newMap.find(" ", capitalIndex) + NEXT_INDEX;
     }
     return newMap;
+}
+
+//Creates a progress bar for the load screen
+GtkWidget* createProgressBar() {
+    const double THIRD = 0.33;
+    GtkWidget* progressBar = gtk_progress_bar_new();
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressBar), THIRD);
+    return progressBar;
+}
+//Increase progress bar
+void increaseProgress(ezgl::application* app, GtkWidget* progressBar) {
+    const double THIRD = 0.33;
+    gdouble progress = gtk_progress_bar_get_fraction(GTK_PROGRESS_BAR(progressBar)) + THIRD;
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(progressBar), progress);
+    
+    app->flush_drawing();
 }
