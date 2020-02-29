@@ -12,6 +12,45 @@
 #include "roadTypes.h"
 #include "buildingTypes.h"
 
+// Feature Colours
+#define DAY_WATER_COLOUR ezgl::color(0xA2, 0xCD, 0xFC)
+#define DAY_GRASS_COLOUR ezgl::color(0xCB, 0xE6, 0xA3)
+#define DAY_BEACH_COLOUR ezgl::color(0xFF, 0xEF, 0xC3)
+#define DAY_BACKGROUND_COLOUR ezgl::color(0xE0, 0xE0, 0xE0)
+
+#define NIGHT_WATER_COLOUR ezgl::color(0x00, 0x2B, 0x44)
+#define NIGHT_GRASS_COLOUR ezgl::color(0x30, 0x67, 0x44)
+#define NIGHT_BEACH_COLOUR ezgl::color(0xF7, 0xF2, 0xC7)
+#define NIGHT_BACKGROUND_COLOUR ezgl::color(0x24, 0x2D, 0x37)
+
+// Road Colours
+#define DAY_HIGHWAY_COLOUR ezgl::color(0xFF, 0xF1, 0xBA)
+#define DAY_MAJOR_ROAD_COLOUR ezgl::color(0xFF, 0xFF, 0xFF)
+#define DAY_MINOR_ROAD_COLOUR ezgl::color(0xF2, 0xF2, 0xF2)
+#define DAY_TRAIL_COLOUR ezgl::color(0x75, 0x2F, 0x11)
+#define DAY_PATH_COLOUR ezgl::color(0x77, 0x19, 0x19)
+
+#define NIGHT_HIGHWAY_COLOUR ezgl::color(0xED, 0x93, 0x02)
+#define NIGHT_MAJOR_ROAD_COLOUR ezgl::color(0x4F, 0x57, 0x64)
+#define NIGHT_MINOR_ROAD_COLOUR ezgl::color(0x37, 0x3F, 0x4D)
+#define NIGHT_TRAIL_COLOUR ezgl::color(0x37, 0x3F, 0x4D)
+#define NIGHT_PATH_COLOUR ezgl::color(0xF2, 0xF2, 0xF2)
+
+// Building Colours
+#define DAY_SCHOOL_COLOUR ezgl::color(0x57, 0x90, 0xC5)
+#define DAY_HOSPITAL_COLOUR ezgl::color(0xC4, 0x68, 0x96)
+#define DAY_BUILDING_COLOUR ezgl::color(0x74, 0x84, 0x94)
+
+#define NIGHT_SCHOOL_COLOUR ezgl::color(0x4B, 0x7C, 0xAA)
+#define NIGHT_HOSPITAL_COLOUR ezgl::color(0xC4, 0x68, 0x96)
+#define NIGHT_BUILDING_COLOUR ezgl::color(0x57, 0x64, 0x77)
+
+#define ERROR_COLOUR ezgl::color(0xFF, 0x00, 0x00)
+
+namespace nightMode {
+    extern bool isOn;
+}
+
 ezgl::color getFeatureColour(const FeatureType& type);
 
 ezgl::color getRoadColour(const roadType& type);

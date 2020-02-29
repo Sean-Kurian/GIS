@@ -29,42 +29,6 @@ double latFromY(double y) {
     return ((y / EARTH_RADIUS_METERS) * (1/DEGREE_TO_RADIAN) + (gData.getAvgLat())); 
 }
 
-//
-double getAngle(ezgl::point2d fromPos, ezgl::point2d toPos) {
-    if (toPos.x > fromPos.x) 
-        return atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x)) * RAD_TO_DEG;
-    else 
-        return atan2((fromPos.y - toPos.y), (fromPos.x - toPos.x)) * RAD_TO_DEG;
-}
-
-//
-double getAngle(ezgl::point2d fromPos, ezgl::point2d toPos, bool& wasFlipped) {
-    if (toPos.x > fromPos.x) {
-        wasFlipped = false;
-        return atan2((toPos.y - fromPos.y), (toPos.x - fromPos.x)) * RAD_TO_DEG;
-    }
-    else {
-        wasFlipped = true;
-        return atan2((fromPos.y - toPos.y), (fromPos.x - toPos.x)) * RAD_TO_DEG;
-    }
-}
-
-//
-std::string addArrows(std::string name, unsigned numArrows, std::string arrow) {
-    for (unsigned i = 0; i < numArrows; ++i)
-        name = arrow + " " + name + " " + arrow;
-    return name;
-}
-
-bool segOnScreen(ezgl::renderer* rend, ezgl::point2d fromPos, ezgl::point2d toPos) {
-    ezgl::rectangle world = rend->get_visible_world();
-    if (world.contains(fromPos) || world.contains(toPos))
-        return true;
-    else
-        return false;
-    
-}
-
 void switchMap(GtkWidget*, gpointer data) {
     ezgl::application* app = static_cast<ezgl::application *>(data);
     GtkComboBox* box = (GtkComboBox*) app->get_object("mapDropDown");

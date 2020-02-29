@@ -2,6 +2,7 @@
 #include "globalData.h"
 #include "m1.h"
 #include "drawMapHelpers.h"
+#include "colourFunctions.h"
 #include "LatLon.h"
 #include "displayInfo.h"
 
@@ -42,5 +43,9 @@ void actOnKeyPress(ezgl::application* app, GdkEventKey* event, char* key) {
             ezgl::translate_left(canvas, 5.0);
         else if (strcmp(key, "Right") == 0)
             ezgl::translate_right(canvas, 5.0);
+        else if (strcmp(key, "n") || strcmp(key, "N")) {
+            nightMode::isOn = !nightMode::isOn;
+            canvas->redraw();
+        }
     }
 }
