@@ -29,6 +29,15 @@ double latFromY(double y) {
     return ((y / EARTH_RADIUS_METERS) * (1/DEGREE_TO_RADIAN) + (gData.getAvgLat())); 
 }
 
+double getDistFromLine(ezgl::point2d lineStart, ezgl::point2d lineEnd, ezgl::point2d pt) {
+    // Calculates line in form Ax + By = C
+    double A = lineStart.y - lineEnd.y;
+    double B = lineEnd.x - lineStart.x;
+    double C = lineStart.x * lineEnd.y - lineEnd.x * lineStart.y;
+    // Calculates distance of the point to the line
+    return abs(A * pt.x + B * pt.y + C) / sqrt((A * A) + (B * B));
+}
+
 void switchMap(GtkWidget*, gpointer data) {
     ezgl::application* app = static_cast<ezgl::application *>(data);
     GtkComboBox* box = (GtkComboBox*) app->get_object("mapDropDown");
