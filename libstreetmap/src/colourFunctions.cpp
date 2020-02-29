@@ -1,6 +1,6 @@
 //==============================================================================
-// File Description: 
-//
+// File Description: Sets colour themes for map, night and normal mode
+// 
 //==============================================================================
 
 #include "colourFunctions.h"

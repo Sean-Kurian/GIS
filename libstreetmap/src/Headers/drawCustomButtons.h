@@ -1,3 +1,8 @@
+//==============================================================================
+// File Description: Sets up buttons and callback function using gtk 
+// 
+//==============================================================================
+
 #ifndef DRAWCUSTOMBUTTONS_H
 #define DRAWCUSTOMBUTTONS_H
 

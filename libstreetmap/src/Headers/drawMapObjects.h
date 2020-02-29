@@ -2,7 +2,7 @@
 #define DRAWMAPOBJECTS_H
 
 //==============================================================================
-// File Description: 
+// File Description: Functions to draw individual objects on map such as streets, buildings, icons etc.
 //
 //==============================================================================
 

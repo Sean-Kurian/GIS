@@ -1,6 +1,6 @@
 //==============================================================================
-// File Description: 
-//
+// File Description: Loads and draws maps, as well as draws features at various zoom levels 
+// as defined by the size of pixelsPerMeter. Zoom levels were chosen based on optimal sizing. 
 //==============================================================================
 
 #include "m1.h"
@@ -258,5 +258,6 @@ ptree getRoot(){
     curl_global_cleanup();
     return ptRoot; 
 }
+
 
 

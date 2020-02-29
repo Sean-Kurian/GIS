@@ -1,3 +1,9 @@
+//==============================================================================
+// File Description: Displays intersection info, popup dialogue boxes and unknown info. 
+//
+//==============================================================================
+
+
 #ifndef DISPLAYINFO_H
 #define DISPLAYINFO_H
 
