@@ -38,7 +38,7 @@
 #    * -lreadline (interactive line editing library)
 #
 CUSTOM_COMPILE_FLAGS = $(shell pkg-config --cflags x11 gtk+-3.0 libcurl) -fopenmp 
-CUSTOM_LINK_FLAGS    = $(shell pkg-config --libs x11 gtk+-3.0 libcurl) -fopenmp -lreadline 
+CUSTOM_LINK_FLAGS    = $(shell pkg-config --libs x11 gtk+-3.0 libcurl) -fopenmp -lreadline -lcurl 
 
 ################################################################################
 #	                ! WARNING - Here Be Dragons - WARNING !
