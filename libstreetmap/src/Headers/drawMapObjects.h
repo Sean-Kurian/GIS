@@ -22,7 +22,8 @@ void drawOneWayArrows(ezgl::renderer* rend, const roadType& type, const double& 
 
 void drawAllFeatures(ezgl::renderer* rend);
 void drawFeatures(ezgl::renderer* rend, const naturalFeature& type);
-void drawBuildings(ezgl::renderer* rend);
+void drawAllBuildings(ezgl::renderer* rend);
+void drawBuildings(ezgl::renderer* rend, const buildingType& type);
 void drawPOI(ezgl::renderer* rend); 
 
 void drawHighlightedData(ezgl::renderer* rend);

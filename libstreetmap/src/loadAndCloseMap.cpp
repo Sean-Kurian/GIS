@@ -11,6 +11,7 @@
 #include "globalData.h"
 #include "roadTypes.h"
 #include "naturalFeatures.h"
+#include "buildingTypes.h"
 
 #include <algorithm>
 #include <regex>
@@ -153,15 +154,17 @@ void getFeatureData(const unsigned& numFeatures) {
             maxLat = std::max(maxLat, location.lat());
             maxLon = std::max(maxLon, location.lon());
         }
-        naturalFeature type = determineNaturalFeature(featureIndex);
+        naturalFeature nfType = determineNaturalFeature(featureIndex);
         if (getFeatureName(featureIndex) == "The Lake") {
             std::cout << "The Lake: " << featureIndex << " " << numPoints << "\n";
-            type = naturalFeature::minorWater;
+            nfType = naturalFeature::minorWater;
         }
-        if (type != naturalFeature::NF_TYPECOUNT)
-            gData.addIndexOfNaturalFeature(featureIndex, type);
-        else
-            gData.addIndexOfBuilding(featureIndex);
+        if (nfType != naturalFeature::NF_TYPECOUNT)
+            gData.addIndexOfNaturalFeature(featureIndex, nfType);
+        else {
+            buildingType type = determineBuildingType(featureIndex);
+            gData.addIndexOfBuildingType(featureIndex, type);
+        }
     }
     gData.addCoordData(minLat, maxLat, minLon, maxLon);
 }
@@ -202,7 +205,7 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
                 type = determineRoadType(val);
         }
         for (const int segIndex : segs)
-            gData.addSegToStreetType(segIndex, numLanes, type);
+            gData.addSegOfStreetType(segIndex, numLanes, type);
     }
     //
     for (unsigned relationIndex = 0; relationIndex < numRelations; ++relationIndex) {
@@ -263,6 +266,69 @@ naturalFeature determineNaturalFeature(const unsigned& featureIndex) {
     
     return naturalFeature::forest;
 }
+
+buildingType determineBuildingType(const unsigned& buildingIndex) {
+    const OSMEntity* feature = NULL;
+    TypedOSMID featureOSM = getFeatureOSMID(buildingIndex);
+    if (featureOSM.type() == TypedOSMID::EntityType::Node)
+        feature = getNodeByIndex(gData.getNodeIndexOfOSMID(featureOSM));
+    else if (featureOSM.type() == TypedOSMID::EntityType::Way)
+        feature = getWayByIndex(gData.getWayIndexOfOSMID(featureOSM));
+    else if (featureOSM.type() == TypedOSMID::EntityType::Relation)
+        feature = getRelationByIndex(gData.getRelationIndexOfOSMID(featureOSM));
+    
+    if (feature != NULL) {
+        for (unsigned tagNum = 0; tagNum < getTagCount(feature); ++tagNum) {
+            std::string key, val;
+            std::tie(key, val) = getTagPair(feature, tagNum);
+            
+            if (key == "building") {
+                if (val == "retail" || val == "supermarket" || val == "church" 
+                 || val == "hotel")
+                    return buildingType::commercial;
+                
+                else if (val == "residential" || val == "house" || val == "apartments"
+                      || val == "terrace")
+                    return buildingType::residental;
+                
+                else if (val == "office" || val == "commercial")
+                    return buildingType::office;
+                
+                else if (val == "school" || val == "university" || val == "kindergarten")
+                    return buildingType::school;
+                
+                else if (val == "hospital")
+                    return buildingType::hospital;
+            }
+            
+            if (key == "amenity") {
+                if (val == "hostpital" || val == "clinic")
+                    return buildingType::hospital;
+                
+                else if (val == "school" || val == "college" || val == "university"
+                      || val == "kindergarten" || val == "language_school"
+                      || val == "driving_school" || val == "music_school")
+                    return buildingType::school;
+            }
+            // Less common tags checked last to save computation time
+            if (key == "building") {
+                if (val == "dormatory" || val == "houseboat" || val == "cabin" || val == "farm" 
+                 || val == "semidetached_house" || val == "bungalo" || val == "ger")
+                    return buildingType::residental;
+            }
+        }
+        return buildingType::misc;
+    }
+    else
+        return buildingType::misc;
+}
+
+
+
+
+
+
+
 
 
 //    else if (type == FeatureType::Lake) {
