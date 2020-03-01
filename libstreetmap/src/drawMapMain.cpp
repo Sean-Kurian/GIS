@@ -91,7 +91,7 @@ void drawMainCanvas(ezgl::renderer* rend) {
         
         drawPOI30(rend, buildingType::school);
         drawPOI30(rend, buildingType::hospital);
-        PrintTTCVehicleInfo(ptRoot, rend); 
+        PrintTTCVehicleInfo30(ptRoot, rend); 
         
     }
     else if (pixelsPerMeter < 0.75) {
@@ -109,7 +109,7 @@ void drawMainCanvas(ezgl::renderer* rend) {
         
         drawPOI50(rend, buildingType::school);
         drawPOI50(rend, buildingType::hospital);
-        PrintTTCVehicleInfo(ptRoot, rend); 
+        PrintTTCVehicleInfo50(ptRoot, rend); 
     }
     
     else {
@@ -129,7 +129,7 @@ void drawMainCanvas(ezgl::renderer* rend) {
         
         drawPOI70(rend, buildingType::school);
         drawPOI70(rend, buildingType::hospital);
-        PrintTTCVehicleInfo(ptRoot, rend); 
+        PrintTTCVehicleInfo70(ptRoot, rend); 
     }
     drawHighlightedData(rend);
 }
