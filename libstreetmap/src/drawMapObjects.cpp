@@ -278,12 +278,12 @@ void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
 void drawPOI30(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter){
    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
-    test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 30 30.png");
+    test = rend->load_png("./libstreetmap/resources/school2 30 30.png");
     if (type == buildingType::school){
-       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 30 30.png");
+       test = rend->load_png("./libstreetmap/resources/school2 30 30.png");
     }
     else if (type == buildingType::hospital){
-       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/hospital2 30 30.png"); 
+       test = rend->load_png("./libstreetmap/resources/hospital2 30 30.png"); 
     }
 
     for (const unsigned buildingIndex : buildings) {
@@ -304,12 +304,12 @@ void drawPOI30(ezgl::renderer* rend, const buildingType& type, double pixelsPerM
 void drawPOI50(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter){
     std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
-    test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 30 30.png");
+    test = rend->load_png("./libstreetmap/resources/school2 30 30.png");
     if (type == buildingType::school){
-       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 50 50.png");
+       test = rend->load_png("./libstreetmap/resources/school2 50 50.png");
     }
     else if (type == buildingType::hospital){
-       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/hospital2 50 50.png"); 
+       test = rend->load_png("./libstreetmap/resources/hospital2 50 50.png"); 
     }
 
     for (const unsigned buildingIndex : buildings) {
@@ -330,12 +330,12 @@ void drawPOI50(ezgl::renderer* rend, const buildingType& type, double pixelsPerM
 void drawPOI70(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter){
 std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
-    test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 70 70.png");
+    test = rend->load_png("./libstreetmap/resources/school2 70 70.png");
     if (type == buildingType::school){
-       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 70 70.png");
+       test = rend->load_png("./libstreetmap/resources/school2 70 70.png");
     }
     else if (type == buildingType::hospital){
-       test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/hospital2 70 70.png"); 
+       test = rend->load_png("./libstreetmap/resources/hospital2 70 70.png"); 
     }
 
     for (const unsigned buildingIndex : buildings) {
@@ -370,7 +370,7 @@ void PrintTTCVehicleInfo30(ptree &ptRoot, ezgl::renderer* rend) {
     string busName;
     int busID = 0;
     double longitude = 0, latitude = 0;
-    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 30 30.png");
+    ezgl::surface* test = rend->load_png("./libstreetmap/resources/train2 30 30.png");
     
     BOOST_FOREACH(ptree::value_type &featVal, ptRoot.get_child("features")) {
         // "features" maps to a JSON array, so each child should have no name
@@ -406,7 +406,7 @@ void PrintTTCVehicleInfo50(ptree &ptRoot, ezgl::renderer* rend) {
     string busName;
     int busID = 0;
     double longitude = 0, latitude = 0;
-    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 50 50.png");
+    ezgl::surface* test = rend->load_png("./libstreetmap/resources/train2 50 50.png");
     
     BOOST_FOREACH(ptree::value_type &featVal, ptRoot.get_child("features")) {
         // "features" maps to a JSON array, so each child should have no name
@@ -442,7 +442,7 @@ void PrintTTCVehicleInfo70(ptree &ptRoot, ezgl::renderer* rend) {
     string busName;
     int busID = 0;
     double longitude = 0, latitude = 0;
-    ezgl::surface* test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/train2 70 70.png");
+    ezgl::surface* test = rend->load_png("./libstreetmap/resources/train2 70 70.png");
     
     BOOST_FOREACH(ptree::value_type &featVal, ptRoot.get_child("features")) {
         // "features" maps to a JSON array, so each child should have no name
