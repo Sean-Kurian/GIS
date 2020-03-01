@@ -8,6 +8,8 @@
 #include "ezgl/application.hpp"
 #include "gdk/gdkkeysyms-compat.h"
 
+#include "StreetsDatabaseAPI.h"
+#include "drawMapHelpers.h"
 #include "searchBar.h"
 #include "displayInfo.h"
 #include "globalData.h"
@@ -24,8 +26,8 @@ void connectSearchBar(ezgl::application* app) {
 //Callback function for when the user hits the enter key in the search bar
 void searchEnter(GtkEntry* searchEntry, gpointer data) {
     ezgl::application* app = (ezgl::application*) data;
+    auto rend = app->get_renderer();
     std::string search = gtk_entry_get_text(searchEntry);
-    
     
     //If the user is searching for an intersection
     if (search.find("&") != std::string::npos || search.find("and") != std::string::npos) {
@@ -41,7 +43,13 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
         else {
             gData.addHighlightedInt(intersectionIndex);
             displayIntersectionInfo(app, intersectionIndex);
-            app -> refresh_drawing(); 
+            LatLon intPos = getIntersectionPosition(intersectionIndex);
+            ezgl::point2d center(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
+            ezgl::point2d scale(xFromLon(gData.getMaxLon()) / 30, yFromLat(gData.getMaxLat()) / 30);
+            ezgl::rectangle rect(ezgl::point2d(center.x - scale.x, center.y - scale.y),
+                                 ezgl::point2d(center.x + scale.x, center.y + scale.y));
+            rend->set_visible_world(rect);
+            app->refresh_drawing(); 
             gData.removeLastHighlightedInt(); 
         }
     }
