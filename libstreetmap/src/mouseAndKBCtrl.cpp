@@ -48,7 +48,7 @@ void actOnKeyPress(ezgl::application* app, GdkEventKey* event, char* key) {
             ezgl::translate_left(canvas, 5.0);
         else if (strcmp(key, "Right") == 0)
             ezgl::translate_right(canvas, 5.0);
-        else if (strcmp(key, "n") || strcmp(key, "N")) {
+        else if (strcmp(key, "n") == 0 || strcmp(key, "N") == 0) {
             nightMode::isOn = !nightMode::isOn;
             canvas->redraw();
         }
