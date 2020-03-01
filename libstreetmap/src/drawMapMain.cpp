@@ -74,6 +74,8 @@ void drawMainCanvas(ezgl::renderer* rend) {
     }
     
     else if (pixelsPerMeter < 0.2) {
+        drawStreams(rend, pixelsPerMeter);
+        
         drawStreets(rend, roadType::minorRoad, pixelsPerMeter);
         drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
         drawStreets(rend, roadType::highway, pixelsPerMeter);
