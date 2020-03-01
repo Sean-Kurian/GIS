@@ -17,6 +17,11 @@ using namespace std;
 using boost::property_tree::ptree;
 using boost::property_tree::read_json;
 
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wredundant-decls"
+
 typedef struct MyCustomStruct {
     char *url = nullptr;
     unsigned int size = 0;

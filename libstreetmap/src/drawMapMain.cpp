@@ -89,8 +89,8 @@ void drawMainCanvas(ezgl::renderer* rend) {
         drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
         drawStreets(rend, roadType::highway, pixelsPerMeter);
         
-        drawPOI30(rend, buildingType::school);
-        drawPOI30(rend, buildingType::hospital);
+        drawPOI30(rend, buildingType::school, pixelsPerMeter);
+        drawPOI30(rend, buildingType::hospital, pixelsPerMeter);
         PrintTTCVehicleInfo30(ptRoot, rend); 
         
     }
@@ -107,8 +107,8 @@ void drawMainCanvas(ezgl::renderer* rend) {
         drawStreets(rend, roadType::highway, pixelsPerMeter);
         drawStreetNames(rend, roadType::highway, pixelsPerMeter);
         
-        drawPOI50(rend, buildingType::school);
-        drawPOI50(rend, buildingType::hospital);
+        drawPOI50(rend, buildingType::school, pixelsPerMeter);
+        drawPOI50(rend, buildingType::hospital, pixelsPerMeter);
         PrintTTCVehicleInfo50(ptRoot, rend); 
     }
     
@@ -127,8 +127,8 @@ void drawMainCanvas(ezgl::renderer* rend) {
         drawStreets(rend, roadType::highway, pixelsPerMeter);
         drawStreetNames(rend, roadType::highway, pixelsPerMeter);
         
-        drawPOI70(rend, buildingType::school);
-        drawPOI70(rend, buildingType::hospital);
+        drawPOI70(rend, buildingType::school, pixelsPerMeter);
+        drawPOI70(rend, buildingType::hospital, pixelsPerMeter);
         PrintTTCVehicleInfo70(ptRoot, rend); 
     }
     drawHighlightedData(rend);
