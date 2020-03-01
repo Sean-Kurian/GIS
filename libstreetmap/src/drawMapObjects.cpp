@@ -9,6 +9,7 @@
 #include "m1.h"
 #include <cmath>
 #include "libcurl.h"
+#include <limits>
 
 void drawStreets(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter) {
     rend->set_color(getRoadColour(type));
@@ -288,15 +289,17 @@ void drawPOI30(ezgl::renderer* rend, const buildingType& type, double pixelsPerM
 
     for (const unsigned buildingIndex : buildings) {
         LatLon maxPoint; 
+        double maxLon = std::numeric_limits<double>::min(), minLat = std::numeric_limits<double>::max(); 
         maxPoint = getFeaturePoint(0, buildingIndex); 
         for (unsigned curvePoint = 0; curvePoint < getFeaturePointCount(buildingIndex); curvePoint++){
              LatLon pointLL = getFeaturePoint(curvePoint, buildingIndex);
-             if(pointLL.lat() > maxPoint.lat()){
-                 maxPoint = pointLL; 
+             if(pointLL.lat() < minLat){
+                 minLat = pointLL.lat(); 
              }
+             maxLon = std::max(maxLon, pointLL.lon()); 
         }
         
-        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()) - 30.0*pixelsPerMeter, yFromLat(maxPoint.lat()) + 30.0*pixelsPerMeter));
+        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()) - 15.0, yFromLat(maxPoint.lat()) + 15.0));
     }
     rend->free_surface(test); 
 }
@@ -314,15 +317,17 @@ void drawPOI50(ezgl::renderer* rend, const buildingType& type, double pixelsPerM
 
     for (const unsigned buildingIndex : buildings) {
         LatLon maxPoint; 
+        double maxLon = std::numeric_limits<double>::min(), minLat = std::numeric_limits<double>::max(); 
         maxPoint = getFeaturePoint(0, buildingIndex); 
         for (unsigned curvePoint = 0; curvePoint < getFeaturePointCount(buildingIndex); curvePoint++){
              LatLon pointLL = getFeaturePoint(curvePoint, buildingIndex);
-             if(pointLL.lat() > maxPoint.lat()){
-                 maxPoint = pointLL; 
+             if(pointLL.lat() < minLat){
+                 minLat = pointLL.lat(); 
              }
+             maxLon = std::max(maxLon, pointLL.lon()); 
         }
         
-        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()) - 50.0*pixelsPerMeter, yFromLat(maxPoint.lat()) + 50.0*pixelsPerMeter));
+        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()) - 25.0, yFromLat(maxPoint.lat()) + 25.0));
     }
     rend->free_surface(test);  
 }
@@ -340,15 +345,17 @@ std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
 
     for (const unsigned buildingIndex : buildings) {
         LatLon maxPoint; 
+        double maxLon = std::numeric_limits<double>::min(), minLat = std::numeric_limits<double>::max(); 
         maxPoint = getFeaturePoint(0, buildingIndex); 
         for (unsigned curvePoint = 0; curvePoint < getFeaturePointCount(buildingIndex); curvePoint++){
              LatLon pointLL = getFeaturePoint(curvePoint, buildingIndex);
-             if(pointLL.lat() > maxPoint.lat()){
-                 maxPoint = pointLL; 
+             if(pointLL.lat() < minLat){
+                 minLat = pointLL.lat(); 
              }
+             maxLon = std::max(maxLon, pointLL.lon()); 
         }
         
-        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()) - 70.0*pixelsPerMeter, yFromLat(maxPoint.lat()) + 70.0*pixelsPerMeter));
+        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()) - 15.0, yFromLat(maxPoint.lat()) + 15.0));
     }
     rend->free_surface(test); 
 }
