@@ -28,9 +28,9 @@ void drawStreams(ezgl::renderer* rend, const double& pixelsPerMeter);
 void drawAllBuildings(ezgl::renderer* rend);
 void drawBuildings(ezgl::renderer* rend, const buildingType& type);
 
-void drawPOI30(ezgl::renderer* rend, const buildingType& type);
-void drawPOI50(ezgl::renderer* rend, const buildingType& type);
-void drawPOI70(ezgl::renderer* rend, const buildingType& type);
+void drawPOI30(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter);
+void drawPOI50(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter);
+void drawPOI70(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter);
 
 void PrintTTCVehicleInfo30(ptree &ptRoot, ezgl::renderer* rend);
 void PrintTTCVehicleInfo50(ptree &ptRoot, ezgl::renderer* rend);

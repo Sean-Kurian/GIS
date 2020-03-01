@@ -275,7 +275,7 @@ void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
     }
 }
  //Example, replace with relevant indices and icons
-void drawPOI30(ezgl::renderer* rend, const buildingType& type){
+void drawPOI30(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter){
    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
     test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 30 30.png");
@@ -296,12 +296,12 @@ void drawPOI30(ezgl::renderer* rend, const buildingType& type){
              }
         }
         
-        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()), yFromLat(maxPoint.lat())));
+        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()) - 30.0*pixelsPerMeter, yFromLat(maxPoint.lat()) + 30.0*pixelsPerMeter));
     }
     rend->free_surface(test); 
 }
 
-void drawPOI50(ezgl::renderer* rend, const buildingType& type){
+void drawPOI50(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter){
     std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
     test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 30 30.png");
@@ -322,12 +322,12 @@ void drawPOI50(ezgl::renderer* rend, const buildingType& type){
              }
         }
         
-        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()), yFromLat(maxPoint.lat())));
+        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()) - 50.0*pixelsPerMeter, yFromLat(maxPoint.lat()) + 50.0*pixelsPerMeter));
     }
     rend->free_surface(test);  
 }
 
-void drawPOI70(ezgl::renderer* rend, const buildingType& type){
+void drawPOI70(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter){
 std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
     test = rend->load_png("/nfs/ug/homes-4/k/kurianse/ece297/work/mapper/libstreetmap/resources/school2 70 70.png");
@@ -348,7 +348,7 @@ std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
              }
         }
         
-        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()), yFromLat(maxPoint.lat())));
+        rend->draw_surface(test, ezgl::point2d(xFromLon(maxPoint.lon()) - 70.0*pixelsPerMeter, yFromLat(maxPoint.lat()) + 70.0*pixelsPerMeter));
     }
     rend->free_surface(test); 
 }
@@ -471,5 +471,7 @@ void PrintTTCVehicleInfo70(ptree &ptRoot, ezgl::renderer* rend) {
           
     }
     rend->free_surface(test); 
+    
+    busID++; 
     
 }
