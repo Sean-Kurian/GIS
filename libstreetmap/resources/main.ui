@@ -13,19 +13,9 @@
         <property name="visible">True</property>
         <property name="can_focus">False</property>
         <child>
-          <object class="GtkStatusbar" id="StatusBar">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">2</property>
-          </object>
-          <packing>
-            <property name="left_attach">0</property>
-            <property name="top_attach">1</property>
-          </packing>
-        </child>
-        <child>
           <object class="GtkOverlay" id="MainCanvasOverlay">
+            <property name="width_request">400</property>
+            <property name="height_request">400</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="hexpand">True</property>
@@ -79,23 +69,6 @@
               </object>
               <packing>
                 <property name="index">1</property>
-              </packing>
-            </child>
-            <child type="overlay">
-              <object class="GtkSearchEntry" id="searchBar">
-                <property name="width_request">300</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="halign">start</property>
-                <property name="valign">start</property>
-                <property name="margin_left">10</property>
-                <property name="margin_top">10</property>
-                <property name="primary_icon_stock">gtk-go-forward</property>
-                <property name="placeholder_text" translatable="yes">Enter Starting Intersection</property>
-                <property name="input_hints">GTK_INPUT_HINT_SPELLCHECK | GTK_INPUT_HINT_WORD_COMPLETION | GTK_INPUT_HINT_NONE</property>
-              </object>
-              <packing>
-                <property name="index">2</property>
               </packing>
             </child>
             <child type="overlay">
@@ -174,22 +147,72 @@
                 <property name="index">5</property>
               </packing>
             </child>
-            <child type="overlay">
-              <object class="GtkSearchEntry" id="secondSearchBar">
-                <property name="width_request">300</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStatusbar" id="StatusBar">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">2</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkGrid">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <child>
+              <object class="GtkSearchEntry" id="searchBar">
+                <property name="width_request">240</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="margin_left">10</property>
-                <property name="margin_top">50</property>
+                <property name="margin_top">10</property>
+                <property name="primary_icon_stock">gtk-go-forward</property>
+                <property name="placeholder_text" translatable="yes">Enter Starting Intersection</property>
+                <property name="input_hints">GTK_INPUT_HINT_SPELLCHECK | GTK_INPUT_HINT_WORD_COMPLETION | GTK_INPUT_HINT_NONE</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSearchEntry" id="secondSearchBar">
+                <property name="width_request">240</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="halign">start</property>
+                <property name="valign">start</property>
                 <property name="primary_icon_stock">gtk-stop</property>
                 <property name="primary_icon_activatable">False</property>
                 <property name="primary_icon_sensitive">False</property>
                 <property name="placeholder_text" translatable="yes">Enter Destination Intersection</property>
               </object>
               <packing>
-                <property name="index">6</property>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="directionRequestButton">
+                <property name="label" translatable="yes">Get Directions!</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
               </packing>
             </child>
           </object>
@@ -197,6 +220,9 @@
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
         </child>
       </object>
     </child>
