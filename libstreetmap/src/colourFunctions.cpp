@@ -1,15 +1,16 @@
 //==============================================================================
-// File Description: Sets colour themes for map, night and normal mode
-// 
+// File Description: Contains functions which are used to determine the 
+// appropriate colour of an object based on object type and whether its 
+// currently in night mode or not
 //==============================================================================
-
 #include "colourFunctions.h"
 
+// Declaration of extern variable which controls whether night mode is enabled
 namespace nightMode {
     bool isOn = false;
 }
 
-//
+// Returns feature colour based on feature type and whether night mode is active
 ezgl::color getFeatureColour(const FeatureType& type) {
     switch (type) {
         case Unknown:
@@ -38,6 +39,7 @@ ezgl::color getFeatureColour(const FeatureType& type) {
     return ERROR_COLOUR;
 }
 
+// Returns road colour based on road type and whether night mode is active
 ezgl::color getRoadColour(const roadType& type) {
     switch (type) {
         case highway:
@@ -56,6 +58,7 @@ ezgl::color getRoadColour(const roadType& type) {
     return ERROR_COLOUR;
 }
 
+// Returns building colour based on building type and whether night mode is active
 ezgl::color getBuildingColour(const buildingType& type) {
     switch (type) {
         case school:

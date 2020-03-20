@@ -2,8 +2,8 @@
 #define DRAWMAPOBJECTS_H
 
 //==============================================================================
-// File Description: Functions to draw individual objects on map such as streets, buildings, icons etc.
-//
+// File Description: Functions to draw individual objects on map such as streets, 
+// buildings, icons etc. Also functions to draw highlighted data for user
 //==============================================================================
 
 #include "StreetsDatabaseAPI.h"
@@ -15,28 +15,37 @@
 #include "ezgl/graphics.hpp"
 #include "libcurl.h"
 
+// Draws streets with their width varying based on the number of lanes
 void drawStreets(ezgl::renderer* rend, const roadType& type, const double& roadWidth);
+// Draws paths which are things such as trails. Intended for walking not cars
 void drawPaths(ezgl::renderer* rend, const double& pixelsPerMeter);
-
+// Draws the names of streets based on the visible size of a segment. Draws one way arrows
 void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter);
-void drawOneWayArrows(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter);
 
+// Draws all features besides buildings based on area then draws streams on top
 void drawAllFeatures(ezgl::renderer* rend, const double& pixelsPerMeter);
+// Draws all features besides buildings and streams
 void drawFeatures(ezgl::renderer* rend);
+// Draws streams separately since they're always on top
 void drawStreams(ezgl::renderer* rend, const double& pixelsPerMeter);
 
+// Draws all buildings regardless of type
 void drawAllBuildings(ezgl::renderer* rend);
+// Draws all buildings of any given building type
 void drawBuildings(ezgl::renderer* rend, const buildingType& type);
 
-void drawPOI30(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter);
-void drawPOI50(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter);
-void drawPOI70(ezgl::renderer* rend, const buildingType& type, double pixelsPerMeter);
+// Draws the data such as segments of intersections that needs to be highlighted
+void drawHighlightedData(ezgl::renderer* rend);
 
+//
+void drawPOI30(ezgl::renderer* rend, const buildingType& type);
+void drawPOI50(ezgl::renderer* rend, const buildingType& type);
+void drawPOI70(ezgl::renderer* rend, const buildingType& type);
+
+//
 void PrintTTCVehicleInfo30(ptree &ptRoot, ezgl::renderer* rend);
 void PrintTTCVehicleInfo50(ptree &ptRoot, ezgl::renderer* rend);
 void PrintTTCVehicleInfo70(ptree &ptRoot, ezgl::renderer* rend);
-
-void drawHighlightedData(ezgl::renderer* rend);
 
 #endif /* DRAWMAPOBJECTS_H */
 

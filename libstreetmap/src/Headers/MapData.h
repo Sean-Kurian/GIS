@@ -127,30 +127,30 @@ public:
     void addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
                                       const IntersectionIndex& mainIntID);
     
-    //
+    // Adds an intersection that is to be highlighted
     void addHighlightedInt(const IntersectionIndex& intID);
     
-    //
+    // Removes the last highlighted intersection
     void removeLastHighlightedInt(); 
     
-    //
+    // Stores the max and min lat/lon
     void addCoordData(const double& _minLat, const double& _maxLat, 
                       const double& _minLon, const double& _maxLon);
     
-    //
+    // Adds index of stream to be stored
     void addIndexOfStream(const FeatureIndex& streamID);
     
-    //
+    // Adds previously calculated area to be stored
     void addAreaOfFeature(const double& area, const FeatureIndex& featureID);
     
-    //
+    // Adds indexes of buildings by their given building type
     void addIndexOfBuildingType(const FeatureIndex& buildingID, const buildingType& type);
     
-    //
+    // Adds segment index of a given street type
     void addSegOfStreetType(const StreetSegmentIndex& segID, const unsigned& numLanes, 
                             const roadType& type);
     
-    //
+    // Adds a segments way OSMID to a map keyed to its segment ID
     void addSegToWayOSMID(const StreetSegmentIndex& segID, const OSMID& wayID);
     
     // Adds node index (0 to numNodes) to map keyed to its OSMID
@@ -159,7 +159,7 @@ public:
     // Adds way index (0 to numWays) to map keyed to its OSMID
     void addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID);
     
-    //
+    // Adds a relation index to a map keyed to its OSMID
     void addRelationIndexToOSMID(const unsigned& relationIndex, const OSMID& relationID);
     
     // Sets pointer to current intersection info dialog box
@@ -189,7 +189,7 @@ public:
     // Returns vector containing IDs of all intersections reachable from a given intersection
     const std::vector<int> getAdjacentIntsOfIntersection(const IntersectionIndex& intID) const;
     
-    //
+    // Returns the cosine of the average latitude
     double getLatAspectRatio() const;
     
     // Return the min or max latitude
@@ -204,22 +204,22 @@ public:
     double getAvgLat() const;
     double getAvgLon() const;
     
-    //
+    // Returns the data to be highlighted by the renderer
     const HighlightedData& getHLData() const;
     
-    //
-    const std::vector<unsigned>& getIndexesOfStreams() const;
-    
-    //
+    // Returns the area of all features in a sorted multimap
     const std::multimap<double, unsigned>& getAreaOfFeatures() const;
     
-    //
+    // Returns indexes of all streams on our map
+    const std::vector<unsigned>& getIndexesOfStreams() const;
+    
+    // Returns indexes of all buildings of a given type
     const std::vector<unsigned>& getIndexesOfBuildingType(const buildingType& type) const;
     
-    //
+    // Gets all indexes of segments of a street type
     const std::vector<std::pair<int, unsigned> >& getSegsOfStreetType(const roadType& type) const;
     
-    //
+    // Gets all segments corresponding to a way OSMID
     const std::vector<int> getSegsOfWayOSMID(const OSMID& wayID) const;
     
     // Returns node index (0 to numNodes) of the OSMID. Outputs error if none found
@@ -228,7 +228,7 @@ public:
     // Returns way index (0 to numWays) of the OSMID. Outputs error if none found
     unsigned getWayIndexOfOSMID(const OSMID& wayID) const;
     
-    //
+    // Returns all relations that correspond to a given OSMID
     unsigned getRelationIndexOfOSMID(const OSMID& relationID) const;
     
     // Returns map path

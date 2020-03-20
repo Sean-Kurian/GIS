@@ -1,6 +1,6 @@
 //==============================================================================
-// File Description: Displays intersection info, popup dialogue boxes and unknown info. 
-//
+// File Description: Controls display of intersection info, popup dialogue boxes 
+// and unknown info
 //==============================================================================
 
 #include "ezgl/graphics.hpp"

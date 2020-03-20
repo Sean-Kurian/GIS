@@ -154,16 +154,17 @@ void MapData::addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntI
     adjacentIntsOfIntersection[mainIntID].insert(adjacentIntID);
 }
 
-//
+// Adds an intersection that is to be highlighted
 void MapData::addHighlightedInt(const IntersectionIndex& intID) {
     hlData.highlightedInts.push_back(intID);
 }
 
+// Removes the last highlighted intersection
 void MapData::removeLastHighlightedInt(){
     hlData.highlightedInts.erase(hlData.highlightedInts.end()-1); 
 }
 
-//
+// Stores the max and min lat/lon
 void MapData::addCoordData(const double& _minLat, const double& _maxLat, 
                            const double& _minLon, const double& _maxLon) {
     coordData.minLat = _minLat;
@@ -175,28 +176,28 @@ void MapData::addCoordData(const double& _minLat, const double& _maxLat,
     coordData.latAspectRatio = cos(coordData.avgLat * DEGREE_TO_RADIAN);
 }
 
-//
+// Adds index of stream to be stored
 void MapData::addIndexOfStream(const FeatureIndex& streamID) {
     indexesOfStreams.push_back(streamID);
 }
 
-//
+// Adds previously calculated area to be stored
 void MapData::addAreaOfFeature(const double& area, const FeatureIndex& featureID) {
     areaOfFeatures.insert(std::make_pair(area, featureID));
 }
 
-//
+// Adds indexes of buildings by their given building type
 void MapData::addIndexOfBuildingType(const FeatureIndex& buildingID, const buildingType& type) {
     indexesOfBuildingTypes[type].push_back(buildingID);
 }
 
-//
+// Adds segment index of a given street type
 void MapData::addSegOfStreetType(const StreetSegmentIndex& segID, const unsigned& numLanes, 
                                  const roadType& type) {
     segsOfStreetType[type].push_back(std::make_pair(segID, numLanes));
 }
 
-//
+// Adds a segments way OSMID to a map keyed to its segment ID
 void MapData::addSegToWayOSMID(const StreetSegmentIndex& segID, const OSMID& wayID) {
     const auto itr = segsOfWayOSMID.find(wayID);
     if (itr == segsOfWayOSMID.end()) {
@@ -217,7 +218,7 @@ void MapData::addWayIndexToOSMID(const unsigned& wayIndex, const OSMID& wayID) {
     wayIndexOfOSMID.insert(std::make_pair(wayID, wayIndex));
 }
 
-//
+// Adds a relation index to a map keyed to its OSMID
 void MapData::addRelationIndexToOSMID(const unsigned& relationIndex, const OSMID& relationID) {
     relationIndexOfOSMID.insert(std::make_pair(relationID, relationIndex));
 }
@@ -298,7 +299,7 @@ const std::vector<int> MapData::getAdjacentIntsOfIntersection(const Intersection
     return adjIntersections;
 }
 
-//
+// Returns the cosine of the average latitude
 double MapData::getLatAspectRatio() const {
     return coordData.latAspectRatio;
 }
@@ -327,32 +328,32 @@ double MapData::getAvgLon() const {
     return coordData.avgLon;
 }
 
-//
+// Returns the data to be highlighted by the renderer
 const HighlightedData& MapData::getHLData() const {
     return hlData;
 }
 
-//
+// Returns the area of all features in a sorted multimap
 const std::multimap<double, unsigned>& MapData::getAreaOfFeatures() const {
     return areaOfFeatures;
 }
 
-//
+// Returns indexes of all streams on our map
 const std::vector<unsigned>& MapData::getIndexesOfStreams() const {
     return indexesOfStreams;
 }
 
-// 
+// Returns indexes of all buildings of a given type
 const std::vector<unsigned>& MapData::getIndexesOfBuildingType(const buildingType& type) const {
     return indexesOfBuildingTypes[type];
 }
 
-//
+// Gets all indexes of segments of a street type
 const std::vector<std::pair<int, unsigned> >& MapData::getSegsOfStreetType(const roadType& type) const {
     return segsOfStreetType[type];
 }
 
-//
+// Gets all segments corresponding to a way OSMID
 const std::vector<int> MapData::getSegsOfWayOSMID(const OSMID& wayID) const {
     const auto itr = segsOfWayOSMID.find(wayID);
     if (itr != segsOfWayOSMID.end())
@@ -389,7 +390,7 @@ unsigned MapData::getWayIndexOfOSMID(const OSMID& wayID) const {
         return mapItr->second;
 }
 
-//
+// Returns all relations that correspond to a given OSMID
 unsigned MapData::getRelationIndexOfOSMID(const OSMID& relationID) const {
     const auto mapItr = relationIndexOfOSMID.find(relationID);
     // If no OSMID match is found the itr will point to end

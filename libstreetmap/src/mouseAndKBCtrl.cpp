@@ -1,6 +1,6 @@
 //==============================================================================
-// File Description: Defines events to capture mouse clicks and keyboard presses
-//
+// File Description: Functions which control what our application does when a 
+// users clicks mouse or hits key on keyboard
 //==============================================================================
 
 #include "mouseAndKBCtrl.h"
@@ -11,7 +11,7 @@
 #include "LatLon.h"
 #include "displayInfo.h"
 
-
+// Determines what to do based on where the user clicked on the map
 void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, double y) {
     //app->update_message("Mouse Clicked");
     std::cout << "User clicked mouse at (" << x << "," << y << ")\n";
@@ -36,10 +36,12 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
     
 }
 
-//
+// Determines what to do based on which key the user pressed down
 void actOnKeyPress(ezgl::application* app, GdkEventKey* event, char* key) {
     if (event->type == GdkEventType::GDK_KEY_PRESS) {
         ezgl::canvas* canvas = app->get_canvas(app->get_main_canvas_id());
+        
+        // Up, Down, Left, Right pan the map using ezgl functions
         if (strcmp(key, "Up") == 0)
             ezgl::translate_up(canvas, 5.0);
         else if (strcmp(key, "Down") == 0)
@@ -48,6 +50,8 @@ void actOnKeyPress(ezgl::application* app, GdkEventKey* event, char* key) {
             ezgl::translate_left(canvas, 5.0);
         else if (strcmp(key, "Right") == 0)
             ezgl::translate_right(canvas, 5.0);
+        
+        // n or N force enables nightmode even if its not night time
         else if (strcmp(key, "n") == 0 || strcmp(key, "N") == 0) {
             nightMode::isOn = !nightMode::isOn;
             canvas->redraw();
