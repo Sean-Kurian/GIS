@@ -18,6 +18,11 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(const Intersecti
 double compute_path_walking_time(const std::vector<StreetSegmentIndex>& path, 
         const double walking_speed, const double turn_penalty); 
 
+std::vector<StreetSegmentIndex> find_path_between_intersections(
+        const IntersectionIndex intersect_id_start,
+            const IntersectionIndex intersect_id_end, 
+            const double turn_penalty); 
+
 std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex>> find_path_with_walk_to_pickup(
         const IntersectionIndex start_intersection, 
         const IntersectionIndex end_intersection, 
