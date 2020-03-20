@@ -21,6 +21,9 @@
 void connectSearchBar(ezgl::application* app) {
     GtkSearchEntry* searchBar = (GtkSearchEntry*) app->get_object("searchBar");
     g_signal_connect(G_OBJECT(searchBar), "activate", G_CALLBACK(searchEnter), app);
+    
+    GtkSearchEntry* destinationSearch = (GtkSearchEntry*) app->get_object("secondSearchBar");
+    g_signal_connect(G_OBJECT(destinationSearch), "activate", G_CALLBACK(destinationSearchEnter), app);
 }
 
 //Callback function for when the user hits the enter key in the search bar
@@ -53,6 +56,12 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
             gData.removeLastHighlightedInt(); 
         }
     }
+}
+
+//Callback function for when the user hits the enter key in the destination search bar
+void destinationSearchEnter(GtkEntry* destinationSearch, gpointer) {
+    std::string destination = gtk_entry_get_text(destinationSearch);
+    //std::cout << "Destination search: " << destination << "\n";
 }
 
 //Parses intersection search to format it properly
