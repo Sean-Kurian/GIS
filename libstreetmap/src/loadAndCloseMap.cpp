@@ -62,7 +62,7 @@ bool load_map(std::string mapPath) {
         const unsigned numFeatures = getNumFeatures();
         // Loops over all nodes and ways to store OSMIDs keyed to their index
         getLayer1Data(numNodes, numWays, numRelations);
-        //
+        // Sorts all features into their respective types and find their areas
         getFeatureData(numFeatures);
     }
     
@@ -106,7 +106,7 @@ void getSegmentData(const unsigned& numStreetSegments) {
         gData.addSegToStreet(segIndex, SSData.streetID);
         // Calculates and stores length and travel time of segment
         gData.addLengthAndTravelTimeOfSeg(SSData, segIndex);
-        //
+        // Adds segments index to a map keyed to its OSMID
         gData.addSegToWayOSMID(segIndex, SSData.wayOSMID);
     }
 }
@@ -145,8 +145,9 @@ void getIntersectionData(const unsigned& numIntersections) {
     }
 }
 
-//
+// Loops over all features to sort them into their respective types and find their area
 void getFeatureData(const unsigned& numFeatures) {
+    // Initial declarations
     LatLon location = getFeaturePoint(0, 0);
     double minLat = location.lat();
     double minLon = location.lon();
@@ -158,6 +159,7 @@ void getFeatureData(const unsigned& numFeatures) {
     for (unsigned featureIndex = 0; featureIndex < numFeatures; ++featureIndex) {
         unsigned numPoints = getFeaturePointCount(featureIndex);
         FeatureType featType = getFeatureType(featureIndex);
+        // Find the min and max points on our entire map
         for (unsigned pointIndex = 0; pointIndex < numPoints; ++pointIndex) {
             location = getFeaturePoint(pointIndex, featureIndex);
             minLat = std::min(minLat, location.lat());
@@ -165,18 +167,22 @@ void getFeatureData(const unsigned& numFeatures) {
             maxLat = std::max(maxLat, location.lat());
             maxLon = std::max(maxLon, location.lon());
         }
+        // Sorts buildings into their subcategories for our map
         if (featType == FeatureType::Building) {
             buildingType bType = determineBuildingType(featureIndex);
             gData.addIndexOfBuildingType(featureIndex, bType);
         }
+        // Stores stream index since they always need to be drawn on top
         else if (featType == FeatureType::Stream) {
             gData.addIndexOfStream(featureIndex);
         }
+        // Finds feature area and stores it into gData based on that
         else {
             double area = find_feature_area(featureIndex);
             gData.addAreaOfFeature(area, featureIndex);
         }
     }
+    // Stores the min/max lat/lon that the function found
     gData.addCoordData(minLat, maxLat, minLon, maxLon);
     
     auto end = std::chrono::high_resolution_clock::now();
@@ -203,13 +209,16 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
         // Stores way's index with its OSMID
         gData.addWayIndexToOSMID(wayIndex, way->id());
         std::vector<int> segs = gData.getSegsOfWayOSMID(way->id());
+        // Default number of lanes based on average number of lanes
         int numLanes = 2;
         roadType type;
         
+        // Loops over all tags to find the number of lanes and street type
         for (unsigned tagNum = 0; tagNum < getTagCount(way); ++tagNum) {
             std::string key, val;
             std::tie(key, val) = getTagPair(way, tagNum);
             if (key == "lanes") {
+                // Need try catch due to stoi crashing if it can't find an integer
                 try {
                     numLanes = std::stoi(val);
                 }
@@ -219,6 +228,7 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
                               << "Exception: " << e.what() << "\n";
                 }
             }
+            // Determines the street type of the road
             else if (key == "highway") 
                 type = determineRoadType(val);
         }
@@ -226,7 +236,7 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
         for (const int segIndex : segs)
             gData.addSegOfStreetType(segIndex, std::min(numLanes, 8), type);
     }
-    //
+    // Stores relations to a map keyed to their OSMID
     for (unsigned relationIndex = 0; relationIndex < numRelations; ++relationIndex) {
         relation = getRelationByIndex(relationIndex);
         gData.addRelationIndexToOSMID(relationIndex, relation->id());
@@ -237,6 +247,7 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
               << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms\n";
 }
 
+// Determines the road type of a street segment based on OSM (key, value) data
 roadType determineRoadType(const std::string& val) {
     if (val == "residential" || val == "unclassified" || val == "living_street"
             || val == "service" || val == "road")
@@ -259,6 +270,7 @@ roadType determineRoadType(const std::string& val) {
     return roadType::minorRoad;
 }
 
+// Determines the building type of a building based on OSM (key, value) pairs
 buildingType determineBuildingType(const unsigned& buildingIndex) {
     const OSMEntity* feature = NULL;
     TypedOSMID featureOSM = getFeatureOSMID(buildingIndex);
@@ -269,6 +281,7 @@ buildingType determineBuildingType(const unsigned& buildingIndex) {
     else if (featureOSM.type() == TypedOSMID::EntityType::Relation)
         feature = getRelationByIndex(gData.getRelationIndexOfOSMID(featureOSM));
     
+    // Searches for a key, value pair to determine the building type
     if (feature != NULL) {
         for (unsigned tagNum = 0; tagNum < getTagCount(feature); ++tagNum) {
             std::string key, val;
@@ -294,6 +307,7 @@ buildingType determineBuildingType(const unsigned& buildingIndex) {
         }
         return buildingType::other;
     }
+    // If none found, then assume its an "other" building. Mostly for houses etc
     else
         return buildingType::other;
 }

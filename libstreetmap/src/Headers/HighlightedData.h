@@ -2,8 +2,9 @@
 #define HIGHLIGHTEDDATA_H
 
 //==============================================================================
-// File Description: 
-//
+// File Description: Struct which stores vectors containing the segments and the
+// intersections which need to be highlighted and a static boolean for whether 
+// highlighted data should be drawn at all
 //==============================================================================
 
 struct HighlightedData {
