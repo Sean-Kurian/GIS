@@ -53,15 +53,41 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
                                  ezgl::point2d(center.x + scale.x, center.y + scale.y));
             rend->set_visible_world(rect);
             app->refresh_drawing(); 
-            gData.removeLastHighlightedInt(); 
+            //gData.removeLastHighlightedInt(); 
         }
     }
 }
 
 //Callback function for when the user hits the enter key in the destination search bar
-void destinationSearchEnter(GtkEntry* destinationSearch, gpointer) {
-    std::string destination = gtk_entry_get_text(destinationSearch);
-    //std::cout << "Destination search: " << destination << "\n";
+void destinationSearchEnter(GtkEntry* destinationSearch, gpointer data) {
+    ezgl::application* app = (ezgl::application*) data;
+    auto rend = app->get_renderer();
+    std::string search = gtk_entry_get_text(destinationSearch);
+    
+    //If the user is searching for an intersection
+    if (search.find("&") != std::string::npos || search.find("and") != std::string::npos) {
+        search = parseIntersectionSearch(search);
+        int intersectionIndex = find_intersection_from_name(search);
+        
+        //If the intersection is not found, display that to the user
+        if (intersectionIndex == -1) {
+            intersectionNotFound(app);
+        }
+        
+        //Otherwise, display intersection info
+        else {
+            gData.addHighlightedInt(intersectionIndex);
+            displayIntersectionInfo(app, intersectionIndex);
+            LatLon intPos = getIntersectionPosition(intersectionIndex);
+            ezgl::point2d center(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
+            ezgl::point2d scale(xFromLon(gData.getMaxLon()) / 30, yFromLat(gData.getMaxLat()) / 30);
+            ezgl::rectangle rect(ezgl::point2d(center.x - scale.x, center.y - scale.y),
+                                 ezgl::point2d(center.x + scale.x, center.y + scale.y));
+            rend->set_visible_world(rect);
+            app->refresh_drawing(); 
+            //gData.removeLastHighlightedInt(); 
+        }
+    }
 }
 
 //Parses intersection search to format it properly
