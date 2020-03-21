@@ -122,3 +122,12 @@ void increaseProgress(ezgl::application* app, GtkWidget* progressBar) {
     
     app->flush_drawing();
 }
+
+//Sets up the walking input interface
+void setUpWalkInput(ezgl::application* app) {
+    //Right justify the numerical inputs
+    GtkEntry* walkingSpeedEntry = (GtkEntry*) app->get_object("walkingSpeed");
+    gtk_entry_set_alignment(walkingSpeedEntry, 1);
+    GtkEntry* walkingLimitEntry = (GtkEntry*) app->get_object("walkingLimit");
+    gtk_entry_set_alignment(walkingLimitEntry, 1);
+}

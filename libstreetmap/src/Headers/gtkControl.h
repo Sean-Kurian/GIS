@@ -44,5 +44,8 @@ GtkWidget* createProgressBar();
 //Increase progress bar
 void increaseProgress(ezgl::application* app, GtkWidget* progress);
 
+//Sets up the walking input interface
+void setUpWalkInput(ezgl::application* app);
+
 #endif /* GTKCONTROL_H */
 

@@ -166,6 +166,7 @@ void initialSetup(ezgl::application* app, bool) {
     connectSearchBar(app);
     connectDirectionButtons(app);
     setUpDropDown(app);
+    setUpWalkInput(app);
 }
 
 // Does necessary setup for libcurl
