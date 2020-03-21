@@ -17,6 +17,12 @@
 //Connect Zoom buttons to callback functions
 void connectZoomButtons(ezgl::application* app);
 
+//Connect Direction related buttons to callback functions
+void connectDirectionButtons(ezgl::application* app);
+
+//Callback function to find directions when direction button is pressed
+void findDirections(ezgl::application* app);
+
 //Set up drop down menu for map switching
 void setUpDropDown(ezgl::application* app);
 

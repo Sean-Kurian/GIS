@@ -166,7 +166,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkGrid">
+          <object class="GtkGrid" id="DirectionPanel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
