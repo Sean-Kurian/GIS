@@ -53,9 +53,6 @@ double compute_path_walking_time(const std::vector<StreetSegmentIndex>& path,
             return travel_time; 
 }
 
-double compute_path_walking_time(const std::vector<StreetSegmentIndex>& path, 
-        const double walking_speed, const double turn_penalty); 
-
 std::vector<StreetSegmentIndex> find_path_between_intersections(
         const IntersectionIndex intersect_id_start,
             const IntersectionIndex intersect_id_end, 

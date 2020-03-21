@@ -161,7 +161,9 @@ void MapData::addHighlightedInt(const IntersectionIndex& intID) {
 
 // Removes the last highlighted intersection
 void MapData::removeLastHighlightedInt(){
-    hlData.highlightedInts.erase(hlData.highlightedInts.end()-1); 
+    if (!hlData.highlightedInts.empty()){
+        hlData.highlightedInts.erase(hlData.highlightedInts.end()-1); 
+    }
 }
 
 // Stores the max and min lat/lon
