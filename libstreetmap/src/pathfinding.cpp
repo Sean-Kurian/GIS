@@ -3,7 +3,6 @@
 // and the time needed to travel those paths walking or with a car
 //==============================================================================
 
-#ifndef LIBCURL_H
 
 
 #include "pathfinding.h"

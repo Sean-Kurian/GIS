@@ -164,6 +164,7 @@ void initialSetup(ezgl::application* app, bool) {
     // Sets up and connects GTK objects to our map
     connectZoomButtons(app);
     connectSearchBar(app);
+    connectDirectionButtons(app);
     setUpDropDown(app);
 }
 

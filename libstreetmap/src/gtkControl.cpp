@@ -18,6 +18,18 @@ void connectZoomButtons(ezgl::application* app) {
     g_signal_connect(G_OBJECT(zoomFitButton), "clicked", G_CALLBACK(ezgl::press_zoom_fit), app);
 }
 
+//Connect Direction related buttons to callback functions
+void connectDirectionButtons(ezgl::application* app) {
+    GtkWidget* directionRequestButton = GTK_WIDGET(app->get_object("directionRequestButton"));
+    
+    g_signal_connect(G_OBJECT(directionRequestButton), "clicked", G_CALLBACK(findDirections), app);
+}
+
+//Callback function to find directions when direction button is pressed
+void findDirections(ezgl::application* app) {
+    std::cout << "Directions button clicked\n";
+}
+
 //Set up drop down menu for map switching
 void setUpDropDown(ezgl::application* app) {
     GtkComboBox* dropDownMenu = (GtkComboBox*) app->get_object("mapDropDown");
