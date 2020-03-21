@@ -21,10 +21,9 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
     if (event->button == 1) {
         unsigned intIndex = find_closest_intersection(clicked);
         std::cout << "Closest intersection: " << intIndex << "\n";
-        gData.addHighlightedInt(intIndex);
-        displayIntersectionInfo(app, intIndex);
-        app -> refresh_drawing(); 
         gData.removeLastHighlightedInt(); 
+        gData.addHighlightedInt(intIndex);
+        app -> refresh_drawing(); 
     }
     
     //If it is not a left click, erase the displayed intersection info if it exists
