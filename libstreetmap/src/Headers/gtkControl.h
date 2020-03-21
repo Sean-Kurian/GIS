@@ -21,7 +21,10 @@ void connectZoomButtons(ezgl::application* app);
 void connectDirectionButtons(ezgl::application* app);
 
 //Callback function to find directions when direction button is pressed
-void findDirections(ezgl::application* app);
+void findDirections(GtkWidget* directionRequestButton, ezgl::application* app);
+
+//Callback function to toggle on/off the walk interface
+void toggleWalkInterface(GtkWidget* walkToggle, ezgl::application* app);
 
 //Set up drop down menu for map switching
 void setUpDropDown(ezgl::application* app);
