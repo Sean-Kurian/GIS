@@ -21,13 +21,29 @@ void connectZoomButtons(ezgl::application* app) {
 //Connect Direction related buttons to callback functions
 void connectDirectionButtons(ezgl::application* app) {
     GtkWidget* directionRequestButton = GTK_WIDGET(app->get_object("directionRequestButton"));
+    GtkWidget* walkToggleButton = GTK_WIDGET(app->get_object("walkToggle"));
+    
     
     g_signal_connect(G_OBJECT(directionRequestButton), "clicked", G_CALLBACK(findDirections), app);
+    g_signal_connect(G_OBJECT(walkToggleButton), "toggled", G_CALLBACK(toggleWalkInterface), app);
 }
 
 //Callback function to find directions when direction button is pressed
-void findDirections(ezgl::application* app) {
+void findDirections(GtkWidget* directionRequestButton, ezgl::application* app) {
     std::cout << "Directions button clicked\n";
+}
+
+//Callback function to toggle on/off the walk interface
+void toggleWalkInterface(GtkWidget* walkToggleButton, ezgl::application* app) {
+    //Get the grid that holds the walk input interface
+    GtkWidget* walkInputGrid = GTK_WIDGET(app->get_object("walkInputGrid"));
+    
+    //Determine if the interface needs to shown or hidden
+    if (gtk_toggle_button_get_active((GtkToggleButton*) walkToggleButton)) {
+        gtk_widget_show(walkInputGrid);
+    } else {
+        gtk_widget_hide(walkInputGrid);
+    }
 }
 
 //Set up drop down menu for map switching
@@ -127,7 +143,12 @@ void increaseProgress(ezgl::application* app, GtkWidget* progressBar) {
 void setUpWalkInput(ezgl::application* app) {
     //Right justify the numerical inputs
     GtkEntry* walkingSpeedEntry = (GtkEntry*) app->get_object("walkingSpeed");
-    gtk_entry_set_alignment(walkingSpeedEntry, 1);
     GtkEntry* walkingLimitEntry = (GtkEntry*) app->get_object("walkingLimit");
+    
+    gtk_entry_set_alignment(walkingSpeedEntry, 1);
     gtk_entry_set_alignment(walkingLimitEntry, 1);
+    
+    //Hide the walk input interface
+    GtkWidget* walkInputGrid = GTK_WIDGET(app->get_object("walkInputGrid"));
+    gtk_widget_hide(walkInputGrid);
 }
