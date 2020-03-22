@@ -23,6 +23,7 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
         std::cout << "Closest intersection: " << intIndex << "\n";
         gData.removeLastHighlightedInt(); 
         gData.addHighlightedInt(intIndex);
+        displayIntersectionInfo(app, intIndex);
         app -> refresh_drawing(); 
     }
     
