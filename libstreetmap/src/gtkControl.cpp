@@ -26,6 +26,10 @@ void connectDirectionButtons(ezgl::application* app) {
     
     g_signal_connect(G_OBJECT(directionRequestButton), "clicked", G_CALLBACK(findDirections), app);
     g_signal_connect(G_OBJECT(walkToggleButton), "toggled", G_CALLBACK(toggleWalkInterface), app);
+    
+    //Hide the direction panel to start 
+    GtkWidget* directionPanel = GTK_WIDGET(app->get_object("DirectionPanel"));
+    gtk_widget_hide(directionPanel);
 }
 
 //Callback function to find directions when direction button is pressed
