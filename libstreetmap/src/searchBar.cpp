@@ -19,9 +19,15 @@
 
 //Connect search bar to callback function
 void connectSearchBar(ezgl::application* app) {
+    //Main search bar
+    GtkSearchEntry* mainSearchBar = (GtkSearchEntry*) app->get_object("mainSearchBar");
+    g_signal_connect(G_OBJECT(mainSearchBar), "activate", G_CALLBACK(searchEnter), app);
+    
+    //Starting search bar
     GtkSearchEntry* searchBar = (GtkSearchEntry*) app->get_object("searchBar");
     g_signal_connect(G_OBJECT(searchBar), "activate", G_CALLBACK(searchEnter), app);
     
+    //Destination search bar
     GtkSearchEntry* destinationSearch = (GtkSearchEntry*) app->get_object("secondSearchBar");
     g_signal_connect(G_OBJECT(destinationSearch), "activate", G_CALLBACK(destinationSearchEnter), app);
 }
