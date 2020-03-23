@@ -3,8 +3,6 @@
 // and the time needed to travel those paths walking or with a car
 //==============================================================================
 
-
-
 #include "pathfinding.h"
 #include "m1.h"
 #include "StreetsDatabaseAPI.h"
@@ -12,8 +10,38 @@
 #include "globalData.h"
 #include "math.h"
 
+#include <queue>
+
+struct compare {
+    bool operator() (const aStarNode& lhs, const aStarNode& rhs) {
+        return lhs.estTotalTime < rhs.estTotalTime;
+    }
+};
+
+std::vector<StreetSegmentIndex> findPathTaken(const std::vector<aStarNode>& cameFrom, 
+                                              const IntersectionIndex& startInt,
+                                              const IntersectionIndex& endInt) {
+    int current = endInt;
+    std::vector<int> result;
+    while (cameFrom[current].parentEdge != -1) {
+        result.push_back(cameFrom[current].parentEdge);
+        current = cameFrom[current].parentInt;
+    }
+    return result;
+}
+
+double determineTurnPenalty(const StreetSegmentIndex& fromEdge, const StreetSegmentIndex& toEdge, 
+                            const double& turnPenalty) {
+    InfoStreetSegment fromData = getInfoStreetSegment(fromEdge);
+    InfoStreetSegment toData = getInfoStreetSegment(toEdge);
+    if (fromData.streetID == toData.streetID)
+        return 0;
+    else
+        return turnPenalty;
+}
+
 double compute_path_travel_time(const std::vector<StreetSegmentIndex>& path, 
-        const double turn_penalty){
+                                const double turn_penalty){
     
         if (path.size() == 0) return 0; 
         
@@ -33,8 +61,8 @@ double compute_path_travel_time(const std::vector<StreetSegmentIndex>& path,
 }
 //length over walking speed
 double compute_path_walking_time(const std::vector<StreetSegmentIndex>& path, 
-        const double walking_speed, 
-        const double turn_penalty){
+                                 const double walking_speed, 
+                                 const double turn_penalty){
     
             if (path.size() == 0) return 0; 
     
@@ -54,17 +82,72 @@ double compute_path_walking_time(const std::vector<StreetSegmentIndex>& path,
 }
 
 std::vector<StreetSegmentIndex> find_path_between_intersections(
-        const IntersectionIndex intersect_id_start,
-            const IntersectionIndex intersect_id_end, 
-            const double turn_penalty){
+                                const IntersectionIndex intersect_id_start,
+                                const IntersectionIndex intersect_id_end, 
+                                const double turn_penalty) {
+    std::vector<int> segsOfInt;
+    std::vector<aStarNode> cameFrom;
+    cameFrom.resize(getNumIntersections());
     
+    std::priority_queue<aStarNode, std::vector<aStarNode>, compare> openSet;
+    aStarNode baseNode(intersect_id_start, -1, -1, 0, 0);
+    openSet.push(baseNode);
+    
+    while (!openSet.empty()) {
+        aStarNode currNode = openSet.top();
+        
+        if (currNode.intID == intersect_id_end) {
+            // FIND PATH TAKEN
+            return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
+        }
+        openSet.pop();
+        segsOfInt = gData.getSegsOfIntersection(currNode.intID);
+        
+        for (const int& segID : segsOfInt) {
+            InfoStreetSegment SSData = getInfoStreetSegment(segID);
+            int toInt;
+            
+            if (SSData.from == currNode.intID) {
+                toInt = SSData.to;
+            }
+            else {
+                if (SSData.oneWay)
+                    continue;
+                else
+                    toInt = SSData.from;
+            }
+            
+            double segTravelTime = gData.getTravelTimeOfSegment(segID);
+            double turnPenalty = determineTurnPenalty(currNode.parentEdge, segID, turn_penalty);
+            double timeToInt = segTravelTime + currNode.timeToNode + turnPenalty;
+            
+            // New fastest way to this node
+            if (timeToInt < cameFrom[toInt].timeToNode) {
+                cameFrom[toInt].intID = toInt;
+                cameFrom[toInt].parentInt = currNode.intID;
+                cameFrom[toInt].parentEdge = segID;
+                cameFrom[toInt].timeToNode = timeToInt;
+                double distToEnd = find_distance_between_two_points(std::make_pair(
+                                        getIntersectionPosition(toInt),
+                                        getIntersectionPosition(intersect_id_end)));
+                // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
+                cameFrom[toInt].estTotalTime = timeToInt + (distToEnd * 0.01 * 3.6);
+                // Add neighbour to open set
+                openSet.push(cameFrom[toInt]);
+            }
+        }
+    }
+    // Open set empty but no path found
+    std::cerr << "Open set empty but no path found. May be impossible\n"; 
+    std::vector<int> failure = {};
+    return failure;
 }
 
 std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex>> find_path_with_walk_to_pickup(
-        const IntersectionIndex start_intersection, 
-        const IntersectionIndex end_intersection, 
-        const double turn_penalty, 
-        const double walking_speed, 
-        const double walking_time_limit){
+                                const IntersectionIndex start_intersection, 
+                                const IntersectionIndex end_intersection, 
+                                const double turn_penalty, 
+                                const double walking_speed, 
+                                const double walking_time_limit) {
     
 }
