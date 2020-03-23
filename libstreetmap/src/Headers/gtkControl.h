@@ -9,6 +9,8 @@
 #include "StreetsDatabaseAPI.h"
 #include "globalData.h"
 #include "drawMapHelpers.h"
+#include "searchBar.h"
+#include "displayInfo.h"
 
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"

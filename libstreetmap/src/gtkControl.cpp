@@ -41,7 +41,43 @@ void connectDirectionButtons(ezgl::application* app) {
 
 //Callback function to find directions when direction button is pressed
 void findDirections(GtkWidget* directionRequestButton, ezgl::application* app) {
-    std::cout << "Directions button clicked\n";
+    //Determine the start and destination intersections being searched for
+    GtkEntry* startSearchEntry = (GtkEntry*) app->get_object("searchBar");
+    GtkEntry* destinationSearchEntry = (GtkEntry*) app->get_object("secondSearchBar");
+    std::string startSearch = gtk_entry_get_text(startSearchEntry);
+    std::string destinationSearch = gtk_entry_get_text(destinationSearchEntry);
+    
+    //Ensure intersections are being searched for (each entry has an "&" or "and")
+    if ((startSearch.find("&") != std::string::npos || startSearch.find("and") != std::string::npos) &&
+            (destinationSearch.find("&") != std::string::npos || destinationSearch.find("and") != std::string::npos)) {
+        //Format the searches
+        startSearch = parseIntersectionSearch(startSearch);
+        destinationSearch = parseIntersectionSearch(destinationSearch);
+        
+        //Find the intersection indexes
+        IntersectionIndex startIndex = find_intersection_from_name(startSearch);
+        IntersectionIndex destinationIndex = find_intersection_from_name(destinationSearch);
+        
+        //Alert users if any intersections are not found
+        if (startIndex == -1) {
+            std::cout << "Starting intersection not found\n";
+        }
+        else if (destinationIndex == -1) {
+            std::cout << "Destination intersection not found\n";
+        }
+        
+        //Otherwise, determine a path between two intersections
+        // This is where find path would go
+        else {
+            std::cout << "Starting Intersection: " << getIntersectionName(startIndex) << "\n";
+            std::cout << "Destination Intersection: " << getIntersectionName(destinationIndex) << "\n";
+        }
+    }
+    
+    //Otherwise, display error message (later step could be splitting it to determine which entry contains the error)
+    else {
+        std::cout << "Invalid search entered\n";
+    }
 }
 
 //Callback function to show direction panel
