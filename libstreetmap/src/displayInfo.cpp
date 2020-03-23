@@ -13,7 +13,6 @@
 
 //Displays intersection info when the intersection is clicked
 void displayIntersectionInfo(ezgl::application* app, int intersectionIndex) {
-    //If there was a previous dialog box displaying another intersection, delete it
     
     //Get the name of the intersection
     std::string intersectionName = getIntersectionName(intersectionIndex);
