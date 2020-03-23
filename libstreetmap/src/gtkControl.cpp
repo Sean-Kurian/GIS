@@ -22,17 +22,21 @@ void connectZoomButtons(ezgl::application* app) {
 //Connect Direction related buttons to callback functions
 void connectDirectionButtons(ezgl::application* app) {
     GtkWidget* directionPanelButton = GTK_WIDGET(app->get_object("directionPanelButton"));
+    GtkWidget* collapseButton = GTK_WIDGET(app->get_object("collapseButton"));
     GtkWidget* directionRequestButton = GTK_WIDGET(app->get_object("directionRequestButton"));
     GtkWidget* walkToggleButton = GTK_WIDGET(app->get_object("walkToggle"));
     
     
-    g_signal_connect(G_OBJECT(directionPanelButton), "clicked", G_CALLBACK(toggleDirectionPanel), app);
+    g_signal_connect(G_OBJECT(directionPanelButton), "clicked", G_CALLBACK(showDirectionPanel), app);
+    g_signal_connect(G_OBJECT(collapseButton), "clicked", G_CALLBACK(collapseDirectionPanel), app);
     g_signal_connect(G_OBJECT(directionRequestButton), "clicked", G_CALLBACK(findDirections), app);
     g_signal_connect(G_OBJECT(walkToggleButton), "toggled", G_CALLBACK(toggleWalkInterface), app);
     
     //Hide the direction panel to start 
     GtkWidget* directionPanel = GTK_WIDGET(app->get_object("DirectionPanel"));
+    GtkWidget* bottomDirectionPanel = GTK_WIDGET(app->get_object("bottomDirectionPanel"));
     gtk_widget_hide(directionPanel);
+    gtk_widget_hide(bottomDirectionPanel);
 }
 
 //Callback function to find directions when direction button is pressed
@@ -40,16 +44,31 @@ void findDirections(GtkWidget* directionRequestButton, ezgl::application* app) {
     std::cout << "Directions button clicked\n";
 }
 
-//Callback function to toggle on/off the direction panel
-void toggleDirectionPanel(GtkWidget* directionPanelButton, ezgl::application* app) {
-    //Determine if the direction panel is currently visible, toggle appropriately
+//Callback function to show direction panel
+void showDirectionPanel(GtkWidget* directionPanelButton, ezgl::application* app) {
     GtkWidget* directionPanel = GTK_WIDGET(app->get_object("DirectionPanel"));
+    GtkWidget* bottomDirectionPanel = GTK_WIDGET(app->get_object("bottomDirectionPanel"));
+    gtk_widget_show(directionPanel);
+    gtk_widget_show(bottomDirectionPanel);
     
-    if (gtk_widget_get_visible(directionPanel)) {
-        gtk_widget_hide(directionPanel);
-    } else {
-        gtk_widget_show(directionPanel);
-    }
+    //Hide the main search bar and direction panel button
+    GtkWidget* mainSearchBar = GTK_WIDGET(app->get_object("mainSearchBar"));
+    gtk_widget_hide(directionPanelButton);
+    gtk_widget_hide(mainSearchBar);
+}
+
+//Callback function to collapse the direction panel
+void collapseDirectionPanel(GtkWidget* collapseButton, ezgl::application* app) {
+    GtkWidget* directionPanel = GTK_WIDGET(app->get_object("DirectionPanel"));
+    GtkWidget* bottomDirectionPanel = GTK_WIDGET(app->get_object("bottomDirectionPanel"));
+    gtk_widget_hide(directionPanel);
+    gtk_widget_hide(bottomDirectionPanel);
+    
+    //Show the main search bar and direction panel button
+    GtkWidget* directionPanelButton = GTK_WIDGET(app->get_object("directionPanelButton"));
+    GtkWidget* mainSearchBar = GTK_WIDGET(app->get_object("mainSearchBar"));
+    gtk_widget_show(directionPanelButton);
+    gtk_widget_show(mainSearchBar);
 }
 
 //Callback function to toggle on/off the walk interface
