@@ -51,8 +51,8 @@ void actOnKeyPress(ezgl::application* app, GdkEventKey* event, char* key) {
         else if (strcmp(key, "Right") == 0)
             ezgl::translate_right(canvas, 5.0);
         
-        // n or N force enables nightmode even if its not night time
-        else if (strcmp(key, "n") == 0 || strcmp(key, "N") == 0) {
+        // Alt key force enables nightmode even if its not night time
+        else if (event->keyval == GDK_KEY_Alt_L || event->keyval == GDK_KEY_Alt_R) {
             nightMode::isOn = !nightMode::isOn;
             canvas->redraw();
         }
