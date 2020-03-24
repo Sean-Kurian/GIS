@@ -50,6 +50,14 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
         
         //Otherwise, display intersection info
         else {
+                        
+            //If using the main search bar, remove the last highlighted intersection
+            GtkWidget* mainSearchBar = (GtkWidget*) app->get_object("mainSearchBar");
+            if (gtk_widget_get_visible(mainSearchBar)) {
+                gData.removeLastHighlightedInt(); 
+            }
+            
+            //Highlight the searched intersection and reposition map
             gData.addHighlightedInt(intersectionIndex);
             displayIntersectionInfo(app, intersectionIndex);
             LatLon intPos = getIntersectionPosition(intersectionIndex);
@@ -59,7 +67,6 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
                                  ezgl::point2d(center.x + scale.x, center.y + scale.y));
             rend->set_visible_world(rect);
             app->refresh_drawing(); 
-            //gData.removeLastHighlightedInt(); 
         }
     }
 }
