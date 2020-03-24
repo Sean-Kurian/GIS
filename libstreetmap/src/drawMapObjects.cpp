@@ -430,8 +430,8 @@ void PrintTTCVehicleInfo30(ptree &ptRoot, ezgl::renderer* rend) {
         if ( !featVal.first.empty() )
             throw "\"features\" child node has a name";
 
-        busName = featVal.second.get<string>("properties.route_name");
-        busID = featVal.second.get<int>("properties.vehicle_id");
+        //busName = featVal.second.get<string>("properties.route_name");
+        //busID = featVal.second.get<int>("properties.vehicle_id");
 
         // Get GPS coordinates (stored as JSON array of 2 values)
         // Sanity checks: Only 2 values
@@ -446,8 +446,8 @@ void PrintTTCVehicleInfo30(ptree &ptRoot, ezgl::renderer* rend) {
         rend->draw_surface(test, ezgl::point2d(-79.4325, 43.6525)); 
         
                 // Print bus info
-        cout << "Bus " << busName << " with ID " << busID <<
-            " is at coordinates: " << longitude << ", " << latitude << endl;
+       // cout << "Bus " << busName << " with ID " << busID <<
+       //     " is at coordinates: " << longitude << ", " << latitude << endl;
           
     }
     rend->free_surface(test); 
@@ -503,8 +503,8 @@ void PrintTTCVehicleInfo70(ptree &ptRoot, ezgl::renderer* rend) {
         if ( !featVal.first.empty() )
             throw "\"features\" child node has a name";
 
-        busName = featVal.second.get<string>("properties.route_name");
-        busID = featVal.second.get<int>("properties.vehicle_id");
+        //busName = featVal.second.get<string>("properties.route_name");
+        //busID = featVal.second.get<int>("properties.vehicle_id");
 
         // Get GPS coordinates (stored as JSON array of 2 values)
         // Sanity checks: Only 2 values
@@ -525,6 +525,6 @@ void PrintTTCVehicleInfo70(ptree &ptRoot, ezgl::renderer* rend) {
     }
     rend->free_surface(test); 
     
-    busID++; 
+    //busID++; 
     
 }
