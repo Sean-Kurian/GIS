@@ -85,6 +85,17 @@ int find_intersection_from_name(std::string intersectionName) {
     return -1;
 }
 
+std::string find_direction_between_intersections(std::pair<LatLon, LatLon> points){
+    
+    //double x = (points.second.lon() - points.first.lon()) * cos((points.second.lat() + points.first.lat())/2); 
+    // y = points.second.lat() - points.first.lat(); 
+    //double angle = atan2(y,x); 
+    
+    //if ((angle >= 0 && angle <= 45) || (angle >= 315 && angle <= 360)){
+   //     return "North"; 
+    //}
+}
+
 //Alerts user intersection was not found
 void intersectionNotFound(ezgl::application* app) {
     app->update_message("Intersection Not Found");

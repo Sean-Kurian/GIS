@@ -34,6 +34,8 @@ void intersectionNotFound(ezgl::application* app);
 //Pops up an error message dialog, pauses program until closed
 void popUpErrorMessage(std::string message, ezgl::application* app);
 
+std::string find_direction_between_intersections(std::pair<LatLon, LatLon> points); 
+
 
 #endif /* DISPLAYINFO_H */
 

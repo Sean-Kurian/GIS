@@ -6,6 +6,7 @@
 #include "mouseAndKBCtrl.h"
 #include "globalData.h"
 #include "m1.h"
+#include "displayInfo.h"
 #include "drawMapHelpers.h"
 #include "colourFunctions.h"
 #include "LatLon.h"
@@ -18,13 +19,15 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
     LatLon clicked = LatLon(latFromY(y), lonFromX(x));
     
     //If it is a left click, display intersection info
+    unsigned intIndex; 
     if (event->button == 1) {
-        unsigned intIndex = find_closest_intersection(clicked);
+        intIndex = find_closest_intersection(clicked);
         std::cout << "Closest intersection: " << intIndex << "\n";
         gData.removeLastHighlightedInt(); 
         gData.addHighlightedInt(intIndex);
         displayIntersectionInfo(app, intIndex);
         app -> refresh_drawing(); 
+        //std::string hi = find_direction_between_intersections(std::make_pair(clicked, clicked));
     }
     
     //If it is not a left click, erase the displayed intersection info if it exists
@@ -33,6 +36,8 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
             eraseIntersectionInfo(gData.getIntersectionInfoBox());
         }
     }
+    
+   
     
 }
 
