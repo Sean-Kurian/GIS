@@ -185,6 +185,27 @@
                 <property name="index">6</property>
               </packing>
             </child>
+            <child type="overlay">
+              <object class="GtkButton" id="helpButton">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <property name="halign">start</property>
+                <property name="valign">end</property>
+                <property name="margin_left">10</property>
+                <property name="margin_bottom">10</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="pixbuf">question.png</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="index">7</property>
+              </packing>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>
@@ -319,10 +340,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="secLabel">
+                  <object class="GtkLabel" id="minLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">sec</property>
+                    <property name="label" translatable="yes">min</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -368,28 +389,12 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
+                <property name="hexpand">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="helpButton">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <child>
-                  <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="pixbuf">question.png</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="top_attach">0</property>
+                <property name="width">2</property>
               </packing>
             </child>
           </object>
