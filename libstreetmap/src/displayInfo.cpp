@@ -92,3 +92,14 @@ int find_intersection_from_name(std::string intersectionName) {
 void intersectionNotFound(ezgl::application* app) {
     app->update_message("Intersection Not Found");
 }
+
+//Pops up an error message dialog, pauses program until closed
+void popUpErrorMessage(std::string message, ezgl::application* app) {
+    GtkWindow* window = (GtkWindow*) app->get_object(app->get_main_window_id().c_str());
+    
+    GtkWidget* dialog = gtk_message_dialog_new(window, GTK_DIALOG_DESTROY_WITH_PARENT,
+                                                GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+                                                message.c_str());
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
+}
