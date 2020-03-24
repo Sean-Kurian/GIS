@@ -57,6 +57,7 @@ void findDirections(GtkWidget* directionRequestButton, ezgl::application* app) {
         //Find the intersection indexes
         IntersectionIndex startIndex = find_intersection_from_name(startSearch);
         IntersectionIndex destinationIndex = find_intersection_from_name(destinationSearch);
+        const double TURN_PENALTY = 15.0;
         
         //Alert users if any intersections are not found
         if (startIndex == -1) {
@@ -71,6 +72,39 @@ void findDirections(GtkWidget* directionRequestButton, ezgl::application* app) {
         else {
             std::cout << "Starting Intersection: " << getIntersectionName(startIndex) << "\n";
             std::cout << "Destination Intersection: " << getIntersectionName(destinationIndex) << "\n";
+            
+            //Determine if walk + drive directions requested
+            GtkToggleButton* walkToggle = (GtkToggleButton*) app->get_object("walkToggle");
+            if (gtk_toggle_button_get_active(walkToggle)) {
+                const int MIN_TO_SEC = 60;
+                //Attempt to read in walk parameters
+                GtkEntry* walkingSpeedEntry = (GtkEntry*) app->get_object("walkingSpeed");
+                GtkEntry* walkingLimitEntry = (GtkEntry*) app->get_object("walkingLimit");
+                std::string walkingSpeedText = gtk_entry_get_text(walkingSpeedEntry);
+                std::string walkingLimitText = gtk_entry_get_text(walkingLimitEntry);
+                
+                double walkingSpeed = atof(walkingSpeedText.c_str());
+                double walkingLimit = atof(walkingLimitText.c_str()) * MIN_TO_SEC;
+                
+                if (walkingSpeed == 0) {
+                    std::cout << "Invalid walking speed\n";
+                }
+                else if (walkingLimit == 0) {
+                    std::cout << "Invalid walking time limit\n";
+                }
+                else {
+                    std::cout << "Walking speed: " << walkingSpeed << " m/s\n";
+                    std::cout << "Walking limit: " << walkingLimit << " sec\n";
+                    //PUT FIND PATH WALK + DRIVE ALGORITHM CALL HERE
+                    //use (startIndex, destinationIndex, TURN_PENALTY, walkingSpeed, walkingLimit) as arguments for call
+                }
+            }
+            
+            //Only regular driving directions are requested
+            else {
+                //PUT FIND PATH ALGORITHM HERE
+                //use (startIndex, destinationIndex, TURN_PENALTY) as arguments for call
+            }
         }
     }
     
