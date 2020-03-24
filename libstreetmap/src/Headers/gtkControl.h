@@ -23,13 +23,13 @@ void connectZoomButtons(ezgl::application* app);
 void connectDirectionButtons(ezgl::application* app);
 
 //Callback function to find directions when direction button is pressed
-void findDirections(GtkWidget* directionRequestButton, ezgl::application* app);
+void findDirections(GtkWidget* , ezgl::application* app);
 
 //Callback function to show the direction panel
 void showDirectionPanel(GtkWidget* directionPanelButton, ezgl::application* app);
 
 //Callback function to collapse the direction panel
-void collapseDirectionPanel(GtkWidget* collapseButton, ezgl::application* app);
+void collapseDirectionPanel(GtkWidget* , ezgl::application* app);
 
 //Callback function to toggle on/off the walk interface
 void toggleWalkInterface(GtkWidget* walkToggle, ezgl::application* app);
