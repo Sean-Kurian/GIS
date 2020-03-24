@@ -67,9 +67,6 @@ int find_intersection_from_name(std::string intersectionName) {
     std::string first_street = intersectionName.substr(0, and_text - 1);
     std::string second_street = intersectionName.substr(and_text + 2);
     
-    std::cout << "First street: " << first_street << "\n";
-    std::cout << "Second street: " << second_street << "\n";
-    
     std::vector<int> first_street_ids = find_street_ids_from_partial_street_name(first_street);
     std::vector<int> second_street_ids = find_street_ids_from_partial_street_name(second_street);
     
@@ -99,7 +96,7 @@ void popUpErrorMessage(std::string message, ezgl::application* app) {
     
     GtkWidget* dialog = gtk_message_dialog_new(window, GTK_DIALOG_DESTROY_WITH_PARENT,
                                                 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
-                                                message.c_str());
+                                                "%s", message.c_str());
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
 }

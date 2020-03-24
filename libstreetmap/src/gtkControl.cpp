@@ -40,7 +40,7 @@ void connectDirectionButtons(ezgl::application* app) {
 }
 
 //Callback function to find directions when direction button is pressed
-void findDirections(GtkWidget* directionRequestButton, ezgl::application* app) {
+void findDirections(GtkWidget* , ezgl::application* app) {
     //Determine the start and destination intersections being searched for
     GtkEntry* startSearchEntry = (GtkEntry*) app->get_object("searchBar");
     GtkEntry* destinationSearchEntry = (GtkEntry*) app->get_object("secondSearchBar");
@@ -128,7 +128,7 @@ void showDirectionPanel(GtkWidget* directionPanelButton, ezgl::application* app)
 }
 
 //Callback function to collapse the direction panel
-void collapseDirectionPanel(GtkWidget* collapseButton, ezgl::application* app) {
+void collapseDirectionPanel(GtkWidget* , ezgl::application* app) {
     GtkWidget* directionPanel = GTK_WIDGET(app->get_object("DirectionPanel"));
     GtkWidget* bottomDirectionPanel = GTK_WIDGET(app->get_object("bottomDirectionPanel"));
     gtk_widget_hide(directionPanel);
