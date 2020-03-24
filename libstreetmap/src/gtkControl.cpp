@@ -125,6 +125,16 @@ void showDirectionPanel(GtkWidget* directionPanelButton, ezgl::application* app)
     GtkWidget* mainSearchBar = GTK_WIDGET(app->get_object("mainSearchBar"));
     gtk_widget_hide(directionPanelButton);
     gtk_widget_hide(mainSearchBar);
+    
+    //If there is a highlighted intersection (either from search or click),
+    //Automatically fill this intersection name in destination intersection entry
+    if (!gData.getHLData().highlightedInts.empty()) {
+        IntersectionIndex intersectionID = gData.getHLData().highlightedInts.front();
+        std::string intersectionName = getIntersectionName(intersectionID);
+        
+        GtkEntry* destinationSearchEntry = (GtkEntry*) app->get_object("secondSearchBar");
+        gtk_entry_set_text(destinationSearchEntry, intersectionName.c_str());
+    }
 }
 
 //Callback function to collapse the direction panel
@@ -139,6 +149,36 @@ void collapseDirectionPanel(GtkWidget* , ezgl::application* app) {
     GtkWidget* mainSearchBar = GTK_WIDGET(app->get_object("mainSearchBar"));
     gtk_widget_show(directionPanelButton);
     gtk_widget_show(mainSearchBar);
+    
+    //Ensure when direction panel is collapsed, only one intersection remains highlighted
+    //This intersection will be the first one in the highlighted intersection vector
+    //Erase the starting intersection if it exists and is highlighted (the second intersection)
+    if (gData.getHLData().highlightedInts.size() == 2) {
+        gData.removeLastHighlightedInt();
+        app->refresh_drawing();
+    }
+    
+    //If there is a destination intersection currently highlighted, auto fill it in main search bar
+    //Also update the status bar with this intersection
+    if (!gData.getHLData().highlightedInts.empty()) {
+        IntersectionIndex destinationIntersectionID = gData.getHLData().highlightedInts.front();
+        std::string destinationIntersectionName = getIntersectionName(destinationIntersectionID);
+        
+        GtkEntry* mainSearchEntry = (GtkEntry*) app->get_object("mainSearchBar");
+        gtk_entry_set_text(mainSearchEntry, destinationIntersectionName.c_str());
+        
+        app->update_message(destinationIntersectionName);
+    }
+    
+    //Otherwise if no other intersections are highlighted, clear destination search bar
+    else {
+        GtkEntry* destinationSearchEntry = (GtkEntry*) app->get_object("secondSearchBar");
+        gtk_entry_set_text(destinationSearchEntry, "");
+    }
+    
+    //Always clear starting search bar when collapsing direction panel
+    GtkEntry* startSearchEntry = (GtkEntry*) app->get_object("searchBar");
+    gtk_entry_set_text(startSearchEntry, "");
 }
 
 //Callback function to toggle on/off the walk interface
