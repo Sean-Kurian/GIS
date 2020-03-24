@@ -61,10 +61,10 @@ void findDirections(GtkWidget* directionRequestButton, ezgl::application* app) {
         
         //Alert users if any intersections are not found
         if (startIndex == -1) {
-            std::cout << "Starting intersection not found\n";
+            popUpErrorMessage("Starting intersection not found", app);
         }
         else if (destinationIndex == -1) {
-            std::cout << "Destination intersection not found\n";
+            popUpErrorMessage("Destination intersection not found", app);
         }
         
         //Otherwise, determine a path between two intersections
@@ -87,10 +87,10 @@ void findDirections(GtkWidget* directionRequestButton, ezgl::application* app) {
                 double walkingLimit = atof(walkingLimitText.c_str()) * MIN_TO_SEC;
                 
                 if (walkingSpeed == 0) {
-                    std::cout << "Invalid walking speed\n";
+                    popUpErrorMessage("Invalid walking speed", app);
                 }
                 else if (walkingLimit == 0) {
-                    std::cout << "Invalid walking time limit\n";
+                    popUpErrorMessage("Invalid walking time limit", app);
                 }
                 else {
                     std::cout << "Walking speed: " << walkingSpeed << " m/s\n";
@@ -110,7 +110,7 @@ void findDirections(GtkWidget* directionRequestButton, ezgl::application* app) {
     
     //Otherwise, display error message (later step could be splitting it to determine which entry contains the error)
     else {
-        std::cout << "Invalid search entered\n";
+        popUpErrorMessage("Invalid search entered", app);
     }
 }
 
