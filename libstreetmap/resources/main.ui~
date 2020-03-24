@@ -299,7 +299,7 @@
                     <property name="halign">start</property>
                     <property name="margin_left">5</property>
                     <property name="margin_right">5</property>
-                    <property name="width_chars">3</property>
+                    <property name="width_chars">0</property>
                     <property name="input_purpose">number</property>
                   </object>
                   <packing>
@@ -319,10 +319,10 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="minLabel">
+                  <object class="GtkLabel" id="secLabel">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">min</property>
+                    <property name="label" translatable="yes">sec</property>
                   </object>
                   <packing>
                     <property name="left_attach">2</property>
@@ -337,7 +337,7 @@
                     <property name="halign">start</property>
                     <property name="margin_left">5</property>
                     <property name="margin_right">5</property>
-                    <property name="width_chars">3</property>
+                    <property name="width_chars">0</property>
                     <property name="input_purpose">number</property>
                   </object>
                   <packing>
@@ -358,7 +358,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkGrid" id="bottomPanelGrid">
+          <object class="GtkGrid" id="bottomDirectionPanel">
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
