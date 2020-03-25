@@ -111,9 +111,15 @@ void findDirections(GtkWidget* , ezgl::application* app) {
         }
     }
     
-    //Otherwise, display error message (later step could be splitting it to determine which entry contains the error)
+    //Otherwise, display error message
     else {
-        popUpErrorMessage("Invalid search entered", app);
+        //Determine which entry is invalid
+        if (startSearch.find("&") == std::string::npos && startSearch.find("and") == std::string::npos) {
+            popUpErrorMessage("Invalid starting intersection entered", app);
+        }
+        else {
+            popUpErrorMessage("Invalid destination intersection entered", app);
+        }
     }
 }
 
