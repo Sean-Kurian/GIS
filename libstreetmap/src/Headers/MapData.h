@@ -130,8 +130,20 @@ public:
     // Adds an intersection that is to be highlighted
     void addHighlightedInt(const IntersectionIndex& intID);
     
+    // Adds an intersection that is to be highlighted at the front of the vector
+    void addHighlightedIntAtFront(const IntersectionIndex& intID);
+    
     // Removes the last highlighted intersection
     void removeLastHighlightedInt(); 
+    
+    // Removes the first highlighted intersection
+    void removeFirstHighlightedInt();
+    
+    // Sets whether or not a starting intersection is highlighted
+    void setStartHighlight(bool highlighted);
+    
+    // Sets whether or not a destination intersection is highlighted
+    void setDesintationHighlight(bool highlighted);
     
     // Stores the max and min lat/lon
     void addCoordData(const double& _minLat, const double& _maxLat, 
@@ -206,6 +218,12 @@ public:
     
     // Returns the data to be highlighted by the renderer
     const HighlightedData& getHLData() const;
+    
+    // Returns whether or not a starting intersection is highlighted
+    bool isStartHighlighted();
+    
+    // Returns whether or not a destination intersection is highlighted
+    bool isDestinationHighlighted();
     
     // Returns the area of all features in a sorted multimap
     const std::multimap<double, unsigned>& getAreaOfFeatures() const;

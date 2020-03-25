@@ -12,6 +12,8 @@ struct HighlightedData {
     std::vector<unsigned> highlightedSegs;
     static bool isHighlighted;
     static bool highlightedOnce; 
+    bool startHighlighted;
+    bool destinationHighlighted;
 };
 
 #endif /* HIGHLIGHTEDDATA_H */
