@@ -58,9 +58,12 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
                 gData.addHighlightedInt(intersectionIndex);
             }
             
+            //Get the other two search bars in direction mode
+            GtkEntry* startingEntry = (GtkEntry*) app->get_object("searchBar");
+            GtkEntry* destinationEntry = (GtkEntry*) app->get_object("secondSearchBar");
+            
             //If using the destination search bar, remove the current highlighted destination intersection (if it exists)
             //Highlight the current intersection, add it to the front of the highlighted intersections vector
-            GtkEntry* destinationEntry = (GtkEntry*) app->get_object("secondSearchBar");
             if (destinationEntry == searchEntry) {
                 if (gData.isDestinationHighlighted()) {
                     gData.removeFirstHighlightedInt();
@@ -71,13 +74,19 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
             
             //If using the starting search bar, remove the current highlighted starting intersection (if it exists)
             //Highlight the current intersection, add it to the back of the highlighted intersections vector
-            GtkEntry* startingEntry = (GtkEntry*) app->get_object("searchBar");
             if (startingEntry ==  searchEntry) {
                 if (gData.isStartHighlighted()) {
                     gData.removeLastHighlightedInt();
                 }
                 gData.addHighlightedInt(intersectionIndex);
                 gData.setStartHighlight(true);
+                
+                //Toggle to destination entry
+                if (!gData.isDestinationHighlighted()) {
+                    gtk_entry_set_text(destinationEntry, "Enter Destination Intersection");
+                }
+                GtkWidget* destinationEntryWidget = (GtkWidget*) destinationEntry;
+                gtk_widget_grab_focus(destinationEntryWidget);
             }
             
             //Display intersection info and reposition map

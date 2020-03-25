@@ -385,11 +385,10 @@
             <child>
               <object class="GtkButton" id="collapseButton">
                 <property name="label" translatable="yes">&lt;&lt;&lt;</property>
-                <property name="width_request">215</property>
+                <property name="width_request">250</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="hexpand">True</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
