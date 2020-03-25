@@ -29,7 +29,7 @@ void connectSearchBar(ezgl::application* app) {
     
     //Destination search bar
     GtkSearchEntry* destinationSearch = (GtkSearchEntry*) app->get_object("secondSearchBar");
-    g_signal_connect(G_OBJECT(destinationSearch), "activate", G_CALLBACK(destinationSearchEnter), app);
+    g_signal_connect(G_OBJECT(destinationSearch), "activate", G_CALLBACK(searchEnter), app);
 }
 
 //Callback function for when the user hits the enter key in the search bar
@@ -51,14 +51,36 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
         //Otherwise, display intersection info
         else {
                         
-            //If using the main search bar, remove the last highlighted intersection
+            //If using the main search bar, remove the last highlighted intersection and highlight current one
             GtkWidget* mainSearchBar = (GtkWidget*) app->get_object("mainSearchBar");
             if (gtk_widget_get_visible(mainSearchBar)) {
                 gData.removeLastHighlightedInt(); 
+                gData.addHighlightedInt(intersectionIndex);
             }
             
-            //Highlight the searched intersection and reposition map
-            gData.addHighlightedInt(intersectionIndex);
+            //If using the destination search bar, remove the current highlighted destination intersection (if it exists)
+            //Highlight the current intersection, add it to the front of the highlighted intersections vector
+            GtkEntry* destinationEntry = (GtkEntry*) app->get_object("secondSearchBar");
+            if (destinationEntry == searchEntry) {
+                if (gData.isDestinationHighlighted()) {
+                    gData.removeFirstHighlightedInt();
+                }
+                gData.addHighlightedIntAtFront(intersectionIndex);
+                gData.setDesintationHighlight(true);
+            }
+            
+            //If using the starting search bar, remove the current highlighted starting intersection (if it exists)
+            //Highlight the current intersection, add it to the back of the highlighted intersections vector
+            GtkEntry* startingEntry = (GtkEntry*) app->get_object("searchBar");
+            if (startingEntry ==  searchEntry) {
+                if (gData.isStartHighlighted()) {
+                    gData.removeLastHighlightedInt();
+                }
+                gData.addHighlightedInt(intersectionIndex);
+                gData.setStartHighlight(true);
+            }
+            
+            //Display intersection info and reposition map
             displayIntersectionInfo(app, intersectionIndex);
             LatLon intPos = getIntersectionPosition(intersectionIndex);
             ezgl::point2d center(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
@@ -72,7 +94,7 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
 }
 
 //Callback function for when the user hits the enter key in the destination search bar
-void destinationSearchEnter(GtkEntry* destinationSearch, gpointer data) {
+/*void destinationSearchEnter(GtkEntry* destinationSearch, gpointer data) {
     ezgl::application* app = (ezgl::application*) data;
     auto rend = app->get_renderer();
     std::string search = gtk_entry_get_text(destinationSearch);
@@ -102,7 +124,7 @@ void destinationSearchEnter(GtkEntry* destinationSearch, gpointer data) {
         }
     }
 }
-
+*/
 //Parses intersection search to format it properly
 std::string parseIntersectionSearch(std::string search) {
     const int NEXT_INDEX = 1;

@@ -136,6 +136,8 @@ void showDirectionPanel(GtkWidget* directionPanelButton, ezgl::application* app)
         
         GtkEntry* destinationSearchEntry = (GtkEntry*) app->get_object("secondSearchBar");
         gtk_entry_set_text(destinationSearchEntry, intersectionName.c_str());
+        
+        gData.setDesintationHighlight(true);
     }
 }
 
@@ -181,6 +183,10 @@ void collapseDirectionPanel(GtkWidget* , ezgl::application* app) {
     //Always clear starting search bar when collapsing direction panel
     GtkEntry* startSearchEntry = (GtkEntry*) app->get_object("searchBar");
     gtk_entry_set_text(startSearchEntry, "");
+    
+    //Always set starting and destination highlights to false
+    gData.setStartHighlight(false);
+    gData.setDesintationHighlight(false);
 }
 
 //Callback function to toggle on/off the walk interface

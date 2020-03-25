@@ -159,11 +159,33 @@ void MapData::addHighlightedInt(const IntersectionIndex& intID) {
     hlData.highlightedInts.push_back(intID);
 }
 
+// Adds an intersection that is to be highlighted at the front of the vector
+void MapData::addHighlightedIntAtFront(const IntersectionIndex& intID) {
+    hlData.highlightedInts.insert(hlData.highlightedInts.begin(), intID);
+}
+
 // Removes the last highlighted intersection
 void MapData::removeLastHighlightedInt(){
     if (!hlData.highlightedInts.empty()){
         hlData.highlightedInts.erase(hlData.highlightedInts.end()-1); 
     }
+}
+
+// Removes the first highlighted intersection
+void MapData::removeFirstHighlightedInt() {
+    if (!hlData.highlightedInts.empty()) {
+        hlData.highlightedInts.erase(hlData.highlightedInts.begin());
+    }
+}
+
+// Sets whether or not a starting intersection is highlighted
+void MapData::setStartHighlight(bool highlighted) {
+    hlData.startHighlighted = highlighted;
+}
+    
+// Sets whether or not a destination intersection is highlighted
+void MapData::setDesintationHighlight(bool highlighted) {
+    hlData.destinationHighlighted = highlighted;
 }
 
 // Stores the max and min lat/lon
@@ -333,6 +355,16 @@ double MapData::getAvgLon() const {
 // Returns the data to be highlighted by the renderer
 const HighlightedData& MapData::getHLData() const {
     return hlData;
+}
+
+// Returns whether or not a starting intersection is highlighted
+bool MapData::isStartHighlighted() {
+    return hlData.startHighlighted;
+}
+    
+// Returns whether or not a destination intersection is highlighted
+bool MapData::isDestinationHighlighted() {
+    return hlData.destinationHighlighted;
 }
 
 // Returns the area of all features in a sorted multimap
