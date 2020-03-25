@@ -73,7 +73,8 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             std::cout << "Starting Intersection: " << getIntersectionName(startIndex) << "\n";
             std::cout << "Destination Intersection: " << getIntersectionName(destinationIndex) << "\n";
             
-            //SEAN'S TEST DIRECTION FUNCTION CALL CAN GO HERE
+            std::cout << "Direction: " << find_direction_between_intersections(std::make_pair(getIntersectionPosition(startIndex), 
+                    getIntersectionPosition(destinationIndex))) << "\n"; 
             
             //Determine if walk + drive directions requested
             GtkToggleButton* walkToggle = (GtkToggleButton*) app->get_object("walkToggle");
