@@ -72,6 +72,10 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
                 //Put the name of the intersection clicked on in the destination search bar
                 std::string intersectionName = getIntersectionName(intIndex);
                 gtk_entry_set_text(destinationEntry, intersectionName.c_str());
+                
+                //Toggle to Get Directions! button
+                GtkWidget* directionsButton = (GtkWidget*) app->get_object("directionRequestButton");
+                gtk_widget_grab_focus(directionsButton);
             }
         }
         

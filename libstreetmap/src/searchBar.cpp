@@ -70,6 +70,10 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
                 }
                 gData.addHighlightedIntAtFront(intersectionIndex);
                 gData.setDesintationHighlight(true);
+                
+                //Toggle to Get Directions! button
+                GtkWidget* directionsButton = (GtkWidget*) app->get_object("directionRequestButton");
+                gtk_widget_grab_focus(directionsButton);
             }
             
             //If using the starting search bar, remove the current highlighted starting intersection (if it exists)
