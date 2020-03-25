@@ -121,6 +121,8 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
                 toInt = SSData.to;
                 if (toInt == intersect_id_end) {
                     std::cout << "Path Found\n";
+                    cameFrom[toInt].parentEdge = segID;
+                    cameFrom[toInt].parentInt = currNode.intID;
                     return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
                 }
             }

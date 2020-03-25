@@ -110,8 +110,6 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             
             //Only regular driving directions are requested
             else {
-                //PUT FIND PATH ALGORITHM HERE
-                //use (startIndex, destinationIndex, TURN_PENALTY) as arguments for call
                 std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
                 std::cout << "Path: \n";
                 for (const int& seg : path) {
