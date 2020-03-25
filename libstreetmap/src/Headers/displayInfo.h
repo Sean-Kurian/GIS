@@ -31,6 +31,9 @@ int find_intersection_from_name(std::string intersectionName);
 //Alerts user intersection was not found
 void intersectionNotFound(ezgl::application* app);
 
+//Alerts user invalid intersection entry
+void invalidIntersectionEntry(ezgl::application* app);
+
 //Pops up an error message dialog, pauses program until closed
 void popUpErrorMessage(std::string message, ezgl::application* app);
 
