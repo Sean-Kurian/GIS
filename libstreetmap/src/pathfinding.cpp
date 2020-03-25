@@ -14,7 +14,7 @@
 
 struct compare {
     bool operator() (const aStarNode& lhs, const aStarNode& rhs) {
-        return lhs.estTotalTime < rhs.estTotalTime;
+        return lhs.estTotalTime > rhs.estTotalTime;
     }
 };
 
@@ -23,7 +23,7 @@ std::vector<StreetSegmentIndex> findPathTaken(const std::vector<aStarNode>& came
                                               const IntersectionIndex& endInt) {
     int current = endInt;
     std::vector<int> result;
-    while (cameFrom[current].parentEdge != -1) {
+    while (current != startInt) {
         result.push_back(cameFrom[current].parentEdge);
         current = cameFrom[current].parentInt;
     }
@@ -32,53 +32,57 @@ std::vector<StreetSegmentIndex> findPathTaken(const std::vector<aStarNode>& came
 
 double determineTurnPenalty(const StreetSegmentIndex& fromEdge, const StreetSegmentIndex& toEdge, 
                             const double& turnPenalty) {
-    InfoStreetSegment fromData = getInfoStreetSegment(fromEdge);
-    InfoStreetSegment toData = getInfoStreetSegment(toEdge);
-    if (fromData.streetID == toData.streetID)
-        return 0;
+    if (fromEdge != -1) {
+        InfoStreetSegment fromData = getInfoStreetSegment(fromEdge);
+        InfoStreetSegment toData = getInfoStreetSegment(toEdge);
+        if (fromData.streetID == toData.streetID)
+            return 0;
+        else
+            return turnPenalty;
+    }
     else
-        return turnPenalty;
+        return 0;
 }
 
 double compute_path_travel_time(const std::vector<StreetSegmentIndex>& path, 
                                 const double turn_penalty){
     
-        if (path.size() == 0) return 0; 
-        
-        double travel_time = 0; 
-            InfoStreetSegment SSData, SSData2; 
-            for (int i = 0; i < path.size()-1; i++){
-                SSData = getInfoStreetSegment(path[i]); 
-                SSData2 = getInfoStreetSegment(path[i+1]); 
+    if (path.size() == 0) return 0; 
 
-                travel_time += find_street_segment_travel_time(path[i]); 
-                if(SSData.streetID != SSData2.streetID){
-                    travel_time += turn_penalty; 
-                } 
-            }
-            travel_time += find_street_segment_travel_time(path[path.size() - 1]); 
-            return travel_time; 
+    double travel_time = 0; 
+    InfoStreetSegment SSData, SSData2; 
+    for (int i = 0; i < path.size()-1; i++){
+        SSData = getInfoStreetSegment(path[i]); 
+        SSData2 = getInfoStreetSegment(path[i+1]); 
+
+        travel_time += find_street_segment_travel_time(path[i]); 
+        if(SSData.streetID != SSData2.streetID){
+            travel_time += turn_penalty; 
+        } 
+    }
+    travel_time += find_street_segment_travel_time(path[path.size() - 1]); 
+    return travel_time; 
 }
 //length over walking speed
 double compute_path_walking_time(const std::vector<StreetSegmentIndex>& path, 
                                  const double walking_speed, 
                                  const double turn_penalty){
     
-            if (path.size() == 0) return 0; 
-    
-            double travel_time = 0; 
-            InfoStreetSegment SSData, SSData2; 
-            for (int i = 0; i < path.size()-1; i++){
-                SSData = getInfoStreetSegment(path[i]); 
-                SSData2 = getInfoStreetSegment(path[i+1]); 
+    if (path.size() == 0) return 0; 
 
-                travel_time += find_street_segment_length(path[i]) / walking_speed; 
-                if(SSData.streetID != SSData2.streetID){
-                    travel_time += turn_penalty; 
-                } 
-            }
-            travel_time += find_street_segment_length(path[path.size() - 1]) / 1; 
-            return travel_time; 
+    double travel_time = 0; 
+    InfoStreetSegment SSData, SSData2; 
+    for (int i = 0; i < path.size() - 1; i++) {
+        SSData = getInfoStreetSegment(path[i]); 
+        SSData2 = getInfoStreetSegment(path[i + 1]); 
+
+        travel_time += find_street_segment_length(path[i]) / walking_speed; 
+        if(SSData.streetID != SSData2.streetID){
+            travel_time += turn_penalty; 
+        } 
+    }
+    travel_time += find_street_segment_length(path[path.size() - 1]) / 1; 
+    return travel_time; 
 }
 
 std::vector<StreetSegmentIndex> find_path_between_intersections(
@@ -90,12 +94,18 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
     cameFrom.resize(getNumIntersections());
     
     std::priority_queue<aStarNode, std::vector<aStarNode>, compare> openSet;
-    aStarNode baseNode(intersect_id_start, -1, -1, 0, 0);
+    double baseDist = find_distance_between_two_points(std::make_pair(
+                                    getIntersectionPosition(intersect_id_start),
+                                    getIntersectionPosition(intersect_id_end)));
+    // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
+    double baseEstTime = baseDist * 0.01 * 3.6;
+    aStarNode baseNode(intersect_id_start, -1, -1, 0, baseEstTime);
     openSet.push(baseNode);
+    cameFrom[intersect_id_start].intID = intersect_id_start;
     
     while (!openSet.empty()) {
         aStarNode currNode = openSet.top();
-        
+        std::cout << "Checking intersection: " << currNode.intID << "\n";
         if (currNode.intID == intersect_id_end) {
             // FIND PATH TAKEN
             return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
@@ -109,6 +119,10 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
             
             if (SSData.from == currNode.intID) {
                 toInt = SSData.to;
+                if (toInt == intersect_id_end) {
+                    std::cout << "Path Found\n";
+                    return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
+                }
             }
             else {
                 if (SSData.oneWay)
