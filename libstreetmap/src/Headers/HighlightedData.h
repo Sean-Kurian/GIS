@@ -7,9 +7,11 @@
 // highlighted data should be drawn at all
 //==============================================================================
 
+#include "StreetsDatabaseAPI.h"
+
 struct HighlightedData {
-    std::vector<unsigned> highlightedInts;
-    std::vector<unsigned> highlightedSegs;
+    std::vector<IntersectionIndex> highlightedInts;
+    std::vector<StreetSegmentIndex> highlightedSegs;
     static bool isHighlighted;
     static bool highlightedOnce; 
     bool startHighlighted;

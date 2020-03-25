@@ -139,7 +139,8 @@ void drawMainCanvas(ezgl::renderer* rend) {
         drawPOI70(rend, buildingType::hospital);
         PrintTTCVehicleInfo70(ptRoot, rend); 
     }
-    drawHighlightedData(rend);
+    drawHighlightedStreets(rend, pixelsPerMeter);
+    drawHighlightedIntersections(rend);
 }
 
 // Calculates the number of pixels in a given

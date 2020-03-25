@@ -317,8 +317,38 @@ void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
     }
 }
 
-// Draws the data such as segments of intersections that needs to be highlighted
-void drawHighlightedData(ezgl::renderer* rend) {
+// Draws highlights over segments that need to be highlighted
+void drawHighlightedStreets(ezgl::renderer* rend, const double& pixelsPerMeter) {
+    // Sets colour to highlighted colour
+    rend->set_color(ezgl::RED);
+    const HighlightedData hlData = gData.getHLData();
+    std::vector<int> segs = hlData.highlightedSegs;
+    ezgl::point2d fromPos(0, 0), toPos(0, 0);
+    
+    // Loops over all segments of a given street type and draws them
+    for (const unsigned& SSIndex : segs) {
+        // Calculates the real life lane width. 5m is the average lane width worldwide
+        rend->set_line_width(std::floor(pixelsPerMeter * 5.0 * 2));
+        InfoStreetSegment SSData = getInfoStreetSegment(SSIndex);
+        unsigned numCurves = SSData.curvePointCount;
+        LatLon intPos = getIntersectionPosition(SSData.from);
+        fromPos = ezgl::point2d(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
+        // Draws the segment between each curve point
+        for (unsigned curveIndex = 0; curveIndex < numCurves; ++curveIndex) {
+            LatLon curvePos = getStreetSegmentCurvePoint(curveIndex, SSIndex);
+            toPos = ezgl::point2d(xFromLon(curvePos.lon()), yFromLat(curvePos.lat()));
+            rend->draw_line(fromPos, toPos);
+            fromPos = toPos;
+        }
+        // Draws rest of the segment from the last curve point to the "to" intersection
+        intPos = getIntersectionPosition(SSData.to);
+        toPos = ezgl::point2d(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
+        rend->draw_line(fromPos, toPos);
+    } 
+}
+
+// Draws highlights over intersections that need to be highlighted
+void drawHighlightedIntersections(ezgl::renderer* rend) {
     rend->set_color(ezgl::RED);
     HighlightedData data = gData.getHLData();
     if (!data.highlightedInts.empty()) {

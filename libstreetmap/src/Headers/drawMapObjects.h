@@ -16,7 +16,7 @@
 #include "libcurl.h"
 
 // Draws streets with their width varying based on the number of lanes
-void drawStreets(ezgl::renderer* rend, const roadType& type, const double& roadWidth);
+void drawStreets(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter);
 // Draws paths which are things such as trails. Intended for walking not cars
 void drawPaths(ezgl::renderer* rend, const double& pixelsPerMeter);
 // Draws the names of streets based on the visible size of a segment. Draws one way arrows
@@ -34,8 +34,10 @@ void drawAllBuildings(ezgl::renderer* rend);
 // Draws all buildings of any given building type
 void drawBuildings(ezgl::renderer* rend, const buildingType& type);
 
-// Draws the data such as segments of intersections that needs to be highlighted
-void drawHighlightedData(ezgl::renderer* rend);
+// Draws highlights over segments that need to be highlighted
+void drawHighlightedStreets(ezgl::renderer* rend, const double& pixelsPerMeter);
+// Draws highlights over intersections that need to be highlighted
+void drawHighlightedIntersections(ezgl::renderer* rend);
 
 //
 void drawPOI30(ezgl::renderer* rend, const buildingType& type);
