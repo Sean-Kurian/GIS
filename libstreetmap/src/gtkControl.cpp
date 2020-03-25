@@ -140,6 +140,12 @@ void showDirectionPanel(GtkWidget* directionPanelButton, ezgl::application* app)
         
         gData.setDesintationHighlight(true);
     }
+    
+    //Set the focus for starting intersection entry, to prompt input
+    GtkEntry* startingSearchEntry = (GtkEntry*) app->get_object("searchBar");
+    gtk_entry_set_text(startingSearchEntry, "Enter Starting Intersection");
+    GtkWidget* startingSearchWidget = (GtkWidget*) startingSearchEntry;
+    gtk_widget_grab_focus(startingSearchWidget);
 }
 
 //Callback function to collapse the direction panel
