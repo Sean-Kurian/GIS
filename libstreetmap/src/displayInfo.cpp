@@ -87,13 +87,30 @@ int find_intersection_from_name(std::string intersectionName) {
 
 std::string find_direction_between_intersections(std::pair<LatLon, LatLon> points){
     
-    //double x = (points.second.lon() - points.first.lon()) * cos((points.second.lat() + points.first.lat())/2); 
-    // y = points.second.lat() - points.first.lat(); 
-    //double angle = atan2(y,x); 
+    double dLon = points.second.lon() - points.first.lon(); 
     
-    //if ((angle >= 0 && angle <= 45) || (angle >= 315 && angle <= 360)){
-   //     return "North"; 
-    //}
+    double y = sin(dLon)*cos(points.second.lat()); 
+    double x = cos(points.first.lat())*sin(points.second.lat()) - sin(points.first.lat())*cos(points.second.lat())*cos(dLon); \
+
+    double brng = atan2(y,x); 
+    
+    brng = brng * 57.29577951;//RADIANS_TO_DEGREES; 
+    brng = (int)(brng + 360) % 360; 
+    brng = 360 - brng; 
+    brng += 90; 
+    
+    if (brng >= 45 && brng <= 135){
+        return "North"; 
+    }
+    else if (brng >= 135 && brng <= 225){
+        return "West"; 
+    }
+    else if (brng >= 225 && brng <= 315){
+        return "South"; 
+    }
+    else if (brng >= 315 || brng <= 45){
+        return "East"; 
+    }
 }
 
 //Alerts user intersection was not found
