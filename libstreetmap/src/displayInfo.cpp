@@ -131,5 +131,30 @@ std::string find_direction_between_intersections(std::pair<LatLon, LatLon> point
 
 //Displays help screen
 void displayHelpScreen(GtkWidget* , ezgl::application* app) {
-    std::cout << "Help button pressed\n";
+    GObject* window;
+    GtkWidget* content_area;
+    GtkWidget* label;
+    GtkWidget* dialog;
+    
+    //Get main window to attach help screen to
+    window = app->get_object(app->get_main_window_id().c_str());
+    
+    //Create dialog box with an "Ok" button
+    dialog = gtk_dialog_new_with_buttons("Instructions", (GtkWindow*) window,
+                                        GTK_DIALOG_DESTROY_WITH_PARENT, ("Ok"), 
+                                        GTK_RESPONSE_ACCEPT, NULL);
+    gtk_widget_set_halign(gtk_dialog_get_action_area(GTK_DIALOG(dialog)), GTK_ALIGN_CENTER);
+    
+    //Create the label with the instructions for the help screen
+    content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
+    label = gtk_label_new("Use \"and\" or \"&\" to separate street names when typing in intersections\n\n"
+                          "When the direction panel is open, click an intersection on the map to\nautomatically input "
+                          "its name into the active search entry bar");
+    gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_CENTER);
+    
+    //Show the dialog box, pause execution of the application until screen is closed
+    gtk_container_add(GTK_CONTAINER(content_area), label);
+    gtk_widget_show_all(dialog);
+    gtk_dialog_run(GTK_DIALOG(dialog));
+    gtk_widget_destroy(dialog);
 }
