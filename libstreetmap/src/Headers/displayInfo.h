@@ -39,6 +39,12 @@ std::string find_direction_between_intersections(std::pair<LatLon, LatLon> point
 //Displays help screen
 void displayHelpScreen(GtkWidget* , ezgl::application* app);
 
+//Prints out directions to direction panel
+void printDirections(std::string directions, ezgl::application* app);
+
+//Clears the directions label on the direction panel
+void clearDirections(ezgl::application* app);
+
 
 #endif /* DISPLAYINFO_H */
 

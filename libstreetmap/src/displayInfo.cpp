@@ -158,3 +158,18 @@ void displayHelpScreen(GtkWidget* , ezgl::application* app) {
     gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
 }
+
+//Prints out directions to direction panel
+void printDirections(std::string directions, ezgl::application* app) {
+    GtkLabel* directionsLabel = (GtkLabel*) app->get_object("directionsLabel");
+    gtk_label_set_justify(directionsLabel, GTK_JUSTIFY_CENTER);
+    gtk_label_set_line_wrap(directionsLabel, true);
+    gtk_label_set_max_width_chars(directionsLabel, 10);
+    gtk_label_set_text(directionsLabel, directions.c_str());
+}
+
+//Clears the directions label on the direction panel
+void clearDirections(ezgl::application* app) {
+    GtkLabel* directionsLabel = (GtkLabel*) app->get_object("directionsLabel");
+    gtk_label_set_text(directionsLabel, "");
+}
