@@ -112,7 +112,12 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             else {
                 //PUT FIND PATH ALGORITHM HERE
                 //use (startIndex, destinationIndex, TURN_PENALTY) as arguments for call
-                
+                std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
+                std::cout << "Path: \n";
+                for (const int& seg : path) {
+                    InfoStreetSegment SSData = getInfoStreetSegment(seg);
+                    std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
+                }
                 //Print out directions
                 printDirections("Driving directions go here", app);
             }
