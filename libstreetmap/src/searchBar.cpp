@@ -74,7 +74,7 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
             
             //If using the starting search bar, remove the current highlighted starting intersection (if it exists)
             //Highlight the current intersection, add it to the back of the highlighted intersections vector
-            if (startingEntry ==  searchEntry) {
+            if (startingEntry == searchEntry) {
                 if (gData.isStartHighlighted()) {
                     gData.removeLastHighlightedInt();
                 }
