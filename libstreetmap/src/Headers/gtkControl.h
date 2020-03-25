@@ -11,6 +11,7 @@
 #include "drawMapHelpers.h"
 #include "searchBar.h"
 #include "displayInfo.h"
+#include "pathfinding.h"
 
 #include "ezgl/application.hpp"
 #include "ezgl/graphics.hpp"
