@@ -4,45 +4,13 @@
 //==============================================================================
 
 #include "pathfinding.h"
+#include "pathfindingHelpers.h"
 #include "m1.h"
 #include "StreetsDatabaseAPI.h"
-#include "OSMDatabaseAPI.h"
 #include "globalData.h"
 #include "math.h"
 
 #include <queue>
-
-struct compare {
-    bool operator() (const aStarNode& lhs, const aStarNode& rhs) {
-        return lhs.estTotalTime > rhs.estTotalTime;
-    }
-};
-
-std::vector<StreetSegmentIndex> findPathTaken(const std::vector<aStarNode>& cameFrom, 
-                                              const IntersectionIndex& startInt,
-                                              const IntersectionIndex& endInt) {
-    int current = endInt;
-    std::vector<int> result;
-    while (current != startInt) {
-        result.push_back(cameFrom[current].parentEdge);
-        current = cameFrom[current].parentInt;
-    }
-    return result;
-}
-
-double determineTurnPenalty(const StreetSegmentIndex& fromEdge, const StreetSegmentIndex& toEdge, 
-                            const double& turnPenalty) {
-    if (fromEdge != -1) {
-        InfoStreetSegment fromData = getInfoStreetSegment(fromEdge);
-        InfoStreetSegment toData = getInfoStreetSegment(toEdge);
-        if (fromData.streetID == toData.streetID)
-            return 0;
-        else
-            return turnPenalty;
-    }
-    else
-        return 0;
-}
 
 double compute_path_travel_time(const std::vector<StreetSegmentIndex>& path, 
                                 const double turn_penalty){
@@ -105,7 +73,9 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
     
     while (!openSet.empty()) {
         aStarNode currNode = openSet.top();
-        std::cout << "Checking intersection: " << currNode.intID << "\n";
+        
+//        std::cout << "Checking intersection: " << currNode.intID << "\n";
+        
         if (currNode.intID == intersect_id_end) {
             // FIND PATH TAKEN
             return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
@@ -120,7 +90,7 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
             if (SSData.from == currNode.intID) {
                 toInt = SSData.to;
                 if (toInt == intersect_id_end) {
-                    std::cout << "Path Found\n";
+//                    std::cout << "Path Found\n";
                     cameFrom[toInt].parentEdge = segID;
                     cameFrom[toInt].parentInt = currNode.intID;
                     return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
