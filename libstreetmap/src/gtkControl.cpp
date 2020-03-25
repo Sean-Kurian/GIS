@@ -116,6 +116,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                     InfoStreetSegment SSData = getInfoStreetSegment(seg);
                     std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
                 }
+                gData.addHighlightedSegs(path);
                 //Print out directions
                 printDirections("Driving directions go here", app);
             }

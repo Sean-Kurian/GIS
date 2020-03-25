@@ -154,6 +154,11 @@ void MapData::addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntI
     adjacentIntsOfIntersection[mainIntID].insert(adjacentIntID);
 }
 
+//
+void MapData::addHighlightedSegs(const std::vector<StreetSegmentIndex>& segs) {
+    hlData.highlightedSegs = segs;
+}
+
 // Adds an intersection that is to be highlighted
 void MapData::addHighlightedInt(const IntersectionIndex& intID) {
     hlData.highlightedInts.push_back(intID);
@@ -167,7 +172,7 @@ void MapData::addHighlightedIntAtFront(const IntersectionIndex& intID) {
 // Removes the last highlighted intersection
 void MapData::removeLastHighlightedInt(){
     if (!hlData.highlightedInts.empty()){
-        hlData.highlightedInts.erase(hlData.highlightedInts.end()-1); 
+        hlData.highlightedInts.erase(hlData.highlightedInts.end() - 1); 
     }
 }
 
