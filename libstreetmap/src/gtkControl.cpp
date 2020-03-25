@@ -102,6 +102,9 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                     std::cout << "Walking limit: " << walkingLimit << " sec\n";
                     //PUT FIND PATH WALK + DRIVE ALGORITHM CALL HERE
                     //use (startIndex, destinationIndex, TURN_PENALTY, walkingSpeed, walkingLimit) as arguments for call
+                    
+                    //Print out directions
+                    printDirections("Walk + Drive directions go here", app);
                 }
             }
             
@@ -109,6 +112,9 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             else {
                 //PUT FIND PATH ALGORITHM HERE
                 //use (startIndex, destinationIndex, TURN_PENALTY) as arguments for call
+                
+                //Print out directions
+                printDirections("Driving directions go here", app);
             }
         }
     }
@@ -198,6 +204,9 @@ void collapseDirectionPanel(GtkWidget* , ezgl::application* app) {
     //Always clear starting search bar when collapsing direction panel
     GtkEntry* startSearchEntry = (GtkEntry*) app->get_object("searchBar");
     gtk_entry_set_text(startSearchEntry, "");
+    
+    //Always clear the directions
+    clearDirections(app);
     
     //Always set starting and destination highlights to false
     gData.setStartHighlight(false);
