@@ -25,12 +25,14 @@ void connectDirectionButtons(ezgl::application* app) {
     GtkWidget* collapseButton = GTK_WIDGET(app->get_object("collapseButton"));
     GtkWidget* directionRequestButton = GTK_WIDGET(app->get_object("directionRequestButton"));
     GtkWidget* walkToggleButton = GTK_WIDGET(app->get_object("walkToggle"));
+    GtkWidget* helpButton = GTK_WIDGET(app->get_object("helpButton"));
     
     
     g_signal_connect(G_OBJECT(directionPanelButton), "clicked", G_CALLBACK(showDirectionPanel), app);
     g_signal_connect(G_OBJECT(collapseButton), "clicked", G_CALLBACK(collapseDirectionPanel), app);
     g_signal_connect(G_OBJECT(directionRequestButton), "clicked", G_CALLBACK(findDirections), app);
     g_signal_connect(G_OBJECT(walkToggleButton), "toggled", G_CALLBACK(toggleWalkInterface), app);
+    g_signal_connect(G_OBJECT(helpButton), "clicked", G_CALLBACK(displayHelpScreen), app);
     
     //Hide the direction panel to start 
     GtkWidget* directionPanel = GTK_WIDGET(app->get_object("DirectionPanel"));
