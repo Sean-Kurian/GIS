@@ -90,6 +90,11 @@ void intersectionNotFound(ezgl::application* app) {
     app->update_message("Intersection Not Found");
 }
 
+//Alerts user invalid intersection entry
+void invalidIntersectionEntry(ezgl::application* app) {
+    popUpErrorMessage("Invalid Intersection entry", app);
+}
+
 //Pops up an error message dialog, pauses program until closed
 void popUpErrorMessage(std::string message, ezgl::application* app) {
     GtkWindow* window = (GtkWindow*) app->get_object(app->get_main_window_id().c_str());

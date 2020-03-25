@@ -104,6 +104,11 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
             app->refresh_drawing(); 
         }
     }
+    
+    //If invalid entry, alert user
+    else {
+        invalidIntersectionEntry(app);
+    }
 }
 
 //Callback function for when the user hits the enter key in the destination search bar
