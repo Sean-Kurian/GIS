@@ -107,6 +107,7 @@ void popUpErrorMessage(std::string message, ezgl::application* app) {
     gtk_widget_destroy(dialog);
 }
 
+//Returns the directions between two intersections
 std::string find_direction_between_intersections(std::pair<LatLon, LatLon> points){
     
     double dLon = points.second.lon() - points.first.lon(); 
@@ -117,11 +118,13 @@ std::string find_direction_between_intersections(std::pair<LatLon, LatLon> point
 
     double brng = atan2(y,x); 
     
+    //Angle conversion
     brng = brng * 57.29577951;//RADIANS_TO_DEGREES; 
     brng = (int)(brng + 360) % 360; 
     brng = 360 - brng; 
     brng += 90; 
     
+    //Rough estimates based on compass rose
     if (brng >= 45 && brng <= 135){
         return "North"; 
     }
@@ -137,6 +140,7 @@ std::string find_direction_between_intersections(std::pair<LatLon, LatLon> point
     return "";
 }
 
+//Logical turn cases
 std::string find_turn_direction(std::string dir1, std::string dir2){
     if (dir1 == "North"){
         if (dir2 == "West"){
