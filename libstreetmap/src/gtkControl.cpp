@@ -187,47 +187,45 @@ void findDirections(GtkWidget* , ezgl::application* app) {
 
     //Only regular driving directions are requested
     else {
-                directions.clear(); 
-                std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
-                std::cout << "Path: \n";
-                std::string dir1, dir2;  
-                int i = 0; 
-                for (const int& seg : path) {
-                    if (i < path.size()-3){
-                    //Loads 3 street segments, used for direction calculation
-                    InfoStreetSegment SSData = getInfoStreetSegment(seg);
-                    InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
-                    InfoStreetSegment SSData3 = getInfoStreetSegment(*(&seg + 2)); 
-                        
-                    if (i == 0){
-                        //Starting direction
-                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
-                            getIntersectionPosition(SSData2.from))); 
+        directions.clear(); 
+        std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
+        std::cout << "Path: \n";
+        std::string dir1, dir2;  
+        int i = 0; 
+        for (const int& seg : path) {
+            if (i < path.size()-3){
+            //Loads 3 street segments, used for direction calculation
+            InfoStreetSegment SSData = getInfoStreetSegment(seg);
+            InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
+            InfoStreetSegment SSData3 = getInfoStreetSegment(*(&seg + 2)); 
 
-                        directions.push_back("Head " + dir1 + " on " + getStreetName(SSData.streetID) + "\n"); 
-                    }
-                    //Only changing street if street name changes
-                    if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
-                        //Dir2 is new direction, dir1 is used as comparison to calculate turn direction
-                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
-                            getIntersectionPosition(SSData2.from))); 
-                        dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
-                            getIntersectionPosition(SSData3.from)));
-                        
-                        //Store in direction vector
-                        directions.push_back("Turn " + find_turn_direction(dir1, dir2) + " onto " + getStreetName(SSData2.streetID) + "\n");
-                        directions.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n"); 
-                        }
-                    }
-                    i++; 
+            if (i == 0){
+                //Starting direction
+                dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                    getIntersectionPosition(SSData2.from))); 
+
+                directions.push_back("Head " + dir1 + " on " + getStreetName(SSData.streetID) + "\n"); 
+            }
+            //Only changing street if street name changes
+            if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
+                //Dir2 is new direction, dir1 is used as comparison to calculate turn direction
+                dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                    getIntersectionPosition(SSData2.from))); 
+                dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
+                    getIntersectionPosition(SSData3.from)));
+
+                //Store in direction vector
+                directions.push_back("Turn " + find_turn_direction(dir1, dir2) + " onto " + getStreetName(SSData2.streetID) + "\n");
+                directions.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n"); 
                 }
-                gData.addHighlightedSegs(path);
-                app->refresh_drawing();
-                //Print out directions
-                printDirections(directions, app);
+            }
+            gData.addHighlightedSegs(path);
+            app->refresh_drawing();
+            //Print out directions
+            printDirections(directions, app);
             
         }
-        
+    }
 }
 
 //Callback function to show direction panel
