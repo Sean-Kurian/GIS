@@ -122,16 +122,19 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                     //std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
                         
                     if (i == 0){
-                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
+                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
                             getIntersectionPosition(SSData.to))); 
                         std::cout <<"Head "<< dir1 << " on " << getStreetName(SSData.streetID) <<"\n";  
                     }
                     if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
+                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                            getIntersectionPosition(SSData.to))); 
                         dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
                             getIntersectionPosition(SSData2.to)));
-                        std::cout <<"Travel from " << getStreetName(SSData.streetID) << " to " 
+                        std::cout <<"Turn " << find_turn_direction(dir1, dir2) << " onto " 
                              << getStreetName(SSData2.streetID) << "\n"; 
-                        std::cout <<"Head "<< dir2 << " on " << getStreetName(SSData2.streetID) <<"\n"; 
+                        std::cout <<"Head "<< dir2 << " on " << getStreetName(SSData2.streetID) <<"\n";
+
                         }
                     }
                     i++; 
