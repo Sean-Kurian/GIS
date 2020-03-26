@@ -49,6 +49,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
     GtkEntry* destinationSearchEntry = (GtkEntry*) app->get_object("secondSearchBar");
     std::string startSearch = gtk_entry_get_text(startSearchEntry);
     std::string destinationSearch = gtk_entry_get_text(destinationSearchEntry);
+    std::vector<std::string> directions; 
     
     //Ensure intersections are being searched for (each entry has an "&" or "and")
     if ((startSearch.find("&") != std::string::npos || startSearch.find("and") != std::string::npos) &&
@@ -111,9 +112,10 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             
             //Only regular driving directions are requested
             else {
+                directions.clear(); 
                 std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
                 std::cout << "Path: \n";
-                std::string dir1, dir2; 
+                std::string dir1, dir2;  
                 int i = 0; 
                 for (const int& seg : path) {
                     if (i < path.size()-1){
@@ -124,7 +126,8 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                     if (i == 0){
                         dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
                             getIntersectionPosition(SSData.to))); 
-                        std::cout <<"Head "<< dir1 << " on " << getStreetName(SSData.streetID) <<"\n";  
+                        std::cout <<"Head "<< dir1 << " on " << getStreetName(SSData.streetID) <<"\n";
+                        directions.push_back("Head " + dir1 + " on " + getStreetName(SSData.streetID) + "\n"); 
                     }
                     if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
                         dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
@@ -133,8 +136,9 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                             getIntersectionPosition(SSData2.to)));
                         std::cout <<"Turn " << find_turn_direction(dir1, dir2) << " onto " 
                              << getStreetName(SSData2.streetID) << "\n"; 
+                        directions.push_back("Turn " + find_turn_direction(dir1, dir2) + " onto " + getStreetName(SSData2.streetID) + "\n");
                         std::cout <<"Head "<< dir2 << " on " << getStreetName(SSData2.streetID) <<"\n";
-
+                        directions.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n"); 
                         }
                     }
                     i++; 
