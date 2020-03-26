@@ -134,6 +134,7 @@ std::string find_direction_between_intersections(std::pair<LatLon, LatLon> point
     else if (brng >= 315 || brng <= 45){
         return "East"; 
     }
+    return "";
 }
 
 std::string find_turn_direction(std::string dir1, std::string dir2){
