@@ -32,7 +32,6 @@ struct compare {
     }
 };
 
-
 //
 std::vector<StreetSegmentIndex> findPathTaken(const std::vector<aStarNode>& cameFrom, 
                                               const IntersectionIndex& startInt,
