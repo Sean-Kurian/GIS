@@ -36,6 +36,5 @@ std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex>> find
                                  const double walking_speed, 
                                  const double walking_time_limit); 
 
-
 #endif /* PATHFINDING_H */
 
