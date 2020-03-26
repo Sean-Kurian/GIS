@@ -2,7 +2,7 @@
 #define PATHFINDINGHELPERS_H
 
 //==============================================================================
-// File Description:
+// File Description: Header file for helper functions to pathfinding
 //
 //==============================================================================
 
