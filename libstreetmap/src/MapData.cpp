@@ -260,7 +260,9 @@ void MapData::setIntersectionInfoBox(GtkWidget* dialog) {
 }
 
 // Sets maximum speed limit on the map
-void MapData::setMaxSpeedLimit(const unsigned& limit);
+void MapData::setMaxSpeedLimit(const unsigned& limit) {
+    maxSpeedLimit = limit;
+}
 
 //==============================================================================
 // Accessors

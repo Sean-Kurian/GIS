@@ -120,7 +120,7 @@ bool are_directly_connected(std::pair<int, int> intersection_ids) {
 // from given intersection. Does not contain duplicate intersections
 std::vector<int> find_adjacent_intersections(int intersection_id) {
     std::vector<int> adjacentInts;
-    std::vector<pairSegIntID> adjSegIntIDs;
+    std::vector<pairSegIntID> adjSegIntIDs = gData.getAdjacentSegIntIDsOfInt(intersection_id);
     for (const pairSegIntID& adjIDs : adjSegIntIDs) 
         adjacentInts.push_back(adjIDs.second);
     return adjacentInts;
