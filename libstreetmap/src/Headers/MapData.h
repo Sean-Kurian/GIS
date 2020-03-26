@@ -195,7 +195,7 @@ public:
     double getLengthOfSegment(const StreetSegmentIndex& segID) const;
     
     // Returns time needed to travel at speed limit down a given segment
-    double getTravelTimeOfSegment(const StreetSegmentIndex& segID) const;
+    double getTravelTimeOfSeg(const StreetSegmentIndex& segID) const;
     
     // Returns vector containing IDs of all intersections along a street
     const std::vector<int> getIntersectionsOfStreet(const StreetIndex& streetID) const;

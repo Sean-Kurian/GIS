@@ -305,7 +305,7 @@ double MapData::getLengthOfSegment(const StreetSegmentIndex& segID) const {
 }
 
 // Returns time needed to travel at speed limit down a given segment
-double MapData::getTravelTimeOfSegment(const StreetSegmentIndex& segID) const {
+double MapData::getTravelTimeOfSeg(const StreetSegmentIndex& segID) const {
     return travelTimeOfSegment[segID];
 }
 
