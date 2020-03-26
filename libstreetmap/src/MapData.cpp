@@ -16,6 +16,7 @@
 //==============================================================================
 
 MapData::MapData() {
+    maxSpeedLimit = 100; // Default
     intersectionDialog = nullptr;
 }
 
@@ -42,6 +43,7 @@ MapData::~MapData() {
 
 // Clears all data structures. Used to load another map without needing destructor
 void MapData::clearMapData() {
+    maxSpeedLimit = 0;
     IDsOfStreetName.clear();
     segsOfStreet.clear();
     intersectionsOfStreet.clear();
@@ -257,6 +259,9 @@ void MapData::setIntersectionInfoBox(GtkWidget* dialog) {
     intersectionDialog = dialog;    
 }
 
+// Sets maximum speed limit on the map
+void MapData::setMaxSpeedLimit(const unsigned& limit);
+
 //==============================================================================
 // Accessors
 //==============================================================================
@@ -438,7 +443,6 @@ unsigned MapData::getRelationIndexOfOSMID(const OSMID& relationID) const {
         return mapItr->second;
 }
 
-
 // Returns map path
 const std::string MapData::getMapPath() const {
     return mapPath;
@@ -447,4 +451,9 @@ const std::string MapData::getMapPath() const {
 // Returns pointer to dialog box displaying currently clicked on intersection
 GtkWidget* MapData::getIntersectionInfoBox() const {
     return intersectionDialog;
+}
+
+//
+unsigned MapData::getMaxSpeed() const {
+    return maxSpeedLimit;
 }

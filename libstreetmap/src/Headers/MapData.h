@@ -88,6 +88,9 @@ private:
     // Pointer to current dialog box displaying intersection info
     GtkWidget* intersectionDialog;
     
+    // Maximum speed limit in the city
+    unsigned maxSpeedLimit;
+    
 public:
 //==============================================================================
 // Constructors / Destructors
@@ -181,6 +184,9 @@ public:
     
     // Sets pointer to current intersection info dialog box
     void setIntersectionInfoBox(GtkWidget* dialog);
+    
+    // Sets maximum speed limit on the map
+    void setMaxSpeedLimit(const unsigned& limit);
 //==============================================================================
 // Accessors
 //==============================================================================
@@ -259,6 +265,9 @@ public:
     
     // Returns pointer to dialog box displaying currently clicked on intersection
     GtkWidget* getIntersectionInfoBox() const;
+    
+    //
+    unsigned getMaxSpeed() const;
 };
 
 #endif /* MAPDATA_H */
