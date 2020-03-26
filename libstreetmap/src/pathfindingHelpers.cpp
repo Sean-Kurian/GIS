@@ -7,7 +7,7 @@
 
 #include <algorithm>
 
-//
+// Finds the aStarNode* of a given intersection ID
 aStarNode* getToNode(const IntersectionIndex& intID, 
                      const std::unordered_map<unsigned, aStarNode*>& visited) {
     auto itr = visited.find(intID);
@@ -17,7 +17,7 @@ aStarNode* getToNode(const IntersectionIndex& intID,
         return itr->second;
 }
 
-//
+// Reconstructs the path taken to get to the end
 std::vector<StreetSegmentIndex> findPathTaken(const std::unordered_map<unsigned, aStarNode*> visited, 
                                               const IntersectionIndex& startInt,
                                               const IntersectionIndex& endInt) {
@@ -32,24 +32,7 @@ std::vector<StreetSegmentIndex> findPathTaken(const std::unordered_map<unsigned,
     return result;
 }
 
-//
-//std::vector<StreetSegmentIndex> findPathTakenx(const std::vector<aStarNodex>& cameFrom,
-//                                              const IntersectionIndex& startInt,
-//                                              const IntersectionIndex& endInt) {
-//    
-//    
-//    
-//    int current = endInt;
-//    std::vector<int> result;
-//    while (current != startInt) {
-//        result.push_back(cameFrom[current].parentEdge);
-//        current = cameFrom[current].parentInt;
-//    }
-//    std::reverse(result.begin(), result.end());
-//    return result;
-//}
-
-//
+// Determines if there was a turn and returns how much it should cost if there was
 double determineTurnPenalty(const StreetSegmentIndex& fromEdge,
                             const StreetSegmentIndex& toEdge,
                             const double& turnPenalty) {
