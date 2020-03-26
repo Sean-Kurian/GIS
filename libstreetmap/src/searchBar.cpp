@@ -46,6 +46,7 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
         //If the intersection is not found, display that to the user
         if (intersectionIndex == -1) {
             intersectionNotFound(app);
+            removeIfNecessary(searchEntry, app);
         }
         
         //Otherwise, display intersection info
@@ -108,6 +109,7 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
     //If invalid entry, alert user
     else {
         invalidIntersectionEntry(app);
+        removeIfNecessary(searchEntry, app);
     }
 }
 
@@ -156,4 +158,35 @@ std::string parseIntersectionSearch(std::string search) {
         capitalIndex = search.find(" ", capitalIndex) + NEXT_INDEX;
     }
     return search;
+}
+
+//Removes intersection from highlighted intersection vector (if necessary) when invalid search is entered
+void removeIfNecessary(GtkEntry* searchEntry, ezgl::application* app) {
+    //Get all the start search bar
+    GtkEntry* mainEntry = (GtkEntry*) app->get_object("mainSearchBar");
+    GtkEntry* startingEntry = (GtkEntry*) app->get_object("searchBar");
+    GtkEntry* destinationEntry = (GtkEntry*) app->get_object("secondSearchBar");
+    
+    //Determine if main search bar is being used, remove highlighted intersection if necessary
+    if (searchEntry == mainEntry) {
+        gData.removeLastHighlightedInt();
+    }
+    
+    //Determine if destination entry bar is being used, remove highlighted intersection if necessary
+    if (searchEntry == destinationEntry) {
+        if (gData.isDestinationHighlighted()) {
+            gData.removeFirstHighlightedInt();
+            gData.setDesintationHighlight(false);
+        }
+    }
+    
+    //Determine if starting entry bar is being used, remove highlighted intersection if necessary
+    if (searchEntry == startingEntry) {
+        if (gData.isStartHighlighted()) {
+            gData.removeLastHighlightedInt();
+            gData.setStartHighlight(false);
+        }
+    }
+    
+    app->refresh_drawing();
 }

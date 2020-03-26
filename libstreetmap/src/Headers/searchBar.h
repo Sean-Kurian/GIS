@@ -26,5 +26,8 @@ void searchEnter(GtkEntry* searchEntry, gpointer data);
 //Parses intersection search to format it properly
 std::string parseIntersectionSearch(std::string search);
 
+//Removes intersection from highlighted intersection vector (if necessary) when invalid search is entered
+void removeIfNecessary(GtkEntry* searchEntry, ezgl::application* app);
+
 #endif /* SEARCHBAR_H */
 
