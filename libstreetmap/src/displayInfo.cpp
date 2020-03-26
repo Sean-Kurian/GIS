@@ -171,7 +171,9 @@ std::string find_turn_direction(std::string dir1, std::string dir2){
         if (dir2 == "North"){
             return "Left"; 
         }
-    }    
+    }
+
+return dir1+dir2;     
     
 }
 
