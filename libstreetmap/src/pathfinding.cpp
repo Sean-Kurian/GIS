@@ -62,12 +62,12 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
     cameFrom.resize(getNumIntersections());
     
     std::priority_queue<aStarNode, std::vector<aStarNode>, compare> openSet;
-    double baseDist = find_distance_between_two_points(std::make_pair(
-                                    getIntersectionPosition(intersect_id_start),
-                                    getIntersectionPosition(intersect_id_end)));
+//    double baseDist = find_distance_between_two_points(std::make_pair(
+//                                    getIntersectionPosition(intersect_id_start),
+//                                    getIntersectionPosition(intersect_id_end)));
     // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
-    double baseEstTime = baseDist * 0.01 * 3.6;
-    aStarNode baseNode(intersect_id_start, -1, -1, 0, baseEstTime);
+//    double baseEstTime = baseDist * 0.01 * 3.6;
+    aStarNode baseNode(intersect_id_start, -1, -1, 0, 0);
     openSet.push(baseNode);
     cameFrom[intersect_id_start].intID = intersect_id_start;
     
