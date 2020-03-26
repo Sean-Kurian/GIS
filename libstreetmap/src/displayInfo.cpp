@@ -86,7 +86,7 @@ int find_intersection_from_name(std::string intersectionName) {
 
 //Alerts user intersection was not found
 void intersectionNotFound(ezgl::application* app) {
-    app->update_message("Intersection Not Found");
+    popUpErrorMessage("Intersection not found", app);
 }
 
 //Alerts user invalid intersection entry

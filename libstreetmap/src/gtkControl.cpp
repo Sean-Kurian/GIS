@@ -129,6 +129,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                     i++; 
                 }
                 gData.addHighlightedSegs(path);
+                app->refresh_drawing();
                 //Print out directions
                 printDirections("Driving directions go here", app);
             }
