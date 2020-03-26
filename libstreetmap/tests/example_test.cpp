@@ -69,6 +69,28 @@ TEST(pathFindingTest) {
     for (const int& seg : path) {
         std::cout << "SegID: " << seg << "\n";
     }
+    
+    startFind = std::chrono::high_resolution_clock::now();
+    
+    path = find_path_with_walk_to_pickup(109, 1086, 22.58759087598575732, 1.39999999999999991, 0.00000000000000000);
+    
+    endFind = std::chrono::high_resolution_clock::now();
+    std::cout << "Time taken to find path: "
+              << std::chrono::duration_cast<std::chrono::microseconds>(endFind - startFind).count() << " ns\n";
+    
+    startCalc = std::chrono::high_resolution_clock::now();
+    
+    time = compute_path_travel_time(path, 0.00000000000000000);
+    
+    endCalc = std::chrono::high_resolution_clock::now();
+    std::cout << "Time taken to calc time: "
+              << std::chrono::duration_cast<std::chrono::microseconds>(endCalc - startCalc).count() << " ns\n";
+    
+    std::cout << "Time: " << time << "\n";
+    std::cout << "Path: \n";
+    for (const int& seg : path) {
+        std::cout << "SegID: " << seg << "\n";
+    }
 }
 
 // Tests how the map stores its data

@@ -453,7 +453,7 @@ GtkWidget* MapData::getIntersectionInfoBox() const {
     return intersectionDialog;
 }
 
-//
+// Returns maximum speed limit of the city
 unsigned MapData::getMaxSpeed() const {
     return maxSpeedLimit;
 }

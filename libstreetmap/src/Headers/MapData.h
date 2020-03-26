@@ -266,7 +266,7 @@ public:
     // Returns pointer to dialog box displaying currently clicked on intersection
     GtkWidget* getIntersectionInfoBox() const;
     
-    //
+    // Returns maximum speed limit of the city
     unsigned getMaxSpeed() const;
 };
 
