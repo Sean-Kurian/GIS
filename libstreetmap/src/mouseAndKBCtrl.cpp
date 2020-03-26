@@ -34,6 +34,9 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
         
         //If the the application is in direction mode, determine if the click is setting starting or destination intersection
         else {
+            //Clear any existing highlighted direction path
+            gData.addHighlightedSegs({});
+            
             //Get both search bars in direction mode
             GtkEntry* startingEntry = (GtkEntry*) app->get_object("searchBar");
             GtkEntry* destinationEntry = (GtkEntry*) app->get_object("secondSearchBar");
@@ -50,6 +53,7 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
                 
                 //Put the name of the intersection clicked on in the start search bar
                 std::string intersectionName = getIntersectionName(intIndex);
+                intersectionName = removeUnknown(intersectionName);
                 gtk_entry_set_text(startingEntry, intersectionName.c_str());
                 
                 //Toggle to destination entry
@@ -71,6 +75,7 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
                 
                 //Put the name of the intersection clicked on in the destination search bar
                 std::string intersectionName = getIntersectionName(intIndex);
+                intersectionName = removeUnknown(intersectionName);
                 gtk_entry_set_text(destinationEntry, intersectionName.c_str());
                 
                 //Toggle to Get Directions! button

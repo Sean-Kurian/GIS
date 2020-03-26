@@ -102,6 +102,9 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
             ezgl::rectangle rect(ezgl::point2d(center.x - scale.x, center.y - scale.y),
                                  ezgl::point2d(center.x + scale.x, center.y + scale.y));
             rend->set_visible_world(rect);
+            
+            //Erase any existing highlighted direction path
+            gData.addHighlightedSegs({});
             app->refresh_drawing(); 
         }
     }
