@@ -122,10 +122,8 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                         if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
                             std::cout <<"Travel from " << getStreetName(SSData.streetID) << " to " 
                                     << getStreetName(SSData2.streetID) << "\n"; 
-                        }
-                        else if (getStreetName(SSData.streetID) == getStreetName(SSData2.streetID)){
-                            std::cout <<"Head " << find_direction_between_intersections(std::make_pair(getIntersectionPosition
-                                    (SSData2.streetID), getIntersectionPosition(SSData.streetID)))<< "\n"; 
+                            std::cout <<"Head "<< find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
+                                    getIntersectionPosition(SSData2.to))) << " on " << getStreetName(SSData2.streetID) <<"\n"; 
                         }
                     }
                     i++; 
