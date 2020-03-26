@@ -10,7 +10,6 @@
 #include "pathfinding.h"
 
 #include <vector>
-#include <memory>
 #include <unordered_map>
 
 // Stores node details and how fast its gotten there from the start
