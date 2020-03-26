@@ -153,14 +153,14 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             //use (startIndex, destinationIndex, TURN_PENALTY, walkingSpeed, walkingLimit) as arguments for call
 
             //Print out directions
-            printDirections(directions, app);
+            printWalkDirections({}, directions, app);
         }
     }
 
     //Only regular driving directions are requested
     else {
         directions.clear(); 
-        std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
+        std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, TURN_PENALTY);
         std::cout << "Path: \n";
         std::string dir1, dir2;  
         int i = 0; 

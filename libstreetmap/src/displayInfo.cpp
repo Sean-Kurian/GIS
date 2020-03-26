@@ -209,27 +209,56 @@ void displayHelpScreen(GtkWidget* , ezgl::application* app) {
     gtk_widget_destroy(dialog);
 }
 
-//Prints out directions to direction panel
+//Prints out driving directions to direction panel
 void printDirections(std::vector<std::string> directionsVector, ezgl::application* app) {
+    //Set up the label
     GtkLabel* directionsLabel = (GtkLabel*) app->get_object("directionsLabel");
     gtk_label_set_justify(directionsLabel, GTK_JUSTIFY_CENTER);
     gtk_label_set_line_wrap(directionsLabel, true);
     gtk_label_set_max_width_chars(directionsLabel, 10);
-    std::string directions = combineDirections(directionsVector);
+    
+    //Combine the directions, print on panel
+    std::string directions = combineDirections(directionsVector, false);
     gtk_label_set_text(directionsLabel, directions.c_str());
 }
 
-//Clears the directions label on the direction panel
+//Print out walk + driving directions panel
+void printWalkDirections(std::vector<std::string> walkingVector, std::vector<std::string> directionsVector, ezgl::application* app) {
+    //Set up label
+    GtkLabel* directionsLabel = (GtkLabel*) app->get_object("directionsLabel");
+    gtk_label_set_justify(directionsLabel, GTK_JUSTIFY_CENTER);
+    gtk_label_set_line_wrap(directionsLabel, true);
+    gtk_label_set_max_width_chars(directionsLabel, 10);
+    
+    //Combine the directions, print on panel
+    std::string directions = combineDirections(walkingVector, true);
+    directions += combineDirections(directionsVector, false);
+    gtk_label_set_text(directionsLabel, directions.c_str());
+}
+
+//Clears the directions label on the direction panel and the highlighted path
 void clearDirections(ezgl::application* app) {
     GtkLabel* directionsLabel = (GtkLabel*) app->get_object("directionsLabel");
     gtk_label_set_text(directionsLabel, "");
+    gData.addHighlightedSegs({});
+    app->refresh_drawing();
 }
 
 //Combines the vector of strings representing directions into one string for display on GUI
-std::string combineDirections(std::vector<std::string> directionsVector) {
-    std::string directions = "Driving Directions:\n\n";
+std::string combineDirections(std::vector<std::string> directionsVector, bool isWalking) {
+    std::string directions = "";
+    if (isWalking) {
+        directions += "Walking Directions:\n\n";
+    } else {
+        directions += "Driving Directions:\n\n";
+    }
+    
     for (int i = 0; i < directionsVector.size(); ++i) {
         directions += directionsVector[i] + "\n";
+    }
+    
+    if (isWalking) {
+        directions += "\n";
     }
     return directions;
 }

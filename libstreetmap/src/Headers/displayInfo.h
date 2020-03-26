@@ -44,14 +44,17 @@ std::string find_turn_direction(std::string dir1, std::string dir2);
 //Displays help screen
 void displayHelpScreen(GtkWidget* , ezgl::application* app);
 
-//Prints out directions to direction panel
+//Prints out driving directions to direction panel
 void printDirections(std::vector<std::string> directionsVector, ezgl::application* app);
+
+//Print out walk + driving directions panel
+void printWalkDirections(std::vector<std::string> walkingVector, std::vector<std::string> directionsVector, ezgl::application* app);
 
 //Clears the directions label on the direction panel
 void clearDirections(ezgl::application* app);
 
 //Combines the vector of strings representing directions into one string for display on GUI
-std::string combineDirections(std::vector<std::string> directionsVector);
+std::string combineDirections(std::vector<std::string> directionsVector, bool isWalking);
 
 
 #endif /* DISPLAYINFO_H */
