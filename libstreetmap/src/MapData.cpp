@@ -27,7 +27,7 @@ MapData::~MapData() {
     lengthOfSegment.clear();
     travelTimeOfSegment.clear();
     segsOfIntersection.clear();
-    adjacentIntsOfIntersection.clear();
+    adjacentSegIntsOfInt.clear();
     hlData.highlightedInts.clear(); 
     hlData.highlightedSegs.clear();
     indexesOfStreams.clear();
@@ -48,7 +48,7 @@ void MapData::clearMapData() {
     lengthOfSegment.clear();
     travelTimeOfSegment.clear();
     segsOfIntersection.clear();
-    adjacentIntsOfIntersection.clear();
+    adjacentSegIntsOfInt.clear();
     hlData.highlightedInts.clear(); 
     hlData.highlightedSegs.clear();
     indexesOfStreams.clear();
@@ -82,7 +82,7 @@ void MapData::allocSegmmentVecs(const unsigned& numSegments) {
 // Sizes intersection vectors to their appropriate size to avoid out of index access
 void MapData::allocIntersectionVecs(const unsigned& numIntersections) {
     segsOfIntersection.resize(numIntersections);
-    adjacentIntsOfIntersection.resize(numIntersections);
+    adjacentSegIntsOfInt.resize(numIntersections);
 }
 
 // Sets map path
@@ -149,9 +149,9 @@ void MapData::addSegToIntersection(const StreetSegmentIndex& segID, const Inters
 }
 
 // Adds adjacent intersection to set with all reachable intersections from main intersection
-void MapData::addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
+void MapData::addAdjacentPairSegIntIdToInt(const std::vector<pairSegIntID>& adjacentSegInts,
                                            const IntersectionIndex& mainIntID) {
-    adjacentIntsOfIntersection[mainIntID].insert(adjacentIntID);
+    adjacentSegIntsOfInt[mainIntID] = adjacentSegInts;
 }
 
 //
@@ -187,7 +187,7 @@ void MapData::removeFirstHighlightedInt() {
 void MapData::setStartHighlight(bool highlighted) {
     hlData.startHighlighted = highlighted;
 }
-    
+
 // Sets whether or not a destination intersection is highlighted
 void MapData::setDesintationHighlight(bool highlighted) {
     hlData.destinationHighlighted = highlighted;
@@ -320,12 +320,8 @@ const std::vector<int>& MapData::getSegsOfIntersection(const IntersectionIndex& 
 }
 
 // Returns vector containing IDs of all intersections reachable from a given intersection
-const std::vector<int> MapData::getAdjacentIntsOfIntersection(const IntersectionIndex& intID) const {
-    std::vector<int> adjIntersections;
-    // Goes through unordered set and adds intersection IDs to vector
-    for (const int& adjIntID : adjacentIntsOfIntersection[intID])
-        adjIntersections.push_back(adjIntID);
-    return adjIntersections;
+const std::vector<pairSegIntID> MapData::getAdjacentSegIntIDsOfInt(const IntersectionIndex& intID) const {
+    return adjacentSegIntsOfInt[intID];
 }
 
 // Returns the cosine of the average latitude

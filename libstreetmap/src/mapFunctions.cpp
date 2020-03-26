@@ -119,7 +119,11 @@ bool are_directly_connected(std::pair<int, int> intersection_ids) {
 // Returns all intersections reachable by traveling down one street segment 
 // from given intersection. Does not contain duplicate intersections
 std::vector<int> find_adjacent_intersections(int intersection_id) {
-    return gData.getAdjacentIntsOfIntersection(intersection_id);
+    std::vector<int> adjacentInts;
+    std::vector<pairSegIntID> adjSegIntIDs;
+    for (const pairSegIntID& adjIDs : adjSegIntIDs) 
+        adjacentInts.push_back(adjIDs.second);
+    return adjacentInts;
 }
 
 // Returns all street segments for the given street

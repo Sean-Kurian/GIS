@@ -115,6 +115,7 @@ void getSegmentData(const unsigned& numStreetSegments) {
 void getIntersectionData(const unsigned& numIntersections) {
     InfoStreetSegment SSData;
     for (unsigned intIndex = 0; intIndex < numIntersections; ++intIndex) {
+        std::unordered_map<unsigned, unsigned> adjacentSegInts;
         std::vector<int> streetIDs; 
         // Finds and loops over all segments connected to intersection
         int numSegs = getIntersectionStreetSegmentCount(intIndex);
@@ -127,10 +128,10 @@ void getIntersectionData(const unsigned& numIntersections) {
             SSData = getInfoStreetSegment(segIndex);
             // If this is the starting intersection the end one must be reachable
             if (intIndex == SSData.from)
-                gData.addAdjacentIntToIntersection(SSData.to, intIndex);
+                adjacentSegInts.insert(std::make_pair(segNum, SSData.to));
             // If its a two way street then the other intersection must be reachable
             else if (!SSData.oneWay)
-                gData.addAdjacentIntToIntersection(SSData.from, intIndex);
+                adjacentSegInts.insert(std::make_pair(segNum, SSData.from));
             
             // Check if this streetID has already been added to intersectsOfStreet
             for (const int& ID : streetIDs) {
@@ -142,6 +143,10 @@ void getIntersectionData(const unsigned& numIntersections) {
                 // Adds intersection to vector with all intersections of a street
                 gData.addIntersectToStreet(intIndex, SSData.streetID);
         }
+        std::vector<pairSegIntID> adjacentSegIntPair;
+        for (const auto& segIntIDs : adjacentSegInts) 
+            adjacentSegIntPair.push_back(std::make_pair(segIntIDs.first, segIntIDs.second));
+        gData.addAdjacentPairSegIntIdToInt(adjacentSegIntPair, intIndex);
     }
 }
 
