@@ -57,16 +57,10 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
                                 const IntersectionIndex intersect_id_start,
                                 const IntersectionIndex intersect_id_end, 
                                 const double turn_penalty) {
-    std::vector<int> segsOfInt;
     std::vector<aStarNode> cameFrom;
     cameFrom.resize(getNumIntersections());
     
     std::priority_queue<aStarNode, std::vector<aStarNode>, compare> openSet;
-//    double baseDist = find_distance_between_two_points(std::make_pair(
-//                                    getIntersectionPosition(intersect_id_start),
-//                                    getIntersectionPosition(intersect_id_end)));
-    // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
-//    double baseEstTime = baseDist * 0.01 * 3.6;
     aStarNode baseNode(intersect_id_start, -1, -1, 0, 0);
     openSet.push(baseNode);
     cameFrom[intersect_id_start].intID = intersect_id_start;
@@ -81,45 +75,35 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
             return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
         }
         openSet.pop();
-        segsOfInt = gData.getSegsOfIntersection(currNode.intID);
+        std::vector<pairSegIntID> adjSegIntIDs = gData.getAdjacentSegIntIDsOfInt(currNode.intID);
+        std::vector<int> segsOfInt = gData.getSegsOfIntersection(currNode.intID);
         
-        for (const int& segID : segsOfInt) {
-            InfoStreetSegment SSData = getInfoStreetSegment(segID);
-            int toInt;
-            
-            if (SSData.from == currNode.intID) {
-                toInt = SSData.to;
-                if (toInt == intersect_id_end) {
-//                    std::cout << "Path Found\n";
-                    cameFrom[toInt].parentEdge = segID;
-                    cameFrom[toInt].parentInt = currNode.intID;
-                    return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
-                }
-            }
-            else {
-                if (SSData.oneWay)
-                    continue;
-                else
-                    toInt = SSData.from;
+        for (const pairSegIntID& segIntID : adjSegIntIDs) {
+            InfoStreetSegment SSData = getInfoStreetSegment(segIntID.first);
+
+            if (segIntID.second == intersect_id_end) {
+                cameFrom[segIntID.second].parentEdge = segIntID.first;
+                cameFrom[segIntID.second].parentInt = currNode.intID;
+                return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
             }
             
-            double segTravelTime = gData.getTravelTimeOfSegment(segID);
-            double turnPenalty = determineTurnPenalty(currNode.parentEdge, segID, turn_penalty);
+            double segTravelTime = gData.getTravelTimeOfSegment(segIntID.first);
+            double turnPenalty = determineTurnPenalty(currNode.parentEdge, segIntID.first, turn_penalty);
             double timeToInt = segTravelTime + currNode.timeToNode + turnPenalty;
             
             // New fastest way to this node
-            if (timeToInt < cameFrom[toInt].timeToNode) {
-                cameFrom[toInt].intID = toInt;
-                cameFrom[toInt].parentInt = currNode.intID;
-                cameFrom[toInt].parentEdge = segID;
-                cameFrom[toInt].timeToNode = timeToInt;
+            if (timeToInt < cameFrom[segIntID.second].timeToNode) {
+                cameFrom[segIntID.second].intID = segIntID.second;
+                cameFrom[segIntID.second].parentInt = currNode.intID;
+                cameFrom[segIntID.second].parentEdge = segIntID.first;
+                cameFrom[segIntID.second].timeToNode = timeToInt;
                 double distToEnd = find_distance_between_two_points(std::make_pair(
-                                        getIntersectionPosition(toInt),
+                                        getIntersectionPosition(segIntID.second),
                                         getIntersectionPosition(intersect_id_end)));
                 // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
-                cameFrom[toInt].estTotalTime = timeToInt + (distToEnd * 0.01 * 3.6);
+                cameFrom[segIntID.second].estTotalTime = timeToInt + (distToEnd * 0.01 * 3.6);
                 // Add neighbour to open set
-                openSet.push(cameFrom[toInt]);
+                openSet.push(cameFrom[segIntID.second]);
             }
         }
     }

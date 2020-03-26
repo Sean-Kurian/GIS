@@ -24,6 +24,8 @@
 #include "ezgl/graphics.hpp"
 #include "ezgl/application.hpp"
 
+typedef std::pair<StreetSegmentIndex, IntersectionIndex> pairSegIntID;
+
 class MapData {
 private:
     // Multimap which stores street names keyed to their street values
@@ -48,27 +50,27 @@ private:
     
     // Vector which stores all reachable intersections from an intersection in a set
     // Using vector & unord set for O(1) access. Using set guarantees no duplicates
-    std::vector<std::unordered_set<int> > adjacentIntsOfIntersection; 
+    std::vector<std::vector<pairSegIntID> > adjacentSegIntsOfInt; 
     
-    //
+    // Struct which stores what data needs to be highlighted on each draw
     HighlightedData hlData;
     
-    //
+    // Struct which stores essential coordinate data such as min lat/lon
     CoordData coordData;
     
-    //
+    // Map which keys the area of features to their index
     std::multimap<double, unsigned> areaOfFeatures;
     
-    //
+    // Vector which stores indexes of all streams on our map
     std::vector<unsigned> indexesOfStreams;
     
-    //
+    // Vector which stores vectors containing indexes of a certain building type
     std::vector<std::vector<unsigned> > indexesOfBuildingTypes;
     
-    //
+    // Vector which stores vector containing seg indexes of a certain road type
     std::vector<std::vector<std::pair<int, unsigned> > > segsOfStreetType;
     
-    //
+    // Unordered map which stores a wayOSMID's associated segments in key, value pairs
     std::unordered_map<OSMID, std::vector<int> > segsOfWayOSMID;
     
     // Unordered map which stores the node indexes of OSMIDs in key, value pairs
@@ -80,10 +82,10 @@ private:
     // Unordered map which stores the relation indexes of OSMIDs in key, value pairs
     std::unordered_map<OSMID, unsigned> relationIndexOfOSMID;
     
-    //String to store map_path
+    // String to store map_path
     std::string mapPath;
     
-    //Pointer to current dialog box displaying intersection info
+    // Pointer to current dialog box displaying intersection info
     GtkWidget* intersectionDialog;
     
 public:
@@ -124,7 +126,7 @@ public:
     void addSegToIntersection(const StreetSegmentIndex& segID, const IntersectionIndex& intID);
     
     // Adds adjacent intersection to set with all reachable intersections from main intersection
-    void addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
+    void addAdjacentPairSegIntIdToInt(const std::vector<pairSegIntID>& adjacentSegInts,
                                       const IntersectionIndex& mainIntID);
     
     // Adds a vector of segments that is to be highlighted
@@ -202,7 +204,7 @@ public:
     const std::vector<int>& getSegsOfIntersection(const IntersectionIndex& intID) const;
     
     // Returns vector containing IDs of all intersections reachable from a given intersection
-    const std::vector<int> getAdjacentIntsOfIntersection(const IntersectionIndex& intID) const;
+    const std::vector<pairSegIntID> getAdjacentSegIntIDsOfInt(const IntersectionIndex& intID) const;
     
     // Returns the cosine of the average latitude
     double getLatAspectRatio() const;
