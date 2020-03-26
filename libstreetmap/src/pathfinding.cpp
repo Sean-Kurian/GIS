@@ -12,7 +12,9 @@
 
 #include <queue>
 #include <unordered_map>
+#include <unordered_set>
 
+// Computes the time needed to drive down a given path 
 double compute_path_travel_time(const std::vector<StreetSegmentIndex>& path, 
                                 const double turn_penalty){
     
@@ -20,19 +22,18 @@ double compute_path_travel_time(const std::vector<StreetSegmentIndex>& path,
 
     double travel_time = 0; 
     InfoStreetSegment SSData, SSData2; 
-    for (int i = 0; i < path.size()-1; i++){
+    for (int i = 0; i < path.size() - 1; i++){
         SSData = getInfoStreetSegment(path[i]); 
-        SSData2 = getInfoStreetSegment(path[i+1]); 
+        SSData2 = getInfoStreetSegment(path[i + 1]); 
 
         travel_time += find_street_segment_travel_time(path[i]); 
-        if(SSData.streetID != SSData2.streetID){
+        if (SSData.streetID != SSData2.streetID)
             travel_time += turn_penalty; 
-        } 
     }
     travel_time += find_street_segment_travel_time(path[path.size() - 1]); 
     return travel_time; 
 }
-//length over walking speed
+// Computes the time needed to walk a given path at a given speed
 double compute_path_walking_time(const std::vector<StreetSegmentIndex>& path, 
                                  const double walking_speed, 
                                  const double turn_penalty){
@@ -48,18 +49,20 @@ double compute_path_walking_time(const std::vector<StreetSegmentIndex>& path,
         travel_time += find_street_segment_length(path[i]) / walking_speed; 
         if(SSData.streetID != SSData2.streetID){
             travel_time += turn_penalty; 
-        } 
+        }
     }
+    travel_time += find_street_segment_length(path[path.size() - 1]) / walking_speed;
     return travel_time; 
 }
 
+// Uses A* algorithm to find fastest path between 2 intersections
 std::vector<StreetSegmentIndex> find_path_between_intersections(
                                 const IntersectionIndex intersect_id_start,
                                 const IntersectionIndex intersect_id_end, 
                                 const double turn_penalty) {
     // Nodes to explore next
-    std::priority_queue<waveElem, std::vector<waveElem>, compare> openSet;
-    //
+    std::priority_queue<waveElem, std::vector<waveElem>, compare> toVisit;
+    // Stores nodes that have been visited so far
     std::unordered_map<unsigned, aStarNode*> visited;
     
     aStarNode baseNode(intersect_id_start, -1, -1, std::numeric_limits<double>::max());
@@ -72,10 +75,10 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
     double estTotalTime = distToEnd * 0.01 * 3.6;
     
     waveElem baseElem(&baseNode, -1, -1, 0, estTotalTime); 
-    openSet.push(baseElem);
-    while (!openSet.empty()) {
-        waveElem wave = openSet.top();  // Get next element
-        openSet.pop();                  // Remove from wavefront
+    toVisit.push(baseElem);
+    while (!toVisit.empty()) {
+        waveElem wave = toVisit.top();  // Get next element
+        toVisit.pop();                  // Remove from wavefront
         aStarNode* currNode = wave.node;
         if (currNode->intID == intersect_id_end) 
            return findPathTaken(visited, intersect_id_start, intersect_id_end);
@@ -103,7 +106,7 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
                 // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
                 estTotalTime = timeToNode + (distToEnd * 0.01 * 3.6);
                 // Add neighbour to open set
-                openSet.push(waveElem(toNode, currNode->intID, segIntID.first, timeToNode, estTotalTime));
+                toVisit.push(waveElem(toNode, currNode->intID, segIntID.first, timeToNode, estTotalTime));
             }
         }
     }
@@ -113,11 +116,90 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
     return failure;
 }
 
+// Uses A*  to find fastest path between 2 intersections with walking to a start point
 std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex>> find_path_with_walk_to_pickup(
                                 const IntersectionIndex start_intersection, 
                                 const IntersectionIndex end_intersection, 
                                 const double turn_penalty, 
                                 const double walking_speed, 
                                 const double walking_time_limit) {
+    std::vector<int> pathWalked;
+    std::vector<int> pathDriven;
+    // WALK
+    // Nodes to explore next
+    std::priority_queue<waveElem, std::vector<waveElem>, compare> walkToVisit;
+    // Stores nodes that have been visited so far
+    std::unordered_map<unsigned, aStarNode*> walkVisited;
+    // Stores the further intersections that can be walked to
+    std::unordered_map<double, aStarNode*> maxWalkableInts;
     
+    aStarNode baseNode(start_intersection, -1, -1, std::numeric_limits<double>::max());
+    walkVisited.insert(std::make_pair(start_intersection, &baseNode));
+    
+    double distToEnd = find_distance_between_two_points(std::make_pair(
+                            getIntersectionPosition(start_intersection),
+                            getIntersectionPosition(end_intersection)));
+    // Est time to end is distance / speed
+    double estTotalTime = distToEnd / walking_speed;
+    
+    waveElem baseElem(&baseNode, -1, -1, 0, estTotalTime); 
+    walkToVisit.push(baseElem);
+    while (!walkToVisit.empty()) {
+        waveElem wave = walkToVisit.top();  // Get next element
+        walkToVisit.pop();                  // Remove from wavefront
+        aStarNode* currNode = wave.node;
+        if (currNode->intID == end_intersection) {
+            pathWalked = findPathTaken(walkVisited, start_intersection, end_intersection);
+            std::vector<int> zeroVector;
+            return std::make_pair(pathWalked, zeroVector);
+        }
+
+        if (wave.timeToNode < currNode->bestTime) {
+            currNode->bestTime = wave.timeToNode;
+            currNode->parentInt = wave.parentInt;
+            currNode->parentEdge = wave.parentEdge;
+
+            std::vector<pairSegIntID> adjSegIntIDs = gData.getAdjacentSegIntIDsOfInt(currNode->intID);
+            for (const pairSegIntID& segIntID : adjSegIntIDs) {
+                aStarNode* toNode = getToNode(segIntID.second, walkVisited);
+                if (toNode == NULL) {
+                    toNode = new aStarNode(segIntID.second, currNode->intID, 
+                                           segIntID.first, 
+                                           std::numeric_limits<double>::max());
+                    walkVisited.insert(std::make_pair(segIntID.second, toNode));
+                }
+
+                double timeToNode = wave.timeToNode + gData.getTravelTimeOfSeg(segIntID.first)
+                                  + determineTurnPenalty(wave.parentEdge, segIntID.first, turn_penalty);
+                
+                if (timeToNode >= walking_time_limit) {
+                    distToEnd = find_distance_between_two_points(std::make_pair(
+                                        getIntersectionPosition(currNode->intID),
+                                        getIntersectionPosition(end_intersection)));
+                    estTotalTime = currNode->bestTime + (distToEnd * 0.01 * 3.6);
+                    maxWalkableInts.insert(std::make_pair(estTotalTime, currNode));
+                    continue;
+                }
+
+                distToEnd = find_distance_between_two_points(std::make_pair(
+                                        getIntersectionPosition(segIntID.second),
+                                        getIntersectionPosition(end_intersection)));
+                // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
+                estTotalTime = timeToNode + (distToEnd / walking_speed);
+                // Add neighbour to open set
+                walkToVisit.push(waveElem(toNode, currNode->intID, segIntID.first, timeToNode, estTotalTime));
+            }
+        }
+    }
+    
+    std::map<double, std::pair<std::vector<int>, std::vector<int>>> totalPaths;
+    for (const auto& maxInt : maxWalkableInts) {
+        pathWalked = findPathTaken(walkVisited, start_intersection, maxInt.second->intID);
+        double timeWalked = compute_path_walking_time(pathWalked, walking_speed, turn_penalty);
+        pathDriven = find_path_between_intersections(maxInt.second->intID, end_intersection, turn_penalty);
+        double timeDrove = compute_path_travel_time(pathDriven, turn_penalty);
+        double totalTime = timeWalked + timeDrove;
+        totalPaths.insert(std::make_pair(totalTime, std::make_pair(pathWalked, pathDriven)));
+    }
+    return totalPaths.begin()->second;
 }
