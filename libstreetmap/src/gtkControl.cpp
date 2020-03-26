@@ -5,6 +5,7 @@
 
 #include "gtkControl.h"
 #include "application.hpp"
+#include "drawMapObjects.h" 
 
 #include <regex>
 
@@ -112,9 +113,22 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             else {
                 std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
                 std::cout << "Path: \n";
+                int i = 0; 
                 for (const int& seg : path) {
+                    if (i < path.size()-1){
                     InfoStreetSegment SSData = getInfoStreetSegment(seg);
-                    std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
+                    InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
+                    //std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
+                        if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
+                            std::cout <<"Travel from " << getStreetName(SSData.streetID) << " to " 
+                                    << getStreetName(SSData2.streetID) << "\n"; 
+                        }
+                        else if (getStreetName(SSData.streetID) == getStreetName(SSData2.streetID)){
+                            std::cout <<"Head " << find_direction_between_intersections(std::make_pair(getIntersectionPosition
+                                    (SSData2.streetID), getIntersectionPosition(SSData.streetID)))<< "\n"; 
+                        }
+                    }
+                    i++; 
                 }
                 gData.addHighlightedSegs(path);
                 //Print out directions

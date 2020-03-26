@@ -71,6 +71,8 @@ void drawPaths(ezgl::renderer* rend, const double& pixelsPerMeter) {
     rend->set_line_dash(ezgl::line_dash::none);
 }
 
+
+
 // Draws the names of streets based on the visible size of a segment. Draws one way arrows
 void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter) {
     rend->set_horiz_text_just(ezgl::text_just::center);
