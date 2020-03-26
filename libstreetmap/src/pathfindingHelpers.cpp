@@ -20,7 +20,8 @@ aStarNode* getToNode(const IntersectionIndex& intID,
 // Reconstructs the path taken to get to the end
 std::vector<StreetSegmentIndex> findPathTaken(const std::unordered_map<unsigned, aStarNode*> visited, 
                                               const IntersectionIndex& startInt,
-                                              const IntersectionIndex& endInt) {
+                                              const IntersectionIndex& endInt,
+                                              const bool& clearMap) {
     unsigned current = endInt;
     std::vector<int> result;
     while (current != startInt) {
@@ -29,6 +30,9 @@ std::vector<StreetSegmentIndex> findPathTaken(const std::unordered_map<unsigned,
         current = itr->second->parentInt;
     }
     std::reverse(result.begin(), result.end());
+    if (clearMap)
+        for (auto& mapElem : visited)
+            delete mapElem->second;
     return result;
 }
 

@@ -81,7 +81,7 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
         toVisit.pop();                  // Remove from wavefront
         aStarNode* currNode = wave.node;
         if (currNode->intID == intersect_id_end) 
-           return findPathTaken(visited, intersect_id_start, intersect_id_end);
+           return findPathTaken(visited, intersect_id_start, intersect_id_end, true);
 
         if (wave.timeToNode < currNode->bestTime) {
             currNode->bestTime = wave.timeToNode;
@@ -116,13 +116,13 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
     return failure;
 }
 
-// Uses A*  to find fastest path between 2 intersections with walking to a start point
-std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex> > find_path_with_walk_to_pickup(
-                                const IntersectionIndex start_intersection, 
-                                const IntersectionIndex end_intersection, 
-                                const double turn_penalty, 
-                                const double walking_speed, 
-                                const double walking_time_limit) {
+// Uses A* to find fastest path between 2 intersections with walking to a start point
+std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex> > 
+find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection, 
+                              const IntersectionIndex end_intersection, 
+                              const double turn_penalty, 
+                              const double walking_speed, 
+                              const double walking_time_limit) {
     std::vector<int> pathWalked;
     std::vector<int> pathDriven;
     // WALK
@@ -149,7 +149,7 @@ std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex> > fin
         walkToVisit.pop();                  // Remove from wavefront
         aStarNode* currNode = wave.node;
         if (currNode->intID == end_intersection) {
-            pathWalked = findPathTaken(walkVisited, start_intersection, end_intersection);
+            pathWalked = findPathTaken(walkVisited, start_intersection, end_intersection, true);
             std::vector<int> zeroVector;
             return std::make_pair(pathWalked, zeroVector);
         }
@@ -194,12 +194,14 @@ std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex> > fin
     
     std::map<double, std::pair<std::vector<int>, std::vector<int>>> totalPaths;
     for (const auto& maxInt : maxWalkableInts) {
-        pathWalked = findPathTaken(walkVisited, start_intersection, maxInt.second->intID);
+        pathWalked = findPathTaken(walkVisited, start_intersection, maxInt.second->intID, false);
         double timeWalked = compute_path_walking_time(pathWalked, walking_speed, turn_penalty);
         pathDriven = find_path_between_intersections(maxInt.second->intID, end_intersection, turn_penalty);
         double timeDrove = compute_path_travel_time(pathDriven, turn_penalty);
         double totalTime = timeWalked + timeDrove;
         totalPaths.insert(std::make_pair(totalTime, std::make_pair(pathWalked, pathDriven)));
     }
+    for (auto& mapElem : walkVisited)
+            delete mapElem->second;
     return totalPaths.begin()->second;
 }
