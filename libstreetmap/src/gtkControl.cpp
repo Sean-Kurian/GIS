@@ -44,7 +44,6 @@ void connectDirectionButtons(ezgl::application* app) {
 
 //Callback function to find directions when direction button is pressed
 void findDirections(GtkWidget* , ezgl::application* app) {
-    std::cout << "Callback\n";
     const double TURN_PENALTY = 15.0;
     const IntersectionIndex UNDEFINED = -1;
     IntersectionIndex startIndex = UNDEFINED;
@@ -146,8 +145,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             return;
         }
     }
-    
-    std::cout << "Intersections obtained\n";    
+     
     //At this point, find directions between two intersections
     std::cout << "Starting Intersection: " << getIntersectionName(startIndex) << "\n";
     std::cout << "Destination Intersection: " << getIntersectionName(destinationIndex) << "\n";
@@ -182,6 +180,10 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                                                          TURN_PENALTY, walkingSpeed, walkingLimit);
             //Print out directions
             printWalkDirections({}, directions, app);
+            
+            //Highlight driving path
+            gData.addHighlightedSegs(path.second);
+            app->refresh_drawing();
         }
     }
 
