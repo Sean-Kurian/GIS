@@ -51,8 +51,8 @@ TEST(pathFindingTest) {
     }
 }
 
- Tests how the map stores its data
- Removed comparison function that was being used on compareMap
+// Tests how the map stores its data
+// Removed comparison function that was being used on compareMap
 TEST(MapComparitorTest) {
     std::multimap<std::string, unsigned> defaultMap;
     std::multimap<std::string, unsigned> compareMap;
