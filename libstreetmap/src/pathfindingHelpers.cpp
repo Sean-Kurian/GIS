@@ -5,6 +5,8 @@
 
 #include "pathfindingHelpers.h"
 
+#include <algorithm>
+
 //
 std::vector<StreetSegmentIndex> findPathTaken(const std::vector<aStarNode>& cameFrom,
                                               const IntersectionIndex& startInt,
@@ -15,6 +17,7 @@ std::vector<StreetSegmentIndex> findPathTaken(const std::vector<aStarNode>& came
         result.push_back(cameFrom[current].parentEdge);
         current = cameFrom[current].parentInt;
     }
+    std::reverse(result.begin(), result.end());
     return result;
 }
 

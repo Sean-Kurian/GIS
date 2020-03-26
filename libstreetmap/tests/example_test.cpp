@@ -18,6 +18,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+#include "pathfinding.h"
+#include "m1.h"
+
 #include <unittest++/UnitTest++.h>
 #include <iostream>
 #include <vector>
@@ -25,8 +29,30 @@
 #include <map>
 #include <algorithm>
 
-// Tests how the map stores its data
-// Removed comparison function that was being used on compareMap
+TEST(pathFindingTest) {
+    load_map("/cad2/ece297s/public/maps/toronto_canada.streets.bin");
+    
+    std::vector<int> segsOfInt = find_street_segments_of_intersection(35474);
+    std::cout << "Segs of start: \n";
+    for (const int& seg : segsOfInt) {
+        std::cout << "SegID: " << seg << "\n";
+    }
+    
+    std::vector<int> segsOfEnd = find_street_segments_of_intersection(70532);
+    std::cout << "Segs of end: \n";
+    for (const int& seg : segsOfEnd) {
+        std::cout << "SegID: " << seg << "\n";
+    }
+    
+    std::vector<int> result = find_path_between_intersections(35474, 70532, 0.00000000000000000);
+    std::cout << "Path: \n";
+    for (const int& seg : result) {
+        std::cout << "SegID: " << seg << "\n";
+    }
+}
+
+ Tests how the map stores its data
+ Removed comparison function that was being used on compareMap
 TEST(MapComparitorTest) {
     std::multimap<std::string, unsigned> defaultMap;
     std::multimap<std::string, unsigned> compareMap;

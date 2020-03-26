@@ -42,7 +42,6 @@ void closeIntersectionInfo(GtkDialog*, gint responseID, gpointer) {
             eraseIntersectionInfo(gData.getIntersectionInfoBox());
         }
     }
-    
 }
 
 //Removes any instances of "<unknown>" from an intersection name
@@ -110,8 +109,9 @@ std::string find_direction_between_intersections(std::pair<LatLon, LatLon> point
     
     double dLon = points.second.lon() - points.first.lon(); 
     
-    double y = sin(dLon)*cos(points.second.lat()); 
-    double x = cos(points.first.lat())*sin(points.second.lat()) - sin(points.first.lat())*cos(points.second.lat())*cos(dLon); \
+    double y = sin(dLon) * cos(points.second.lat()); 
+    double x = cos(points.first.lat()) * sin(points.second.lat()) 
+             - sin(points.first.lat()) * cos(points.second.lat()) * cos(dLon); \
 
     double brng = atan2(y,x); 
     

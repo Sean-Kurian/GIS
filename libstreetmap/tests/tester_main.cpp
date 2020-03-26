@@ -31,7 +31,7 @@ int main(int /*argc*/, char** /*argv*/) {
     //Run the unit tests
     int num_failures = 0;
     // Commented out because it was causing valgrind issues even on release conf
-    // num_failures = UnitTest::RunAllTests();
+//     num_failures = UnitTest::RunAllTests();
 
      return num_failures;
 }

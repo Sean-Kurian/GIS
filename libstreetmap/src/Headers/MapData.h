@@ -127,7 +127,7 @@ public:
     void addAdjacentIntToIntersection(const IntersectionIndex& adjacentIntID, 
                                       const IntersectionIndex& mainIntID);
     
-    //
+    // Adds a vector of segments that is to be highlighted
     void addHighlightedSegs(const std::vector<StreetSegmentIndex>& segs);
     
     // Adds an intersection that is to be highlighted
