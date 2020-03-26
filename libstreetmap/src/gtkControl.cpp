@@ -135,53 +135,16 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             
             //Otherwise highlight the intersection
             else {
-                gData.addHighlightedIntAtFront(destinationIndex);
-                gData.setDesintationHighlight(true);
-                directions.clear(); 
-                std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
-                std::cout << "Path: \n";
-                std::string dir1, dir2;  
-                int i = 0; 
-                for (const int& seg : path) {
-                    if (i < path.size()-2){
-                    InfoStreetSegment SSData = getInfoStreetSegment(seg);
-                    InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
-                    InfoStreetSegment SSData3 = getInfoStreetSegment(*(&seg + 2)); 
-                    //std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
-                        
-                    if (i == 0){
-                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
-                            getIntersectionPosition(SSData2.from))); 
-                        std::cout <<"Head "<< dir1 << " on " << getStreetName(SSData.streetID) <<"\n";
-                        directions.push_back("Head " + dir1 + " on " + getStreetName(SSData.streetID) + "\n"); 
-                    }
-                    if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
-                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
-                            getIntersectionPosition(SSData2.from))); 
-                        dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
-                            getIntersectionPosition(SSData3.from)));
-                        std::cout <<"Turn " << find_turn_direction(dir1, dir2) << " onto " 
-                             << getStreetName(SSData2.streetID) << "\n"; 
-                        directions.push_back("Turn " + find_turn_direction(dir1, dir2) + " onto " + getStreetName(SSData2.streetID) + "\n");
-                        std::cout <<"Head "<< dir1+dir2 << " on " << getStreetName(SSData2.streetID) <<"\n";
-                        directions.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n"); 
-                        }
-                    }
-                    i++; 
-                }
-                gData.addHighlightedSegs(path);
-                app->refresh_drawing();
-                //Print out directions
-                printDirections("Driving directions go here", app);
+                gData.addHighlightedIntAtFront(destinationIndex); 
+                gData.setDesintationHighlight(true); 
             }
-        }
-        
+        }  
         //Otherwise invalid search entered
-        else {
+        else{
             popUpErrorMessage("Invalid destination intersection entered", app);
             return;
         }
-    }
+    
         
     //At this point, find directions between two intersections
     std::cout << "Starting Intersection: " << getIntersectionName(startIndex) << "\n";
@@ -222,42 +185,44 @@ void findDirections(GtkWidget* , ezgl::application* app) {
 
     //Only regular driving directions are requested
     else {
-        directions.clear(); 
-        std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, TURN_PENALTY);
-        std::cout << "Path: \n";
-        std::string dir1, dir2;  
-        int i = 0; 
-        for (const int& seg : path) {
-            if (i < path.size()-1){
-            InfoStreetSegment SSData = getInfoStreetSegment(seg);
-            InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
-            //std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
-
-            if (i == 0){
-                dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
-                    getIntersectionPosition(SSData.to))); 
-                std::cout <<"Head "<< dir1 << " on " << getStreetName(SSData.streetID) <<"\n";
-                directions.push_back("Head " + dir1 + " on " + getStreetName(SSData.streetID) + "\n"); 
-            }
-            if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
-                dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
-                    getIntersectionPosition(SSData.to))); 
-                dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
-                    getIntersectionPosition(SSData2.to)));
-                std::cout <<"Turn " << find_turn_direction(dir1, dir2) << " onto " 
-                     << getStreetName(SSData2.streetID) << "\n"; 
-                directions.push_back("Turn " + find_turn_direction(dir1, dir2) + " onto " + getStreetName(SSData2.streetID) + "\n");
-                std::cout <<"Head "<< dir2 << " on " << getStreetName(SSData2.streetID) <<"\n";
-                directions.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n"); 
+                directions.clear(); 
+                std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
+                std::cout << "Path: \n";
+                std::string dir1, dir2;  
+                int i = 0; 
+                for (const int& seg : path) {
+                    if (i < path.size()-3){
+                    InfoStreetSegment SSData = getInfoStreetSegment(seg);
+                    InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
+                    InfoStreetSegment SSData3 = getInfoStreetSegment(*(&seg + 2)); 
+                    //std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
+                        
+                    if (i == 0){
+                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                            getIntersectionPosition(SSData2.from))); 
+                        std::cout <<"Head "<< dir1 << " on " << getStreetName(SSData.streetID) <<"\n";
+                        directions.push_back("Head " + dir1 + " on " + getStreetName(SSData.streetID) + "\n"); 
+                    }
+                    if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
+                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                            getIntersectionPosition(SSData2.from))); 
+                        dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
+                            getIntersectionPosition(SSData3.from)));
+                        std::cout <<"Turn " << find_turn_direction(dir1, dir2) << " onto " 
+                             << getStreetName(SSData2.streetID) << "\n"; 
+                        directions.push_back("Turn " + find_turn_direction(dir1, dir2) + " onto " + getStreetName(SSData2.streetID) + "\n");
+                        std::cout <<"Head "<< dir2 << " on " << getStreetName(SSData2.streetID) <<"\n";
+                        directions.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n"); 
+                        }
+                    }
+                    i++; 
                 }
+                gData.addHighlightedSegs(path);
+                app->refresh_drawing();
+                //Print out directions
+                printDirections(directions, app);
             }
-            i++; 
         }
-        gData.addHighlightedSegs(path);
-        app->refresh_drawing();
-        //Print out directions
-        printDirections(directions, app);
-    }
         
 }
 
