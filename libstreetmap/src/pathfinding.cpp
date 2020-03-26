@@ -171,7 +171,7 @@ std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex> > fin
 
                 double timeToNode = wave.timeToNode + gData.getTravelTimeOfSeg(segIntID.first)
                                   + determineTurnPenalty(wave.parentEdge, segIntID.first, turn_penalty);
-                
+                //Case for time to node greater than walking time limit
                 if (timeToNode >= walking_time_limit) {
                     distToEnd = find_distance_between_two_points(std::make_pair(
                                         getIntersectionPosition(currNode->intID),
