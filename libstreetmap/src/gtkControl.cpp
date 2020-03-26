@@ -153,7 +153,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             //use (startIndex, destinationIndex, TURN_PENALTY, walkingSpeed, walkingLimit) as arguments for call
 
             //Print out directions
-            printDirections("Walk + Drive directions go here", app);
+            printDirections(directions, app);
         }
     }
 
@@ -193,7 +193,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
         gData.addHighlightedSegs(path);
         app->refresh_drawing();
         //Print out directions
-        printDirections("Driving directions go here", app);
+        printDirections(directions, app);
     }
         
 }
