@@ -61,7 +61,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
     //Compare to see if different intersection is entered in the search bars, if so, a search is required
     if (gData.isStartHighlighted()) {
         startIndex = gData.getHLData().highlightedInts[1];
-        if (getIntersectionName(startIndex) != startSearch) {
+        if (removeUnknown(getIntersectionName(startIndex)) != startSearch) {
             startSearchRequired = true;
         }
     } else if (!gData.isStartHighlighted()) {
@@ -70,7 +70,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
     
     if (gData.isDestinationHighlighted()) {
         destinationIndex = gData.getHLData().highlightedInts[0];
-        if (getIntersectionName(destinationIndex) != destinationSearch) {
+        if (removeUnknown(getIntersectionName(destinationIndex)) != destinationSearch) {
             destinationSearchRequired = true;
         }
     } else if (!gData.isDestinationHighlighted()) {
@@ -242,6 +242,7 @@ void showDirectionPanel(GtkWidget* directionPanelButton, ezgl::application* app)
     if (!gData.getHLData().highlightedInts.empty()) {
         IntersectionIndex intersectionID = gData.getHLData().highlightedInts.front();
         std::string intersectionName = getIntersectionName(intersectionID);
+        intersectionName = removeUnknown(intersectionName);
         
         GtkEntry* destinationSearchEntry = (GtkEntry*) app->get_object("secondSearchBar");
         gtk_entry_set_text(destinationSearchEntry, intersectionName.c_str());
