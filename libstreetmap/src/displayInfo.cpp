@@ -154,7 +154,9 @@ void displayHelpScreen(GtkWidget* , ezgl::application* app) {
     content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
     label = gtk_label_new("Use \"and\" or \"&\" to separate street names when typing in intersections\n\n"
                           "When the direction panel is open, click an intersection on the map to\nautomatically input "
-                          "its name into the active search entry bar");
+                          "its name into the active search entry bar\n\n"
+                          "Use the Alt key to toggle night mode on/off\n\n"
+                          "Hold down the scroll wheel or use the arrow keys to pan");
     gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_CENTER);
     
     //Show the dialog box, pause execution of the application until screen is closed
