@@ -65,8 +65,8 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
     // Stores nodes that have been visited so far
     std::unordered_map<unsigned, aStarNode*> visited;
     
-    aStarNode baseNode(intersect_id_start, -1, -1, std::numeric_limits<double>::max());
-    visited.insert(std::make_pair(intersect_id_start, &baseNode));
+    aStarNode* baseNode = new aStarNode(intersect_id_start, -1, -1, std::numeric_limits<double>::max());
+    visited.insert(std::make_pair(intersect_id_start, baseNode));
     
     double distToEnd = find_distance_between_two_points(std::make_pair(
                             getIntersectionPosition(intersect_id_start),
@@ -74,7 +74,7 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
     // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
     double estTotalTime = distToEnd * 0.01 * 3.6;
     
-    waveElem baseElem(&baseNode, -1, -1, 0, estTotalTime); 
+    waveElem baseElem(baseNode, -1, -1, 0, estTotalTime); 
     toVisit.push(baseElem);
     while (!toVisit.empty()) {
         waveElem wave = toVisit.top();  // Get next element
@@ -133,8 +133,8 @@ find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection,
     // Stores the further intersections that can be walked to
     std::unordered_map<double, aStarNode*> maxWalkableInts;
     
-    aStarNode baseNode(start_intersection, -1, -1, std::numeric_limits<double>::max());
-    walkVisited.insert(std::make_pair(start_intersection, &baseNode));
+    aStarNode* baseNode = new aStarNode(start_intersection, -1, -1, std::numeric_limits<double>::max());
+    walkVisited.insert(std::make_pair(start_intersection, baseNode));
     
     double distToEnd = find_distance_between_two_points(std::make_pair(
                             getIntersectionPosition(start_intersection),
@@ -142,7 +142,7 @@ find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection,
     // Est time to end is distance / speed
     double estTotalTime = distToEnd / walking_speed;
     
-    waveElem baseElem(&baseNode, -1, -1, 0, estTotalTime); 
+    waveElem baseElem(baseNode, -1, -1, 0, estTotalTime); 
     walkToVisit.push(baseElem);
     while (!walkToVisit.empty()) {
         waveElem wave = walkToVisit.top();  // Get next element
@@ -202,6 +202,6 @@ find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection,
         totalPaths.insert(std::make_pair(totalTime, std::make_pair(pathWalked, pathDriven)));
     }
     for (auto& mapElem : walkVisited)
-            delete mapElem.second;
+        delete mapElem.second;
     return totalPaths.begin()->second;
 }
