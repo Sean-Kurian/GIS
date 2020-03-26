@@ -45,10 +45,13 @@ std::string find_turn_direction(std::string dir1, std::string dir2);
 void displayHelpScreen(GtkWidget* , ezgl::application* app);
 
 //Prints out directions to direction panel
-void printDirections(std::string directions, ezgl::application* app);
+void printDirections(std::vector<std::string> directionsVector, ezgl::application* app);
 
 //Clears the directions label on the direction panel
 void clearDirections(ezgl::application* app);
+
+//Combines the vector of strings representing directions into one string for display on GUI
+std::string combineDirections(std::vector<std::string> directionsVector);
 
 
 #endif /* DISPLAYINFO_H */

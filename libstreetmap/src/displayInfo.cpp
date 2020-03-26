@@ -210,11 +210,12 @@ void displayHelpScreen(GtkWidget* , ezgl::application* app) {
 }
 
 //Prints out directions to direction panel
-void printDirections(std::string directions, ezgl::application* app) {
+void printDirections(std::vector<std::string> directionsVector, ezgl::application* app) {
     GtkLabel* directionsLabel = (GtkLabel*) app->get_object("directionsLabel");
     gtk_label_set_justify(directionsLabel, GTK_JUSTIFY_CENTER);
     gtk_label_set_line_wrap(directionsLabel, true);
     gtk_label_set_max_width_chars(directionsLabel, 10);
+    std::string directions = combineDirections(directionsVector);
     gtk_label_set_text(directionsLabel, directions.c_str());
 }
 
@@ -222,4 +223,13 @@ void printDirections(std::string directions, ezgl::application* app) {
 void clearDirections(ezgl::application* app) {
     GtkLabel* directionsLabel = (GtkLabel*) app->get_object("directionsLabel");
     gtk_label_set_text(directionsLabel, "");
+}
+
+//Combines the vector of strings representing directions into one string for display on GUI
+std::string combineDirections(std::vector<std::string> directionsVector) {
+    std::string directions = "Driving Directions:\n\n";
+    for (int i = 0; i < directionsVector.size(); ++i) {
+        directions += directionsVector[i] + "\n";
+    }
+    return directions;
 }
