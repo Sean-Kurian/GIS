@@ -113,17 +113,25 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             else {
                 std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
                 std::cout << "Path: \n";
+                std::string dir1, dir2; 
                 int i = 0; 
                 for (const int& seg : path) {
                     if (i < path.size()-1){
                     InfoStreetSegment SSData = getInfoStreetSegment(seg);
                     InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
                     //std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
-                        if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
-                            std::cout <<"Travel from " << getStreetName(SSData.streetID) << " to " 
-                                    << getStreetName(SSData2.streetID) << "\n"; 
-                            std::cout <<"Head "<< find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
-                                    getIntersectionPosition(SSData2.to))) << " on " << getStreetName(SSData2.streetID) <<"\n"; 
+                        
+                    if (i == 0){
+                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
+                            getIntersectionPosition(SSData.to))); 
+                        std::cout <<"Head "<< dir1 << " on " << getStreetName(SSData.streetID) <<"\n";  
+                    }
+                    if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
+                        dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
+                            getIntersectionPosition(SSData2.to)));
+                        std::cout <<"Travel from " << getStreetName(SSData.streetID) << " to " 
+                             << getStreetName(SSData2.streetID) << "\n"; 
+                        std::cout <<"Head "<< dir2 << " on " << getStreetName(SSData2.streetID) <<"\n"; 
                         }
                     }
                     i++; 
