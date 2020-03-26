@@ -134,6 +134,45 @@ std::string find_direction_between_intersections(std::pair<LatLon, LatLon> point
     }
 }
 
+std::string find_turn_direction(std::string dir1, std::string dir2){
+    if (dir1 == "North"){
+        if (dir2 == "West"){
+            return "Left"; 
+        }
+        if (dir2 == "East"){
+            return "Right"; 
+        }
+    }
+    
+    if (dir1 == "South"){
+        if (dir2 == "West"){
+            return "Right"; 
+        }
+        if (dir2 == "East"){
+            return "Left"; 
+        }
+    }
+    
+    if (dir1 == "West"){
+        if (dir2 == "North"){
+            return "Right"; 
+        }
+        if (dir2 == "South"){
+            return "Left"; 
+        }
+    }
+
+    if (dir1 == "East"){
+        if (dir2 == "South"){
+            return "Right"; 
+        }
+        if (dir2 == "North"){
+            return "Left"; 
+        }
+    }    
+    
+}
+
 //Displays help screen
 void displayHelpScreen(GtkWidget* , ezgl::application* app) {
     GObject* window;

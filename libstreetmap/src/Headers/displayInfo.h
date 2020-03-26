@@ -39,6 +39,8 @@ void popUpErrorMessage(std::string message, ezgl::application* app);
 
 std::string find_direction_between_intersections(std::pair<LatLon, LatLon> points); 
 
+std::string find_turn_direction(std::string dir1, std::string dir2); 
+
 //Displays help screen
 void displayHelpScreen(GtkWidget* , ezgl::application* app);
 
