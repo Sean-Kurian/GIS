@@ -32,7 +32,7 @@ std::vector<StreetSegmentIndex> findPathTaken(const std::unordered_map<unsigned,
     std::reverse(result.begin(), result.end());
     if (clearMap)
         for (auto& mapElem : visited)
-            delete mapElem->second;
+            delete mapElem.second;
     return result;
 }
 
