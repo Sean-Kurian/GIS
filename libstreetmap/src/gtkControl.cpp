@@ -44,123 +44,158 @@ void connectDirectionButtons(ezgl::application* app) {
 
 //Callback function to find directions when direction button is pressed
 void findDirections(GtkWidget* , ezgl::application* app) {
-    //Determine the start and destination intersections being searched for
+    const double TURN_PENALTY = 15.0;
+    const IntersectionIndex UNDEFINED = -1;
+    IntersectionIndex startIndex = UNDEFINED;
+    IntersectionIndex destinationIndex = UNDEFINED;
+    bool startSearchRequired = false;
+    bool destinationSearchRequired = false;
+    
     GtkEntry* startSearchEntry = (GtkEntry*) app->get_object("searchBar");
     GtkEntry* destinationSearchEntry = (GtkEntry*) app->get_object("secondSearchBar");
     std::string startSearch = gtk_entry_get_text(startSearchEntry);
     std::string destinationSearch = gtk_entry_get_text(destinationSearchEntry);
     std::vector<std::string> directions; 
     
-    //Ensure intersections are being searched for (each entry has an "&" or "and")
-    if ((startSearch.find("&") != std::string::npos || startSearch.find("and") != std::string::npos) &&
-            (destinationSearch.find("&") != std::string::npos || destinationSearch.find("and") != std::string::npos)) {
-        //Format the searches
-        startSearch = parseIntersectionSearch(startSearch);
-        destinationSearch = parseIntersectionSearch(destinationSearch);
-        
-        //Find the intersection indexes
-        IntersectionIndex startIndex = find_intersection_from_name(startSearch);
-        IntersectionIndex destinationIndex = find_intersection_from_name(destinationSearch);
-        const double TURN_PENALTY = 15.0;
-        
-        //Alert users if any intersections are not found
-        if (startIndex == -1) {
-            popUpErrorMessage("Starting intersection not found", app);
+    //Attempt to assign start and destination based on the current highlighted intersections
+    //Compare to see if different intersection is entered in the search bars, if so, a search is required
+    if (gData.isStartHighlighted()) {
+        startIndex = gData.getHLData().highlightedInts[1];
+        if (getIntersectionName(startIndex) != startSearch) {
+            startSearchRequired = true;
         }
-        else if (destinationIndex == -1) {
-            popUpErrorMessage("Destination intersection not found", app);
+    }
+    if (gData.isDestinationHighlighted()) {
+        destinationIndex = gData.getHLData().highlightedInts[0];
+        if (getIntersectionName(destinationIndex) != destinationSearch) {
+            destinationSearchRequired = true;
+        }
+    }
+
+    //If a start search needs to be performed, ensure intersections are being searched for (each entry has an "&" or "and")
+    if (startSearchRequired) {
+        if (startSearch.find("&") != std::string::npos || startSearch.find("and") != std::string::npos) {
+
+            //Format the searches
+            startSearch = parseIntersectionSearch(startSearch);
+
+            //Find the intersection index
+            startIndex = find_intersection_from_name(startSearch);
+
+            //Alert users if the intersection is not found
+            if (startIndex == UNDEFINED) {
+                popUpErrorMessage("Starting intersection not found", app);
+                return;
+            }
         }
         
-        //Otherwise, determine a path between two intersections
-        // This is where find path would go
+        //Otherwise, invalid search entered
         else {
-            std::cout << "Starting Intersection: " << getIntersectionName(startIndex) << "\n";
-            std::cout << "Destination Intersection: " << getIntersectionName(destinationIndex) << "\n";
-            
-            std::cout << "Direction: " << find_direction_between_intersections(std::make_pair(getIntersectionPosition(startIndex), 
-                    getIntersectionPosition(destinationIndex))) << "\n"; 
-            
-            //Determine if walk + drive directions requested
-            GtkToggleButton* walkToggle = (GtkToggleButton*) app->get_object("walkToggle");
-            if (gtk_toggle_button_get_active(walkToggle)) {
-                const int MIN_TO_SEC = 60;
-                //Attempt to read in walk parameters
-                GtkEntry* walkingSpeedEntry = (GtkEntry*) app->get_object("walkingSpeed");
-                GtkEntry* walkingLimitEntry = (GtkEntry*) app->get_object("walkingLimit");
-                std::string walkingSpeedText = gtk_entry_get_text(walkingSpeedEntry);
-                std::string walkingLimitText = gtk_entry_get_text(walkingLimitEntry);
-                
-                double walkingSpeed = atof(walkingSpeedText.c_str());
-                double walkingLimit = atof(walkingLimitText.c_str()) * MIN_TO_SEC;
-                
-                if (walkingSpeed == 0) {
-                    popUpErrorMessage("Invalid walking speed", app);
-                }
-                else if (walkingLimit == 0) {
-                    popUpErrorMessage("Invalid walking time limit", app);
-                }
-                else {
-                    std::cout << "Walking speed: " << walkingSpeed << " m/s\n";
-                    std::cout << "Walking limit: " << walkingLimit << " sec\n";
-                    //PUT FIND PATH WALK + DRIVE ALGORITHM CALL HERE
-                    //use (startIndex, destinationIndex, TURN_PENALTY, walkingSpeed, walkingLimit) as arguments for call
-                    
-                    //Print out directions
-                    printDirections("Walk + Drive directions go here", app);
-                }
-            }
-            
-            //Only regular driving directions are requested
-            else {
-                directions.clear(); 
-                std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
-                std::cout << "Path: \n";
-                std::string dir1, dir2;  
-                int i = 0; 
-                for (const int& seg : path) {
-                    if (i < path.size()-1){
-                    InfoStreetSegment SSData = getInfoStreetSegment(seg);
-                    InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
-                    //std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
-                        
-                    if (i == 0){
-                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
-                            getIntersectionPosition(SSData.to))); 
-                        std::cout <<"Head "<< dir1 << " on " << getStreetName(SSData.streetID) <<"\n";
-                        directions.push_back("Head " + dir1 + " on " + getStreetName(SSData.streetID) + "\n"); 
-                    }
-                    if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
-                        dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
-                            getIntersectionPosition(SSData.to))); 
-                        dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
-                            getIntersectionPosition(SSData2.to)));
-                        std::cout <<"Turn " << find_turn_direction(dir1, dir2) << " onto " 
-                             << getStreetName(SSData2.streetID) << "\n"; 
-                        directions.push_back("Turn " + find_turn_direction(dir1, dir2) + " onto " + getStreetName(SSData2.streetID) + "\n");
-                        std::cout <<"Head "<< dir2 << " on " << getStreetName(SSData2.streetID) <<"\n";
-                        directions.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n"); 
-                        }
-                    }
-                    i++; 
-                }
-                gData.addHighlightedSegs(path);
-                app->refresh_drawing();
-                //Print out directions
-                printDirections("Driving directions go here", app);
-            }
+            popUpErrorMessage("Invalid starting intersection entered", app);
+            return;
         }
     }
     
-    //Otherwise, display error message
-    else {
-        //Determine which entry is invalid
-        if (startSearch.find("&") == std::string::npos && startSearch.find("and") == std::string::npos) {
-            popUpErrorMessage("Invalid starting intersection entered", app);
+    //If a start search needs to be performed, ensure intersections are being searched for (each entry has an "&" or "and")
+    if (destinationSearchRequired) {
+        if (destinationSearch.find("&") != std::string::npos || destinationSearch.find("and") != std::string::npos) {
+            
+            //Format the searches
+            destinationSearch = parseIntersectionSearch(destinationSearch);
+            
+            //Find the intersection index
+            destinationIndex = find_intersection_from_name(destinationSearch);
+            
+            //Alert users if the intersection is not found
+            if (destinationIndex == UNDEFINED) {
+                popUpErrorMessage("Destination intersection not found", app);
+                return;
+            }
         }
+        
+        //Otherwise invalid search entered
         else {
             popUpErrorMessage("Invalid destination intersection entered", app);
+            return;
         }
     }
+        
+    //At this point, find directions between two intersections
+    std::cout << "Starting Intersection: " << getIntersectionName(startIndex) << "\n";
+    std::cout << "Destination Intersection: " << getIntersectionName(destinationIndex) << "\n";
+
+    std::cout << "Direction: " << find_direction_between_intersections(std::make_pair(getIntersectionPosition(startIndex), 
+            getIntersectionPosition(destinationIndex))) << "\n"; 
+
+    //Determine if walk + drive directions requested
+    GtkToggleButton* walkToggle = (GtkToggleButton*) app->get_object("walkToggle");
+    if (gtk_toggle_button_get_active(walkToggle)) {
+        const int MIN_TO_SEC = 60;
+        //Attempt to read in walk parameters
+        GtkEntry* walkingSpeedEntry = (GtkEntry*) app->get_object("walkingSpeed");
+        GtkEntry* walkingLimitEntry = (GtkEntry*) app->get_object("walkingLimit");
+        std::string walkingSpeedText = gtk_entry_get_text(walkingSpeedEntry);
+        std::string walkingLimitText = gtk_entry_get_text(walkingLimitEntry);
+
+        double walkingSpeed = atof(walkingSpeedText.c_str());
+        double walkingLimit = atof(walkingLimitText.c_str()) * MIN_TO_SEC;
+
+        if (walkingSpeed == 0) {
+            popUpErrorMessage("Invalid walking speed", app);
+        }
+        else if (walkingLimit == 0) {
+            popUpErrorMessage("Invalid walking time limit", app);
+        }
+        else {
+            std::cout << "Walking speed: " << walkingSpeed << " m/s\n";
+            std::cout << "Walking limit: " << walkingLimit << " sec\n";
+            //PUT FIND PATH WALK + DRIVE ALGORITHM CALL HERE
+            //use (startIndex, destinationIndex, TURN_PENALTY, walkingSpeed, walkingLimit) as arguments for call
+
+            //Print out directions
+            printDirections("Walk + Drive directions go here", app);
+        }
+    }
+
+    //Only regular driving directions are requested
+    else {
+        directions.clear(); 
+        std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
+        std::cout << "Path: \n";
+        std::string dir1, dir2;  
+        int i = 0; 
+        for (const int& seg : path) {
+            if (i < path.size()-1){
+            InfoStreetSegment SSData = getInfoStreetSegment(seg);
+            InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
+            //std::cout << "Seg ID: " << seg << " Street: " << getStreetName(SSData.streetID) << "\n";
+
+            if (i == 0){
+                dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                    getIntersectionPosition(SSData.to))); 
+                std::cout <<"Head "<< dir1 << " on " << getStreetName(SSData.streetID) <<"\n";
+                directions.push_back("Head " + dir1 + " on " + getStreetName(SSData.streetID) + "\n"); 
+            }
+            if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)){
+                dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                    getIntersectionPosition(SSData.to))); 
+                dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
+                    getIntersectionPosition(SSData2.to)));
+                std::cout <<"Turn " << find_turn_direction(dir1, dir2) << " onto " 
+                     << getStreetName(SSData2.streetID) << "\n"; 
+                directions.push_back("Turn " + find_turn_direction(dir1, dir2) + " onto " + getStreetName(SSData2.streetID) + "\n");
+                std::cout <<"Head "<< dir2 << " on " << getStreetName(SSData2.streetID) <<"\n";
+                directions.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n"); 
+                }
+            }
+            i++; 
+        }
+        gData.addHighlightedSegs(path);
+        app->refresh_drawing();
+        //Print out directions
+        printDirections("Driving directions go here", app);
+    }
+        
 }
 
 //Callback function to show direction panel
