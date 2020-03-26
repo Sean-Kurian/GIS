@@ -29,12 +29,12 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
                                  const double turn_penalty); 
 
 // Uses A* to find fastest path between 2 intersections with walking to a start point
-std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex> > find_path_with_walk_to_pickup(
-                                 const IntersectionIndex start_intersection, 
-                                 const IntersectionIndex end_intersection, 
-                                 const double turn_penalty, 
-                                 const double walking_speed, 
-                                 const double walking_time_limit); 
+std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex> > 
+find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection, 
+                               const IntersectionIndex end_intersection, 
+                               const double turn_penalty, 
+                               const double walking_speed, 
+                               const double walking_time_limit); 
 
 #endif /* PATHFINDING_H */
 

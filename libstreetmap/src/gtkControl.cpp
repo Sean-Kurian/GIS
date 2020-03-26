@@ -176,7 +176,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             std::cout << "Walking speed: " << walkingSpeed << " m/s\n";
             std::cout << "Walking limit: " << walkingLimit << " sec\n";
             std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex>> 
-                    path = find_path_with_walk_to_pickup(startIndex, destinationIndex, 
+                    path = find_path_with_walk_to_pick_up(startIndex, destinationIndex, 
                                                          TURN_PENALTY, walkingSpeed, walkingLimit);
             //Print out directions
             printWalkDirections({}, directions, app);

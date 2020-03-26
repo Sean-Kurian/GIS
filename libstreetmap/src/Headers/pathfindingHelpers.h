@@ -55,7 +55,8 @@ aStarNode* getToNode(const IntersectionIndex& intID,
 // Reconstructs the path taken to get to the end 
 std::vector<StreetSegmentIndex> findPathTaken(const std::unordered_map<unsigned, aStarNode*> visited, 
                                               const IntersectionIndex& startInt,
-                                              const IntersectionIndex& endInt);
+                                              const IntersectionIndex& endInt,
+                                              const bool& clearMap);
 
 // Determines if there was a turn and returns how much it should cost if there was
 double determineTurnPenalty(const StreetSegmentIndex& fromEdge, 
