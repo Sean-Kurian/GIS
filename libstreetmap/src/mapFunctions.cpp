@@ -56,7 +56,7 @@ double find_street_segment_length(int street_segment_id) {
 
 // Returns the travel time to drive a street segment in seconds 
 double find_street_segment_travel_time(int street_segment_id) {
-    return gData.getTravelTimeOfSegment(street_segment_id);
+    return gData.getTravelTimeOfSeg(street_segment_id);
 }
 
 // Returns the nearest intersection to the given position by checking distance to

@@ -8,18 +8,46 @@
 #include <algorithm>
 
 //
-std::vector<StreetSegmentIndex> findPathTaken(const std::vector<aStarNode>& cameFrom,
+aStarNode* getToNode(const IntersectionIndex& intID, 
+                     const std::unordered_map<unsigned, aStarNode*>& visited) {
+    auto itr = visited.find(intID);
+    if (itr == visited.end())
+        return NULL;
+    else
+        return itr->second;
+}
+
+//
+std::vector<StreetSegmentIndex> findPathTaken(const std::unordered_map<unsigned, aStarNode*> visited, 
                                               const IntersectionIndex& startInt,
                                               const IntersectionIndex& endInt) {
-    int current = endInt;
+    unsigned current = endInt;
     std::vector<int> result;
     while (current != startInt) {
-        result.push_back(cameFrom[current].parentEdge);
-        current = cameFrom[current].parentInt;
+        auto itr = visited.find(current);
+        result.push_back(itr->second->parentEdge);
+        current = itr->second->parentInt;
     }
     std::reverse(result.begin(), result.end());
     return result;
 }
+
+//
+//std::vector<StreetSegmentIndex> findPathTakenx(const std::vector<aStarNodex>& cameFrom,
+//                                              const IntersectionIndex& startInt,
+//                                              const IntersectionIndex& endInt) {
+//    
+//    
+//    
+//    int current = endInt;
+//    std::vector<int> result;
+//    while (current != startInt) {
+//        result.push_back(cameFrom[current].parentEdge);
+//        current = cameFrom[current].parentInt;
+//    }
+//    std::reverse(result.begin(), result.end());
+//    return result;
+//}
 
 //
 double determineTurnPenalty(const StreetSegmentIndex& fromEdge,

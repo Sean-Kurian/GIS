@@ -11,6 +11,7 @@
 #include "math.h"
 
 #include <queue>
+#include <unordered_map>
 
 double compute_path_travel_time(const std::vector<StreetSegmentIndex>& path, 
                                 const double turn_penalty){
@@ -57,56 +58,104 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
                                 const IntersectionIndex intersect_id_start,
                                 const IntersectionIndex intersect_id_end, 
                                 const double turn_penalty) {
-    std::vector<aStarNode> cameFrom;
-    cameFrom.resize(getNumIntersections());
+    // Nodes to explore next
+    std::priority_queue<waveElem, std::vector<waveElem>, compare> openSet;
+    //
+    std::unordered_map<unsigned, aStarNode*> visited;
     
-    std::priority_queue<aStarNode, std::vector<aStarNode>, compare> openSet;
-    aStarNode baseNode(intersect_id_start, -1, -1, 0, 0);
-    openSet.push(baseNode);
-    cameFrom[intersect_id_start].intID = intersect_id_start;
+    aStarNode baseNode(intersect_id_start, -1, -1, std::numeric_limits<double>::max());
+    visited.insert(std::make_pair(intersect_id_start, &baseNode));
     
+    double distToEnd = find_distance_between_two_points(std::make_pair(
+                            getIntersectionPosition(intersect_id_start),
+                            getIntersectionPosition(intersect_id_end)));
+    // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
+    double estTotalTime = distToEnd * 0.01 * 3.6;
+    
+    waveElem baseElem(&baseNode, -1, -1, 0, estTotalTime); 
+    openSet.push(baseElem);
     while (!openSet.empty()) {
-        aStarNode currNode = openSet.top();
+        waveElem wave = openSet.top();  // Get next element
+        openSet.pop();                  // Remove from wavefront
+        aStarNode* currNode = wave.node;
+        if (currNode->intID == intersect_id_end) 
+           return findPathTaken(visited, intersect_id_start, intersect_id_end);
         
-//        std::cout << "Checking intersection: " << currNode.intID << "\n";
-        
-        if (currNode.intID == intersect_id_end) {
-            // FIND PATH TAKEN
-            return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
-        }
-        openSet.pop();
-        std::vector<pairSegIntID> adjSegIntIDs = gData.getAdjacentSegIntIDsOfInt(currNode.intID);
-        std::vector<int> segsOfInt = gData.getSegsOfIntersection(currNode.intID);
-        
-        for (const pairSegIntID& segIntID : adjSegIntIDs) {
-            InfoStreetSegment SSData = getInfoStreetSegment(segIntID.first);
+        if (wave.timeToNode < currNode->bestTime) {
+            currNode->bestTime = wave.timeToNode;
+            currNode->parentInt = wave.parentInt;
+            currNode->parentEdge = wave.parentEdge;
+            
+            std::vector<pairSegIntID> adjSegIntIDs = gData.getAdjacentSegIntIDsOfInt(currNode->intID);
+            for (const pairSegIntID& segIntID : adjSegIntIDs) {
+                
+                aStarNode* toNode = getToNode(segIntID.second, visited);
+                if (toNode == NULL) {
+                    toNode = new aStarNode(segIntID.second, currNode->intID, 
+                                           segIntID.first, 
+                                           std::numeric_limits<double>::max());
+                    visited.insert(std::make_pair(segIntID.second, toNode));
+                }
 
-            if (segIntID.second == intersect_id_end) {
-                cameFrom[segIntID.second].parentEdge = segIntID.first;
-                cameFrom[segIntID.second].parentInt = currNode.intID;
-                return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
-            }
-            
-            double segTravelTime = gData.getTravelTimeOfSegment(segIntID.first);
-            double turnPenalty = determineTurnPenalty(currNode.parentEdge, segIntID.first, turn_penalty);
-            double timeToInt = segTravelTime + currNode.timeToNode + turnPenalty;
-            
-            // New fastest way to this node
-            if (timeToInt < cameFrom[segIntID.second].timeToNode) {
-                cameFrom[segIntID.second].intID = segIntID.second;
-                cameFrom[segIntID.second].parentInt = currNode.intID;
-                cameFrom[segIntID.second].parentEdge = segIntID.first;
-                cameFrom[segIntID.second].timeToNode = timeToInt;
-                double distToEnd = find_distance_between_two_points(std::make_pair(
+                double timeToNode = wave.timeToNode + gData.getTravelTimeOfSeg(segIntID.first)
+                                  + determineTurnPenalty(wave.parentEdge, segIntID.first, turn_penalty);
+                distToEnd = find_distance_between_two_points(std::make_pair(
                                         getIntersectionPosition(segIntID.second),
                                         getIntersectionPosition(intersect_id_end)));
                 // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
-                cameFrom[segIntID.second].estTotalTime = timeToInt + (distToEnd * 0.01 * 3.6);
+                estTotalTime = timeToNode + (distToEnd * 0.01 * 3.6);
                 // Add neighbour to open set
-                openSet.push(cameFrom[segIntID.second]);
+                openSet.push(waveElem(toNode, currNode->intID, segIntID.first, timeToNode, estTotalTime));
             }
         }
     }
+//    std::vector<aStarNodex> cameFrom;
+//    cameFrom.resize(getNumIntersections());
+//    
+//    std::priority_queue<aStarNodex, std::vector<aStarNodex>, compare> openSet;
+//    aStarNodex baseNode(intersect_id_start, -1, -1, 0, 0);
+//    openSet.push(baseNode);
+//    cameFrom[intersect_id_start].intID = intersect_id_start;
+//    
+//    while (!openSet.empty()) {
+//        aStarNodex currNode = openSet.top();
+//        
+//        if (currNode.intID == intersect_id_end)
+//            return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
+//
+//        openSet.pop();
+//        std::vector<pairSegIntID> adjSegIntIDs = gData.getAdjacentSegIntIDsOfInt(currNode.intID);
+//        std::vector<int> segsOfInt = gData.getSegsOfIntersection(currNode.intID);
+//        
+//        for (const pairSegIntID& segIntID : adjSegIntIDs) {
+//            InfoStreetSegment SSData = getInfoStreetSegment(segIntID.first);
+//
+//            if (segIntID.second == intersect_id_end) {
+//                cameFrom[segIntID.second].parentEdge = segIntID.first;
+//                cameFrom[segIntID.second].parentInt = currNode.intID;
+//                return findPathTaken(cameFrom, intersect_id_start, intersect_id_end);
+//            }
+//            
+//            double segTravelTime = gData.getTravelTimeOfSeg(segIntID.first);
+//            double turnPenalty = determineTurnPenalty(currNode.parentEdge, segIntID.first, turn_penalty);
+//            double timeToInt = segTravelTime + currNode.timeToNode + turnPenalty;
+//            
+//            // New fastest way to this node
+//            if (timeToInt < cameFrom[segIntID.second].timeToNode) {
+//                cameFrom[segIntID.second].intID = segIntID.second;
+//                cameFrom[segIntID.second].parentInt = currNode.intID;
+//                cameFrom[segIntID.second].parentEdge = segIntID.first;
+//                cameFrom[segIntID.second].timeToNode = timeToInt;
+//                double distToEnd = find_distance_between_two_points(std::make_pair(
+//                                        getIntersectionPosition(segIntID.second),
+//                                        getIntersectionPosition(intersect_id_end)));
+//                // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
+//                cameFrom[segIntID.second].estTotalTime = timeToInt + (distToEnd * 0.01 * 3.6);
+//                // Add neighbour to open set
+//                openSet.push(cameFrom[segIntID.second]);
+//            }
+//        }
+//    }
     // Open set empty but no path found
     std::cerr << "Open set empty but no path found. May be impossible\n"; 
     std::vector<int> failure = {};
