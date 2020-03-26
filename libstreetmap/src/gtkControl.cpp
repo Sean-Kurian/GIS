@@ -64,16 +64,26 @@ void findDirections(GtkWidget* , ezgl::application* app) {
         if (getIntersectionName(startIndex) != startSearch) {
             startSearchRequired = true;
         }
+    } else if (!gData.isStartHighlighted()) {
+        startSearchRequired = true;
     }
+    
     if (gData.isDestinationHighlighted()) {
         destinationIndex = gData.getHLData().highlightedInts[0];
         if (getIntersectionName(destinationIndex) != destinationSearch) {
             destinationSearchRequired = true;
         }
+    } else if (!gData.isDestinationHighlighted()) {
+        destinationSearchRequired = true;
     }
 
     //If a start search needs to be performed, ensure intersections are being searched for (each entry has an "&" or "and")
     if (startSearchRequired) {
+        //Erase previously highlighted start intersection if required
+        if (gData.isStartHighlighted()) {
+            gData.removeLastHighlightedInt();
+        }
+        
         if (startSearch.find("&") != std::string::npos || startSearch.find("and") != std::string::npos) {
 
             //Format the searches
@@ -87,6 +97,12 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                 popUpErrorMessage("Starting intersection not found", app);
                 return;
             }
+            
+            //Otherwise highlight the intersection
+            else {
+                gData.addHighlightedInt(startIndex);
+                gData.setStartHighlight(true);
+            }
         }
         
         //Otherwise, invalid search entered
@@ -98,6 +114,11 @@ void findDirections(GtkWidget* , ezgl::application* app) {
     
     //If a start search needs to be performed, ensure intersections are being searched for (each entry has an "&" or "and")
     if (destinationSearchRequired) {
+        //Erase previously highlighted intersection if required
+        if (gData.isDestinationHighlighted()) {
+            gData.removeFirstHighlightedInt();
+        }
+        
         if (destinationSearch.find("&") != std::string::npos || destinationSearch.find("and") != std::string::npos) {
             
             //Format the searches
@@ -110,6 +131,12 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             if (destinationIndex == UNDEFINED) {
                 popUpErrorMessage("Destination intersection not found", app);
                 return;
+            }
+            
+            //Otherwise highlight the intersection
+            else {
+                gData.addHighlightedIntAtFront(destinationIndex);
+                gData.setDesintationHighlight(true);
             }
         }
         
