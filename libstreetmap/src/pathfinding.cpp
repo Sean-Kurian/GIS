@@ -202,6 +202,6 @@ find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection,
         totalPaths.insert(std::make_pair(totalTime, std::make_pair(pathWalked, pathDriven)));
     }
     for (auto& mapElem : walkVisited)
-            delete mapElem->second;
+            delete mapElem.second;
     return totalPaths.begin()->second;
 }
