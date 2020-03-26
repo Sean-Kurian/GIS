@@ -174,7 +174,7 @@ std::string find_turn_direction(std::string dir1, std::string dir2){
         }
     }
 
-return dir1+dir2;     
+return "";     
     
 }
 
