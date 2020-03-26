@@ -72,7 +72,7 @@ TEST(pathFindingTest) {
     
     startFind = std::chrono::high_resolution_clock::now();
     
-    std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex>> path = find_path_with_walk_to_pickup(109, 1086, 22.58759087598575732, 1.39999999999999991, 0.00000000000000000);
+    std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex>> walkPath = find_path_with_walk_to_pickup(109, 1086, 22.58759087598575732, 1.39999999999999991, 0.00000000000000000);
     
     endFind = std::chrono::high_resolution_clock::now();
     std::cout << "Time taken to find path: "
