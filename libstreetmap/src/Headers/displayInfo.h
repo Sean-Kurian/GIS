@@ -56,6 +56,9 @@ void clearDirections(ezgl::application* app);
 //Combines the vector of strings representing directions into one string for display on GUI
 std::string combineDirections(std::vector<std::string> directionsVector, bool isWalking);
 
+//Combines the walking and driving path into one for highlighting
+std::vector<StreetSegmentIndex> combinePath(std::vector<StreetSegmentIndex> walkingPath, std::vector<StreetSegmentIndex> drivingPath);
+
 
 #endif /* DISPLAYINFO_H */
 
