@@ -200,7 +200,7 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
     const OSMNode* node;
     const OSMWay* way;
     const OSMRelation* relation;
-    
+    int maxSpeed = 100;
     auto start = std::chrono::high_resolution_clock::now();
     
     // Loops over all nodes and stores their index with their OSMID
@@ -236,7 +236,20 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
             // Determines the street type of the road
             else if (key == "highway") 
                 type = determineRoadType(val);
+            else if (key == "maxspeed") {
+                // Need try catch due to stoi crashing if it can't find an integer
+                try {
+                    int speed = std::stoi(val);
+                    maxSpeed = std::max(maxSpeed, speed);
+                }
+                catch (const std::exception& e) {
+                    std::cerr << "Exception thrown when determining number of lanes\n"
+                              << "Value: " << val << "\n"
+                              << "Exception: " << e.what() << "\n";
+                }
+            }
         }
+        gData.setMaxSpeedLimit(maxSpeed);
         // Adds segment data to gData. The min is to avoid OSM data issues
         for (const int segIndex : segs)
             gData.addSegOfStreetType(segIndex, std::min(numLanes, 8), type);
