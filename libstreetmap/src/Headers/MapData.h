@@ -89,7 +89,7 @@ private:
     GtkWidget* intersectionDialog;
     
     // Maximum speed limit in the city
-    unsigned maxSpeedLimit;
+    int maxSpeedLimit;
     
 public:
 //==============================================================================
@@ -186,7 +186,7 @@ public:
     void setIntersectionInfoBox(GtkWidget* dialog);
     
     // Sets maximum speed limit on the map
-    void setMaxSpeedLimit(const unsigned& limit);
+    void setMaxSpeedLimit(const int& limit);
 //==============================================================================
 // Accessors
 //==============================================================================
@@ -267,7 +267,7 @@ public:
     GtkWidget* getIntersectionInfoBox() const;
     
     // Returns maximum speed limit of the city
-    unsigned getMaxSpeed() const;
+    int getMaxSpeed() const;
 };
 
 #endif /* MAPDATA_H */

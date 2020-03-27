@@ -71,8 +71,9 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
     double distToEnd = find_distance_between_two_points(std::make_pair(
                             getIntersectionPosition(intersect_id_start),
                             getIntersectionPosition(intersect_id_end)));
+    int maxSpeed = gData.getMaxSpeed();
     // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
-    double estTotalTime = distToEnd * 0.01 * 3.6;
+    double estTotalTime = distToEnd * (1 / maxSpeed) * 3.6;
     
     waveElem baseElem(baseNode, -1, -1, 0, estTotalTime); 
     toVisit.push(baseElem);
@@ -104,7 +105,7 @@ std::vector<StreetSegmentIndex> find_path_between_intersections(
                                         getIntersectionPosition(segIntID.second),
                                         getIntersectionPosition(intersect_id_end)));
                 // Est time to end is distance * 1 / 100 (1 / speed limit) * 3.6 (conversion)
-                estTotalTime = timeToNode + (distToEnd * 0.01 * 3.6);
+                estTotalTime = timeToNode + (distToEnd * (1 / maxSpeed) * 3.6);
                 // Add neighbour to open set
                 toVisit.push(waveElem(toNode, currNode->intID, segIntID.first, timeToNode, estTotalTime));
             }
@@ -158,41 +159,46 @@ find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection,
             currNode->parentInt = wave.parentInt;
             currNode->parentEdge = wave.parentEdge;
 
-            std::vector<pairSegIntID> adjSegIntIDs = gData.getAdjacentSegIntIDsOfInt(currNode->intID);
-            for (const pairSegIntID& segIntID : adjSegIntIDs) {
-                aStarNode* toNode = getToNode(segIntID.second, walkVisited);
+            std::vector<int> segsOfInt = find_street_segments_of_intersection(currNode->intID);
+            for (const int& segID : segsOfInt) {
+                int toInt;
+                InfoStreetSegment SSData = getInfoStreetSegment(segID);
+                if (SSData.from == currNode->intID)
+                    toInt = SSData.to;
+                else
+                    toInt = SSData.from;
+                aStarNode* toNode = getToNode(toInt, walkVisited);
                 if (toNode == NULL) {
-                    toNode = new aStarNode(segIntID.second, currNode->intID, 
-                                           segIntID.first, 
+                    toNode = new aStarNode(toInt, currNode->intID, segID, 
                                            std::numeric_limits<double>::max());
-                    walkVisited.insert(std::make_pair(segIntID.second, toNode));
+                    walkVisited.insert(std::make_pair(toInt, toNode));
                 }
 
-                double timeToNode = wave.timeToNode + (find_street_segment_length(segIntID.second) / walking_speed)
-                                  + determineTurnPenalty(wave.parentEdge, segIntID.first, turn_penalty);
+                double timeToNode = wave.timeToNode + (find_street_segment_length(toInt) / walking_speed)
+                                  + determineTurnPenalty(wave.parentEdge, segID, turn_penalty);
                 //Case for time to node greater than walking time limit
                 if (timeToNode >= walking_time_limit) {
                     distToEnd = find_distance_between_two_points(std::make_pair(
                                         getIntersectionPosition(currNode->intID),
                                         getIntersectionPosition(end_intersection)));
-                    estTotalTime = currNode->bestTime + (distToEnd * 0.01 * 3.6);
+                    estTotalTime = currNode->bestTime + (distToEnd * (1 / gData.getMaxSpeed()) * 3.6);
                     maxWalkableInts.insert(std::make_pair(estTotalTime, currNode));
                     continue;
                 }
 
                 distToEnd = find_distance_between_two_points(std::make_pair(
-                                        getIntersectionPosition(segIntID.second),
+                                        getIntersectionPosition(toInt),
                                         getIntersectionPosition(end_intersection)));
                
                 estTotalTime = timeToNode + (distToEnd / walking_speed);
                 // Add neighbour to open set
-                walkToVisit.push(waveElem(toNode, currNode->intID, segIntID.first, timeToNode, estTotalTime));
+                walkToVisit.push(waveElem(toNode, currNode->intID, segID, timeToNode, estTotalTime));
             }
         }
     }
-    // Map which stores the optimal full paths 
+    // Map which stores the optimal full paths
     std::map<double, std::pair<std::vector<int>, std::vector<int>>> totalPaths;
-    
+
     // Goes over max intersections reachable by walking and finds the driving paths from there
     for (const auto& maxInt : maxWalkableInts) {
         pathWalked = findPathTaken(walkVisited, start_intersection, maxInt.second->intID, false);
