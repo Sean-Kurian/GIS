@@ -163,6 +163,7 @@ find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection,
         waveElem wave = walkToVisit.top();
         walkToVisit.pop();
         aStarNode* currNode = wave.node;
+        
         if (currNode->intID == end_intersection) { // Path found
             pathWalked = findPathTaken(walkVisited, start_intersection, end_intersection, true);
             std::vector<int> zeroVector;
