@@ -71,14 +71,12 @@ void drawMainCanvas(ezgl::renderer* rend) {
     if (pixelsPerMeter < 0.01) {
         drawStreets(rend, roadType::highway, pixelsPerMeter);
     }
-    
     else if (pixelsPerMeter < 0.1) {
         drawStreams(rend, pixelsPerMeter);
         
         drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
         drawStreets(rend, roadType::highway, pixelsPerMeter);
     }
-    
     else if (pixelsPerMeter < 0.2) {
         drawStreams(rend, pixelsPerMeter);
         
@@ -86,7 +84,6 @@ void drawMainCanvas(ezgl::renderer* rend) {
         drawStreets(rend, roadType::majorRoad, pixelsPerMeter);
         drawStreets(rend, roadType::highway, pixelsPerMeter);
     }
-    
     else if (pixelsPerMeter < 0.4) {
         drawStreams(rend, pixelsPerMeter);
         
@@ -99,8 +96,6 @@ void drawMainCanvas(ezgl::renderer* rend) {
         
         drawPOI30(rend, buildingType::school);
         drawPOI30(rend, buildingType::hospital);
-        PrintTTCVehicleInfo30(ptRoot, rend); 
-        
     }
     else if (pixelsPerMeter < 0.75) {
         drawStreams(rend, pixelsPerMeter);
@@ -117,9 +112,7 @@ void drawMainCanvas(ezgl::renderer* rend) {
         
         drawPOI50(rend, buildingType::school);
         drawPOI50(rend, buildingType::hospital);
-        PrintTTCVehicleInfo50(ptRoot, rend); 
     }
-    
     else {
         drawStreams(rend, pixelsPerMeter);
         
@@ -137,7 +130,6 @@ void drawMainCanvas(ezgl::renderer* rend) {
         
         drawPOI70(rend, buildingType::school);
         drawPOI70(rend, buildingType::hospital);
-        PrintTTCVehicleInfo70(ptRoot, rend); 
     }
     drawHighlightedStreets(rend, pixelsPerMeter);
     drawHighlightedIntersections(rend);
@@ -148,7 +140,6 @@ double pixelInMeters(ezgl::renderer* rend) {
     ezgl::rectangle world = rend->get_visible_world();
     ezgl::rectangle oneMeterBox(world.center(), 1, 1);
     ezgl::rectangle screen1Meter = rend->world_to_screen(oneMeterBox);
-    std::cout << "1 meter in pixels: " << screen1Meter.width() << "\n";
     return screen1Meter.width();
 }
 
@@ -235,7 +226,6 @@ ptree getRoot(){
             res = curl_easy_perform(curlHandle);
         }
 
-        cout << endl << endl;
         if (res == CURLE_OK) {
             // Create an empty proper tree
             istringstream issJsonData(myStruct.response);
