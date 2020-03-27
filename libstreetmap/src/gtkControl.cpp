@@ -274,7 +274,6 @@ void findDirections(GtkWidget* , ezgl::application* app) {
     else {
         directions.clear(); 
         std::vector<int> path = find_path_between_intersections(startIndex, destinationIndex, 15);
-        std::cout << "Path: \n";
         std::string dir1, dir2;  
         int i = 0; 
         for (const int& seg : path) {
