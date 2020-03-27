@@ -131,7 +131,7 @@ find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection,
     // Stores nodes that have been visited so far
     std::unordered_map<unsigned, aStarNode*> walkVisited;
     // Stores the further intersections that can be walked to
-    std::unordered_map<double, aStarNode*> maxWalkableInts;
+    std::unordered_map<double, aStarNode*> walkableInts;
     
     aStarNode* baseNode = new aStarNode(start_intersection, -1, -1, std::numeric_limits<double>::max());
     walkVisited.insert(std::make_pair(start_intersection, baseNode));
@@ -182,7 +182,7 @@ find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection,
                                         getIntersectionPosition(currNode->intID),
                                         getIntersectionPosition(end_intersection)));
                     estTotalTime = currNode->bestTime + (distToEnd * (1 / gData.getMaxSpeed()) * 3.6);
-                    maxWalkableInts.insert(std::make_pair(estTotalTime, currNode));
+                    walkableInts.insert(std::make_pair(estTotalTime, currNode));
                     continue;
                 }
 
@@ -193,15 +193,15 @@ find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection,
                 estTotalTime = timeToNode + (distToEnd / walking_speed);
                 // Add neighbour to open set
                 walkToVisit.push(waveElem(toNode, currNode->intID, segID, timeToNode, estTotalTime));
-                maxWalkableInts.insert(std::make_pair(estTotalTime, currNode));
+                walkableInts.insert(std::make_pair(estTotalTime, currNode));
             }
         }
     }
     // Map which stores the optimal full paths
     std::map<double, std::pair<std::vector<int>, std::vector<int>>> totalPaths;
 
-    // Goes over max intersections reachable by walking and finds the driving paths from there
-    for (const auto& maxInt : maxWalkableInts) {
+    // Goes over intersections reachable by walking and finds the driving paths from there
+    for (const auto& maxInt : walkableInts) {
         pathWalked = findPathTaken(walkVisited, start_intersection, maxInt.second->intID, false);
         double timeWalked = compute_path_walking_time(pathWalked, walking_speed, turn_penalty);
         pathDriven = find_path_between_intersections(maxInt.second->intID, end_intersection, turn_penalty);
