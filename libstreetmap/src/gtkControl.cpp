@@ -219,6 +219,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                     directions.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n"); 
                 }
             }
+            ++i;
         }
         gData.addHighlightedSegs(path);
         app->refresh_drawing();
