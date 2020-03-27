@@ -15,12 +15,29 @@
 //Draws streets with their width varying based on the number of lanes
 void drawStreets(ezgl::renderer* rend, const roadType& type, const double& pixelsPerMeter) {
     // Sets colour based on the type of street segments being drawn
-    rend->set_color(getRoadColour(type));
+    ezgl::color defaultRoadColour = getRoadColour(type);
+    rend->set_color(defaultRoadColour);
+    const HighlightedData& hlData = gData.getHLData();
+    bool colourWasChanged = false;
     std::vector<std::pair<int, unsigned> > segs = gData.getSegsOfStreetType(type);
     ezgl::point2d fromPos(0, 0), toPos(0, 0);
     
     // Loops over all segments of a given street type and draws them
     for (const std::pair<int, unsigned>& SSIndex : segs) {
+        // Checks if the colour was changed during the last loop and sets it back
+        if (colourWasChanged) {
+            rend->set_color(defaultRoadColour);
+            colourWasChanged = false;
+        }
+        // Checks if the segments being drawn needs to be highlighted
+        if (hlData.highlightedSegs[SSIndex.first] != highlightType::none) {
+            if (hlData.highlightedSegs[SSIndex.first] == highlightType::driveHighlight)
+                rend->set_color(getRoadColour(roadType::highlightedDrive));
+            else
+                rend->set_color(getRoadColour(roadType::highlightedWalk));
+            // Used to ensure we don't have to set the colour for every seg
+            colourWasChanged = true;
+        }
         // Calculates the real life lane width. 5m is the average lane width worldwide
         rend->set_line_width(std::floor(pixelsPerMeter * 5.0 * SSIndex.second));
         InfoStreetSegment SSData = getInfoStreetSegment(SSIndex.first);
@@ -38,7 +55,7 @@ void drawStreets(ezgl::renderer* rend, const roadType& type, const double& pixel
         intPos = getIntersectionPosition(SSData.to);
         toPos = ezgl::point2d(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
         rend->draw_line(fromPos, toPos);
-    } 
+    }
 }
 
 // Draws paths which are things such as trails. Intended for walking not cars
@@ -317,36 +334,6 @@ void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
                 }
         }
     }
-}
-
-// Draws highlights over segments that need to be highlighted
-void drawHighlightedStreets(ezgl::renderer* rend, const double& pixelsPerMeter) {
-    // Sets colour to highlighted colour
-    rend->set_color(ezgl::RED);
-    const HighlightedData hlData = gData.getHLData();
-    std::vector<int> segs = hlData.highlightedSegs;
-    ezgl::point2d fromPos(0, 0), toPos(0, 0);
-    
-    // Loops over all segments of a given street type and draws them
-    for (const unsigned& SSIndex : segs) {
-        // Calculates the real life lane width. 5m is the average lane width worldwide
-        rend->set_line_width(std::floor(pixelsPerMeter * 5.0 * 2));
-        InfoStreetSegment SSData = getInfoStreetSegment(SSIndex);
-        unsigned numCurves = SSData.curvePointCount;
-        LatLon intPos = getIntersectionPosition(SSData.from);
-        fromPos = ezgl::point2d(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
-        // Draws the segment between each curve point
-        for (unsigned curveIndex = 0; curveIndex < numCurves; ++curveIndex) {
-            LatLon curvePos = getStreetSegmentCurvePoint(curveIndex, SSIndex);
-            toPos = ezgl::point2d(xFromLon(curvePos.lon()), yFromLat(curvePos.lat()));
-            rend->draw_line(fromPos, toPos);
-            fromPos = toPos;
-        }
-        // Draws rest of the segment from the last curve point to the "to" intersection
-        intPos = getIntersectionPosition(SSData.to);
-        toPos = ezgl::point2d(xFromLon(intPos.lon()), yFromLat(intPos.lat()));
-        rend->draw_line(fromPos, toPos);
-    } 
 }
 
 // Draws highlights over intersections that need to be highlighted

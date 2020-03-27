@@ -35,7 +35,7 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
         //If the the application is in direction mode, determine if the click is setting starting or destination intersection
         else {
             //Clear any existing highlighted direction path
-            gData.addHighlightedSegs({});
+            gData.addHighlightedSegs({}, highlightType::none);
             
             //Get both search bars in direction mode
             GtkEntry* startingEntry = (GtkEntry*) app->get_object("searchBar");

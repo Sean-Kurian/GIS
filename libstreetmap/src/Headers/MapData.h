@@ -133,7 +133,8 @@ public:
                                       const IntersectionIndex& mainIntID);
     
     // Adds a vector of segments that is to be highlighted
-    void addHighlightedSegs(const std::vector<StreetSegmentIndex>& segs);
+    void addHighlightedSegs(const std::vector<StreetSegmentIndex>& segs, 
+                            const highlightType& hlType);
     
     // Adds an intersection that is to be highlighted
     void addHighlightedInt(const IntersectionIndex& intID);
@@ -230,11 +231,14 @@ public:
     // Returns the data to be highlighted by the renderer
     const HighlightedData& getHLData() const;
     
+    // Returns the type of highlight the segment needs
+    const highlightType& getSegHighlightType(const StreetSegmentIndex& segID) const;
+    
     // Returns whether or not a starting intersection is highlighted
-    bool isStartHighlighted();
+    bool isStartHighlighted() const;
     
     // Returns whether or not a destination intersection is highlighted
-    bool isDestinationHighlighted();
+    bool isDestinationHighlighted() const;
     
     // Returns the area of all features in a sorted multimap
     const std::multimap<double, unsigned>& getAreaOfFeatures() const;

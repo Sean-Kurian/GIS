@@ -34,17 +34,15 @@ void drawAllBuildings(ezgl::renderer* rend);
 // Draws all buildings of any given building type
 void drawBuildings(ezgl::renderer* rend, const buildingType& type);
 
-// Draws highlights over segments that need to be highlighted
-void drawHighlightedStreets(ezgl::renderer* rend, const double& pixelsPerMeter);
 // Draws highlights over intersections that need to be highlighted
 void drawHighlightedIntersections(ezgl::renderer* rend);
 
-//
+// Draws school/hospital icons at 30x30, 50x50, or 70x70 pixels
 void drawPOI30(ezgl::renderer* rend, const buildingType& type);
 void drawPOI50(ezgl::renderer* rend, const buildingType& type);
 void drawPOI70(ezgl::renderer* rend, const buildingType& type);
 
-//
+// Draws bus icons at 30x30, 50x50, or 70x70 pixels
 void PrintTTCVehicleInfo30(ptree &ptRoot, ezgl::renderer* rend);
 void PrintTTCVehicleInfo50(ptree &ptRoot, ezgl::renderer* rend);
 void PrintTTCVehicleInfo70(ptree &ptRoot, ezgl::renderer* rend);

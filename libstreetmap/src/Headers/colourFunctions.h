@@ -30,12 +30,16 @@
 #define DAY_MINOR_ROAD_COLOUR ezgl::color(0xF2, 0xF2, 0xF2)
 #define DAY_TRAIL_COLOUR ezgl::color(0x75, 0x2F, 0x11)
 #define DAY_PATH_COLOUR ezgl::color(0x77, 0x19, 0x19)
+#define DAY_HIGHLIGHT_DRIVE_COLOUR ezgl::color(0x32, 0xE0, 0xED)
+#define DAY_HIGHLIGHT_WALK_COLOUR ezgl::color(0x32, 0xE0, 0xED)
 
 #define NIGHT_HIGHWAY_COLOUR ezgl::color(0xED, 0x93, 0x02)
 #define NIGHT_MAJOR_ROAD_COLOUR ezgl::color(0x4F, 0x57, 0x64)
 #define NIGHT_MINOR_ROAD_COLOUR ezgl::color(0x37, 0x3F, 0x4D)
 #define NIGHT_TRAIL_COLOUR ezgl::color(0x37, 0x3F, 0x4D)
 #define NIGHT_PATH_COLOUR ezgl::color(0xF2, 0xF2, 0xF2)
+#define NIGHT_HIGHLIGHT_DRIVE_COLOUR ezgl::color(0x32, 0xE0, 0xED)
+#define NIGHT_HIGHLIGHT_WALK_COLOUR ezgl::color(0x32, 0xE0, 0xED)
 
 // Building Colours
 #define DAY_SCHOOL_COLOUR ezgl::color(0x57, 0x90, 0xC5)

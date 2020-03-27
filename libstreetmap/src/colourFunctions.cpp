@@ -52,6 +52,10 @@ ezgl::color getRoadColour(const roadType& type) {
             return nightMode::isOn ? NIGHT_TRAIL_COLOUR : DAY_TRAIL_COLOUR;
         case path:
             return nightMode::isOn ? NIGHT_PATH_COLOUR : DAY_PATH_COLOUR;
+        case highlightedDrive:
+            return nightMode::isOn ? NIGHT_HIGHLIGHT_DRIVE_COLOUR : DAY_HIGHLIGHT_DRIVE_COLOUR;
+        case highlightedWalk:
+            return nightMode::isOn ? NIGHT_HIGHLIGHT_WALK_COLOUR : DAY_HIGHLIGHT_WALK_COLOUR;
         default:
             std::cerr << "Error: no matching street type\n";
     }

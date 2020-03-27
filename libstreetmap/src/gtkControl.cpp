@@ -263,9 +263,10 @@ void findDirections(GtkWidget* , ezgl::application* app) {
         }
 
             printWalkDirections(walkDirections, directions, app);
-            //Highlight path
-            std::vector<StreetSegmentIndex> complete_path = combinePath(path.first, path.second);
-            gData.addHighlightedSegs(complete_path);
+            // Highlight driving path
+            gData.addHighlightedSegs(path.second, highlightType::driveHighlight);
+            // Highlight walking path
+            gData.addHighlightedSegs(path.first, highlightType::walkHighlight);
             app->refresh_drawing();
         }
     }
@@ -315,7 +316,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             }
             ++i;
         }
-        gData.addHighlightedSegs(path);
+        gData.addHighlightedSegs(path, highlightType::driveHighlight);
         app->refresh_drawing();
         //Print out directions
         printDirections(directions, app);

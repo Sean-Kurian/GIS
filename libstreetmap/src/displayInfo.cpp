@@ -79,7 +79,6 @@ int find_intersection_from_name(std::string intersectionName) {
             }
         }
     }
-    
     //If there was no intersection, return -1
     return -1;
 }
@@ -245,7 +244,7 @@ void printWalkDirections(std::vector<std::string> walkingVector, std::vector<std
 void clearDirections(ezgl::application* app) {
     GtkLabel* directionsLabel = (GtkLabel*) app->get_object("directionsLabel");
     gtk_label_set_text(directionsLabel, "");
-    gData.addHighlightedSegs({});
+    gData.addHighlightedSegs({}, highlightType::none);
     app->refresh_drawing();
 }
 
