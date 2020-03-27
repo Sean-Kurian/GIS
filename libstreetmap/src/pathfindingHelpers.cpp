@@ -1,5 +1,5 @@
 //==============================================================================
-// File Description: Calculations to be used in pathfinding\
+// File Description: Calculations to be used in pathfinding
 //
 //==============================================================================
 
