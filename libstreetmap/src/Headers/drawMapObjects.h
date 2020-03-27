@@ -35,7 +35,7 @@ void drawAllBuildings(ezgl::renderer* rend);
 void drawBuildings(ezgl::renderer* rend, const buildingType& type);
 
 // Draws highlights over intersections that need to be highlighted
-void drawHighlightedIntersections(ezgl::renderer* rend);
+void drawHighlightedIntersections(ezgl::renderer* rend, const double& pixelsPerMeter);
 
 // Draws school/hospital icons at 30x30, 50x50, or 70x70 pixels
 void drawPOI30(ezgl::renderer* rend, const buildingType& type);
