@@ -189,7 +189,6 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                 InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
                 InfoStreetSegment SSData3 = getInfoStreetSegment(*(&seg + 2)); 
 
-                std::cout<<"Hi"<<"\n"; 
                 if (i == 0){
                     //Starting direction
                     dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
