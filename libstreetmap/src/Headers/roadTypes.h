@@ -12,6 +12,8 @@ enum roadType {
     minorRoad,
     trail,
     path,
+    highlightedDrive,
+    highlightedWalk,
     RT_TYPECOUNT
 };
 

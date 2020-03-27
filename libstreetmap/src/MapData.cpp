@@ -79,6 +79,7 @@ void MapData::allocStreetVecs(const unsigned& numStreets) {
 void MapData::allocSegmmentVecs(const unsigned& numSegments) {
     lengthOfSegment.resize(numSegments);
     travelTimeOfSegment.resize(numSegments);
+    hlData.highlightedSegs.resize(numSegments);
 }
 
 // Sizes intersection vectors to their appropriate size to avoid out of index access
@@ -157,8 +158,12 @@ void MapData::addAdjacentPairSegIntIdToInt(const std::vector<pairSegIntID>& adja
 }
 
 //
-void MapData::addHighlightedSegs(const std::vector<StreetSegmentIndex>& segs) {
-    hlData.highlightedSegs = segs;
+void MapData::addHighlightedSegs(const std::vector<StreetSegmentIndex>& segs,
+                                 const highlightType& hlType) {
+    if (hlType != highlightType::walkHighlight)
+        std::fill(hlData.highlightedSegs.begin(), hlData.highlightedSegs.end(), highlightType::none);
+    for (const int& segID : segs)
+        hlData.highlightedSegs[segID] = hlType;
 }
 
 // Adds an intersection that is to be highlighted
@@ -365,13 +370,18 @@ const HighlightedData& MapData::getHLData() const {
     return hlData;
 }
 
+// Returns the type of highlight the segment needs
+const highlightType& MapData::getSegHighlightType(const StreetSegmentIndex& segID) const {
+    return hlData.highlightedSegs[segID];
+}
+
 // Returns whether or not a starting intersection is highlighted
-bool MapData::isStartHighlighted() {
+bool MapData::isStartHighlighted() const {
     return hlData.startHighlighted;
 }
     
 // Returns whether or not a destination intersection is highlighted
-bool MapData::isDestinationHighlighted() {
+bool MapData::isDestinationHighlighted() const {
     return hlData.destinationHighlighted;
 }
 

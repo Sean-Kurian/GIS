@@ -103,7 +103,7 @@ void searchEnter(GtkEntry* searchEntry, gpointer data) {
             rend->set_visible_world(rect);
             
             //Erase any existing highlighted direction path
-            gData.addHighlightedSegs({});
+            gData.addHighlightedSegs({}, highlightType::none);
             app->refresh_drawing(); 
         }
     }

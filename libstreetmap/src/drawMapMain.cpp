@@ -131,7 +131,6 @@ void drawMainCanvas(ezgl::renderer* rend) {
         drawPOI70(rend, buildingType::school);
         drawPOI70(rend, buildingType::hospital);
     }
-    drawHighlightedStreets(rend, pixelsPerMeter);
     drawHighlightedIntersections(rend);
 }
 

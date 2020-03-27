@@ -9,14 +9,23 @@
 
 #include "StreetsDatabaseAPI.h"
 
+enum highlightType {
+    none = 0,
+    driveHighlight,
+    walkHighlight,
+    HT_TYPECOUNT
+};
+
 struct HighlightedData {
     std::vector<IntersectionIndex> highlightedInts;
-    std::vector<StreetSegmentIndex> highlightedSegs;
+    std::vector<highlightType> highlightedSegs;
     static bool isHighlighted;
     static bool highlightedOnce; 
     bool startHighlighted;
     bool destinationHighlighted;
 };
+
+
 
 #endif /* HIGHLIGHTEDDATA_H */
 

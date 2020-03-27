@@ -52,8 +52,6 @@ double find_street_segment_length(int street_segment_id) {
     return gData.getLengthOfSegment(street_segment_id);
 }
 
-
-
 // Returns the travel time to drive a street segment in seconds 
 double find_street_segment_travel_time(int street_segment_id) {
     return gData.getTravelTimeOfSeg(street_segment_id);
