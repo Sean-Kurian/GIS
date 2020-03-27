@@ -157,7 +157,7 @@ void MapData::addAdjacentPairSegIntIdToInt(const std::vector<pairSegIntID>& adja
     adjacentSegIntsOfInt[mainIntID] = adjacentSegInts;
 }
 
-//
+// Adds a vector of segments that is to be highlighted according to their type
 void MapData::addHighlightedSegs(const std::vector<StreetSegmentIndex>& segs,
                                  const highlightType& hlType) {
     if (hlType != highlightType::walkHighlight)

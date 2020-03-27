@@ -132,7 +132,7 @@ public:
     void addAdjacentPairSegIntIdToInt(const std::vector<pairSegIntID>& adjacentSegInts,
                                       const IntersectionIndex& mainIntID);
     
-    // Adds a vector of segments that is to be highlighted
+    // Adds a vector of segments that is to be highlighted according to their type
     void addHighlightedSegs(const std::vector<StreetSegmentIndex>& segs, 
                             const highlightType& hlType);
     

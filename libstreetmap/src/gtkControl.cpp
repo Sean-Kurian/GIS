@@ -99,27 +99,25 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                 return;
             }
             
-            //Otherwise highlight the intersection
+            // Otherwise highlight the intersection
             else {
                 gData.addHighlightedInt(startIndex);
                 gData.setStartHighlight(true);
             }
         }
         
-        //Otherwise, invalid search entered
+        // Otherwise, invalid search entered
         else {
             popUpErrorMessage("Invalid starting intersection entered", app);
             return;
         }
     }
-    
     //If a start search needs to be performed, ensure intersections are being searched for (each entry has an "&" or "and")
     if (destinationSearchRequired) {
         //Erase previously highlighted intersection if required
-        if (gData.isDestinationHighlighted()) {
+        if (gData.isDestinationHighlighted()) 
             gData.removeFirstHighlightedInt();
-        }
-        
+
         if (destinationSearch.find("&") != std::string::npos || destinationSearch.find("and") != std::string::npos) {
             
             //Format the searches
@@ -167,19 +165,17 @@ void findDirections(GtkWidget* , ezgl::application* app) {
         double walkingSpeed = atof(walkingSpeedText.c_str());
         double walkingLimit = atof(walkingLimitText.c_str()) * MIN_TO_SEC;
 
-        if (walkingSpeed == 0) {
+        if (walkingSpeed == 0) 
             popUpErrorMessage("Invalid walking speed", app);
-        }
-        else if (walkingLimit == 0) {
+        else if (walkingLimit == 0) 
             popUpErrorMessage("Invalid walking time limit", app);
-        }
         else {
             std::cout << "Walking speed: " << walkingSpeed << " m/s\n";
             std::cout << "Walking limit: " << walkingLimit << " sec\n";
             std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex>> 
                     path = find_path_with_walk_to_pick_up(startIndex, destinationIndex, 
                                                          TURN_PENALTY, walkingSpeed, walkingLimit);
-        std::cout <<"Start walking"<<"\n"; 
+        std::cout << "Start walking" << "\n"; 
         std::string dir1, dir2;  
         int i = 0; 
         for (const int& seg : path.first) {
@@ -283,8 +279,8 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                 InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
                 InfoStreetSegment SSData3 = getInfoStreetSegment(*(&seg + 2)); 
 
-                if (i == 0){
-                    //Starting direction
+                if (i == 0) {
+                    // Starting direction
                     dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
                         getIntersectionPosition(SSData2.from))); 
                     if (getStreetName(SSData.streetID) != "<unknown>") 
@@ -292,7 +288,7 @@ void findDirections(GtkWidget* , ezgl::application* app) {
                     else 
                         directions.push_back("Head " + dir1 + "\n"); 
                 }
-                //Only changing street if street name changes
+                // Only changing street if street name changes
                 if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)) {
                     //Dir2 is new direction, dir1 is used as comparison to calculate turn direction
                     dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
