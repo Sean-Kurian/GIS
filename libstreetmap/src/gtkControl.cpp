@@ -179,8 +179,90 @@ void findDirections(GtkWidget* , ezgl::application* app) {
             std::pair<std::vector<StreetSegmentIndex>, std::vector<StreetSegmentIndex>> 
                     path = find_path_with_walk_to_pick_up(startIndex, destinationIndex, 
                                                          TURN_PENALTY, walkingSpeed, walkingLimit);
+        std::cout <<"Start walking"<<"\n"; 
+        std::string dir1, dir2;  
+        int i = 0; 
+        for (const int& seg : path.first) {
+            if (i < path.first.size() - 3) {
+                //Loads 3 street segments, used for direction calculation
+                InfoStreetSegment SSData = getInfoStreetSegment(seg);
+                InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
+                InfoStreetSegment SSData3 = getInfoStreetSegment(*(&seg + 2)); 
 
-            printWalkDirections({}, directions, app);
+                std::cout<<"Hi"<<"\n"; 
+                if (i == 0){
+                    //Starting direction
+                    dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                        getIntersectionPosition(SSData2.from))); 
+                    if (getStreetName(SSData.streetID) != "<unknown>") 
+                        walkDirections.push_back("Head " + dir1 + " on " + getStreetName(SSData.streetID) + "\n"); 
+                    else 
+                        walkDirections.push_back("Head " + dir1 + "\n"); 
+                }
+                //Only changing street if street name changes
+                if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)) {
+                    //Dir2 is new direction, dir1 is used as comparison to calculate turn direction
+                    dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                        getIntersectionPosition(SSData2.from))); 
+                    dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
+                        getIntersectionPosition(SSData3.from)));
+                    std::string turnDir = find_turn_direction(dir1, dir2);
+                    //Store in direction vector
+                    if (getStreetName(SSData2.streetID) != "<unknown>") {
+                        walkDirections.push_back("Turn" + (turnDir == "" ? turnDir : " " + turnDir)
+                                             + " onto " + getStreetName(SSData2.streetID) + "\n");
+                        walkDirections.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n");
+                    }
+                    else {
+                        walkDirections.push_back("Turn " + find_turn_direction(dir1, dir2) + "\n");
+                        walkDirections.push_back("Head " + dir2 + "\n");
+                    }
+                }
+            }
+            ++i;
+        }
+        
+        i = 0; 
+        for (const int& seg : path.second) {
+            if (i < path.second.size() - 3) {
+                //Loads 3 street segments, used for direction calculation
+                InfoStreetSegment SSData = getInfoStreetSegment(seg);
+                InfoStreetSegment SSData2 = getInfoStreetSegment(*(&seg + 1)); 
+                InfoStreetSegment SSData3 = getInfoStreetSegment(*(&seg + 2)); 
+
+                if (i == 0){
+                    //Starting direction
+                    dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                        getIntersectionPosition(SSData2.from))); 
+                    if (getStreetName(SSData.streetID) != "<unknown>") 
+                        directions.push_back("Head " + dir1 + " on " + getStreetName(SSData.streetID) + "\n"); 
+                    else 
+                        directions.push_back("Head " + dir1 + "\n"); 
+                }
+                //Only changing street if street name changes
+                if (getStreetName(SSData.streetID) != getStreetName(SSData2.streetID)) {
+                    //Dir2 is new direction, dir1 is used as comparison to calculate turn direction
+                    dir1 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData.from),
+                        getIntersectionPosition(SSData2.from))); 
+                    dir2 = find_direction_between_intersections(std::make_pair(getIntersectionPosition(SSData2.from),
+                        getIntersectionPosition(SSData3.from)));
+                    std::string turnDir = find_turn_direction(dir1, dir2);
+                    //Store in direction vector
+                    if (getStreetName(SSData2.streetID) != "<unknown>") {
+                        directions.push_back("Turn" + (turnDir == "" ? turnDir : " " + turnDir)
+                                             + " onto " + getStreetName(SSData2.streetID) + "\n");
+                        directions.push_back("Head " + dir2 + " on " + getStreetName(SSData2.streetID) + "\n");
+                    }
+                    else {
+                        directions.push_back("Turn " + find_turn_direction(dir1, dir2) + "\n");
+                        directions.push_back("Head " + dir2 + "\n");
+                    }
+                }
+            }
+            ++i;
+        }
+
+            printWalkDirections(walkDirections, directions, app);
             //Highlight driving path
             gData.addHighlightedSegs(path.second);
             app->refresh_drawing();
