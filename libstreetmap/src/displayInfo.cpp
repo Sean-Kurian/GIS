@@ -267,3 +267,12 @@ std::string combineDirections(std::vector<std::string> directionsVector, bool is
     }
     return directions;
 }
+
+//Combines the walking and driving path into one for highlighting
+std::vector<StreetSegmentIndex> combinePath(std::vector<StreetSegmentIndex> walkingPath, std::vector<StreetSegmentIndex> drivingPath) {
+    std::vector<StreetSegmentIndex> path = walkingPath;
+    for (auto it : drivingPath) {
+        path.push_back(it);
+    }
+    return path;
+}
