@@ -193,6 +193,7 @@ find_path_with_walk_to_pick_up(const IntersectionIndex start_intersection,
                 estTotalTime = timeToNode + (distToEnd / walking_speed);
                 // Add neighbour to open set
                 walkToVisit.push(waveElem(toNode, currNode->intID, segID, timeToNode, estTotalTime));
+                maxWalkableInts.insert(std::make_pair(estTotalTime, currNode));
             }
         }
     }
