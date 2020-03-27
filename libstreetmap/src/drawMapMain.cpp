@@ -131,7 +131,7 @@ void drawMainCanvas(ezgl::renderer* rend) {
         drawPOI70(rend, buildingType::school);
         drawPOI70(rend, buildingType::hospital);
     }
-    drawHighlightedIntersections(rend);
+    drawHighlightedIntersections(rend, pixelsPerMeter);
 }
 
 // Calculates the number of pixels in a given

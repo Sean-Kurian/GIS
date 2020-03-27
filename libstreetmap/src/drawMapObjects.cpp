@@ -337,14 +337,15 @@ void drawBuildings(ezgl::renderer* rend, const buildingType& type) {
 }
 
 // Draws highlights over intersections that need to be highlighted
-void drawHighlightedIntersections(ezgl::renderer* rend) {
+void drawHighlightedIntersections(ezgl::renderer* rend, const double& pixelsPerMeter) {
     rend->set_color(ezgl::RED);
     HighlightedData data = gData.getHLData();
     if (!data.highlightedInts.empty()) {
         for (const unsigned intIndex : data.highlightedInts) {
             LatLon pos = getIntersectionPosition(intIndex);
             ezgl::point2d pointPos(xFromLon(pos.lon()), yFromLat(pos.lat()));
-            rend->draw_elliptic_arc(pointPos, 5, 5, 0, 360);
+            rend->fill_elliptic_arc(pointPos, 1/pixelsPerMeter * 5, 1/pixelsPerMeter * 5, 0, 360);
+            std::cout<<"Pixels per meter are"<<pixelsPerMeter<<"\n"; 
         }
     }
 }
