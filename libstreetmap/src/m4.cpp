@@ -10,20 +10,23 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                               const std::vector<int>& depots,
                                               const float turn_penalty,
                                               const float truck_capacity) {
+    //Determine starting depot and number of deliveries needed to be completed
     unsigned randDepot = std::rand() % depots.size();
     unsigned currentInt = depots[randDepot];
     std::vector<bool> orderComplete;
-    orderComplete.resize(deliveries.size());
-    const unsigned numToComplete = deliveries.size();
+    orderComplete.resize(deliveries.size(), false);
+    const unsigned NUM_TO_COMPLETE = deliveries.size();
     unsigned numCompleted = 0;
     
     std::vector<CourierSubpath> result;
 
-    while (numCompleted < numToComplete) {
+    while (numCompleted < NUM_TO_COMPLETE) {
         CourierSubpath toPickup, toDropoff;
+        
+        //Determine the closest pickup location from current intersection
         double closestDistance = std::numeric_limits<double>::max();
         unsigned closestOrder = 0;
-        for (unsigned orderNum = 0; orderNum < numToComplete; ++orderNum) {
+        for (unsigned orderNum = 0; orderNum < NUM_TO_COMPLETE; ++orderNum) {
             if (!orderComplete[orderNum]) {
                 double distToOrder = find_distance_between_two_points(std::make_pair(
                                      getIntersectionPosition(currentInt),
@@ -34,6 +37,8 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                 }
             }
         }
+        
+        //Construct the courier sub-path from current intersection to delivery pickup
         toPickup.start_intersection = currentInt;
         toPickup.end_intersection = deliveries[closestOrder].pickUp;
         toPickup.subpath = find_path_between_intersections(currentInt, 
@@ -46,7 +51,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         toDropoff.subpath = find_path_between_intersections(deliveries[closestOrder].pickUp,
                                                             deliveries[closestOrder].dropOff,
                                                             turn_penalty);
-        toDropoff.pickUp_indices.push_back(deliveries[closestOrder].pickUp);
+        toDropoff.pickUp_indices.push_back(closestOrder);
         result.push_back(toDropoff);
         
         orderComplete[closestOrder] = true;
