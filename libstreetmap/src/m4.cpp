@@ -21,15 +21,17 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
 
     while (numCompleted < numToComplete) {
         CourierSubpath toPickup, toDropoff;
-        double closestLocation = std::numeric_limits<double>::max();
+        double closestDistance = std::numeric_limits<double>::max();
         unsigned closestOrder = 0;
         for (unsigned orderNum = 0; orderNum < numToComplete; ++orderNum) {
             if (!orderComplete[orderNum]) {
                 double distToOrder = find_distance_between_two_points(std::make_pair(
                                      getIntersectionPosition(currentInt),
                                      getIntersectionPosition(deliveries[orderNum].pickUp)));
-                if (closestLocation < distToOrder) 
+                if (distToOrder < closestDistance) {
+                    closestDistance = distToOrder;
                     closestOrder = orderNum;
+                }
             }
         }
         toPickup.start_intersection = currentInt;
