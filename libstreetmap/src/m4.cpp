@@ -14,7 +14,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     unsigned currentInt = depots[randDepot];
     std::vector<bool> orderComplete;
     orderComplete.resize(deliveries.size());
-    unsigned numToComplete = deliveries.size();
+    const unsigned numToComplete = deliveries.size();
     unsigned numCompleted = 0;
     
     std::vector<CourierSubpath> result;
@@ -53,4 +53,12 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         currentInt = deliveries[closestOrder].dropOff;
         numCompleted++;
     }
+    CourierSubpath toDepot;
+    toDepot.start_intersection = currentInt;
+    toDepot.end_intersection = depots[randDepot];
+    toDepot.subpath = find_path_between_intersections(currentInt,
+                                                      depots[randDepot],
+                                                      turn_penalty);
+    result.push_back(toDepot);
+    return result;
 }
