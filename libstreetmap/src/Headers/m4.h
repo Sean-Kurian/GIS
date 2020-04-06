@@ -25,8 +25,7 @@ struct DeliveryInfo {
 struct CourierSubpath {
     // Specifies one subpath of the courier truck route
 
-    // The intersection id where a start depot, pick-up intersection or drop-off
-    intersection
+    // The intersection id where a start depot, pick-up intersection or drop-off intersection
     // is located
     int start_intersection;
 
@@ -96,10 +95,9 @@ struct CourierSubpath {
 //
 // If no valid route to make *all* the deliveries exists, this routine must
 // return an empty (size == 0) vector.
-std::vector<CourierSubpath> traveling_courier(
-    const std::vector<DeliveryInfo>& deliveries,
-    const std::vector<int>& depots,
-    const float turn_penalty,
-    const float truck_capacity);
+std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& deliveries,
+                                              const std::vector<int>& depots,
+                                              const float turn_penalty,
+                                              const float truck_capacity);
 #endif /* M4_H */
 
