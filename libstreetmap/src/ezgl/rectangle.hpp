@@ -101,12 +101,6 @@ public:
     return {left(), top()};
   }
 
-#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
-#pragma GCC diagnostic ignored "-Wunused-function"
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-#pragma GCC diagnostic ignored "-Wredundant-decls"
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations" 
-#pragma GCC diagnostic ignored "-Wunused-variable" 
   /**
    * The maximum x-coordinate and the minimum y-coordinate.
    */
