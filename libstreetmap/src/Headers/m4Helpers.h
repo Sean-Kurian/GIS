@@ -2,8 +2,6 @@
 #define M4HELPERS_H
 #include "m4.h"
 
-float currentWeight(const std::vector<DeliveryInfo>& deliveries, std::vector<int> deliveryIndices); 
-
 std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, std::vector<bool>& orderComplete, unsigned startDepot); 
 
 double percentFull(double maxWeight, double currentWeight); 
@@ -25,6 +23,8 @@ struct Truck {
 
 //Returns the current weight on the truck
 float getCurrentWeight(const std::vector<DeliveryInfo>& deliveries, std::unordered_map<unsigned, unsigned> deliveryIndices);
+
+std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, const std::vector<bool>& orderComplete, unsigned startDepot);
 
 #endif /* M4HELPERS_H */
 
