@@ -228,9 +228,9 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
                     numLanes = std::stoi(val);
                 }
                 catch (const std::exception& e) {
-                    std::cerr << "Exception thrown when determining number of lanes\n"
-                              << "Value: " << val << "\n"
-                              << "Exception: " << e.what() << "\n";
+//                    std::cerr << "Exception thrown when determining number of lanes\n"
+//                              << "Value: " << val << "\n"
+//                              << "Exception: " << e.what() << "\n";
                 }
             }
             // Determines the street type of the road
@@ -243,9 +243,9 @@ void getLayer1Data(const unsigned& numNodes, const unsigned& numWays, const unsi
                     maxSpeed = std::max(maxSpeed, speed);
                 }
                 catch (const std::exception& e) {
-                    std::cerr << "Exception thrown when determining number of lanes\n"
-                              << "Value: " << val << "\n"
-                              << "Exception: " << e.what() << "\n";
+//                    std::cerr << "Exception thrown when determining number of lanes\n"
+//                              << "Value: " << val << "\n"
+//                              << "Exception: " << e.what() << "\n";
                 }
             }
         }
