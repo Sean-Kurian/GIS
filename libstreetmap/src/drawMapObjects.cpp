@@ -351,7 +351,7 @@ void drawHighlightedIntersections(ezgl::renderer* rend, const double& pixelsPerM
 }
 
 // Example, replace with relevant indices and icons
-void drawPOI30(ezgl::renderer* rend, const buildingType& type){
+/*void drawPOI30(ezgl::renderer* rend, const buildingType& type){
    std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     ezgl::surface* test; 
     test = rend->load_png("./libstreetmap/resources/school2 30 30.png");
@@ -548,3 +548,4 @@ void PrintTTCVehicleInfo70(ptree &ptRoot, ezgl::renderer* rend) {
     //busID++; 
     
 }
+ */
