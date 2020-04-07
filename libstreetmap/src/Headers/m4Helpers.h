@@ -1,14 +1,11 @@
 #ifndef M4HELPERS_H
 #define M4HELPERS_H
+
+#include "StreetsDatabaseAPI.h"
 #include "m4.h"
-
-std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, std::vector<bool>& orderComplete, unsigned startDepot); 
-
-double percentFull(double maxWeight, double currentWeight); 
 
 #include <unordered_map>
 #include <vector>
-#include "m4.h"
 
 struct Truck {
     //Defines attributes about the truck and its current status
@@ -20,6 +17,12 @@ struct Truck {
     
     std::unordered_map<unsigned, unsigned> packages;
 };
+
+//
+std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, std::vector<bool>& orderComplete, unsigned startDepot); 
+
+//
+double percentFull(double maxWeight, double currentWeight); 
 
 //Returns the current weight on the truck
 float getCurrentWeight(const std::vector<DeliveryInfo>& deliveries, std::unordered_map<unsigned, unsigned> deliveryIndices);
