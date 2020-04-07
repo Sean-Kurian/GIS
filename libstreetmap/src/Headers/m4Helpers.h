@@ -1,5 +1,12 @@
 #ifndef M4HELPERS_H
 #define M4HELPERS_H
+#include "m4.h"
+
+double currentWeight(const std::vector<DeliveryInfo>& deliveries, std::vector<int> deliveryIndices); 
+
+std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, std::vector<bool>& orderComplete, unsigned startDepot); 
+
+double percentFull(double maxWeight, double currentWeight); 
 
 #include <unordered_map>
 #include <vector>
