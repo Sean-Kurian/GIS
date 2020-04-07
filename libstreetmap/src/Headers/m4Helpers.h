@@ -2,7 +2,7 @@
 #define M4HELPERS_H
 #include "m4.h"
 
-double currentWeight(const std::vector<DeliveryInfo>& deliveries, std::vector<int> deliveryIndices); 
+float currentWeight(const std::vector<DeliveryInfo>& deliveries, std::vector<int> deliveryIndices); 
 
 std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, std::vector<bool>& orderComplete, unsigned startDepot); 
 
