@@ -60,9 +60,22 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     }
     CourierSubpath toDepot;
     toDepot.start_intersection = currentInt;
-    toDepot.end_intersection = depots[randDepot];
+    
+    //Determine closest depot to go to
+    double closestDepotDistance = std::numeric_limits<double>::max();
+    unsigned closestDepot = 0;
+    for (unsigned depotNum = 0; depotNum < depots.size(); ++depotNum) {
+        double distToDepot = find_distance_between_two_points(std::make_pair(
+                                     getIntersectionPosition(currentInt),
+                                     getIntersectionPosition(depots[depotNum])));
+        if (distToDepot < closestDepotDistance) {
+                    closestDepotDistance = distToDepot;
+                    closestDepot = depotNum;
+                }
+    }
+    toDepot.end_intersection = depots[closestDepot];
     toDepot.subpath = find_path_between_intersections(currentInt,
-                                                      depots[randDepot],
+                                                      depots[closestDepot],
                                                       turn_penalty);
     result.push_back(toDepot);
     return result;
