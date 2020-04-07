@@ -80,3 +80,11 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     result.push_back(toDepot);
     return result;
 }
+
+double currentWeight(const std::vector<DeliveryInfo>& deliveries, std::vector<int> deliveryIndices){
+    double weight = 0; 
+    for (int i = 0; i < deliveryIndices.size(); i++){
+        weight += deliveries[deliveryIndices[i]]; 
+    }
+    return weight; 
+}
