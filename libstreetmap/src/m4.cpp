@@ -85,7 +85,6 @@ std::vector<CourierSubpath> v2traveling_courier(const std::vector<DeliveryInfo>&
     currentInt = initialPath.end_intersection;
     bool isFirstPath = true;
     
-
     while (numCompleted < NUM_TO_COMPLETE) {
         CourierSubpath toPickup, toDropoff, nextPath;
 
@@ -310,17 +309,12 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         }
         
         auto endFindKD = std::chrono::high_resolution_clock::now();
-        
         timeKDTree += std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD);
-        
 //        std::cout << "Time taken to find nearest pickup with KD tree: " 
 //                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD).count() << " ns\n";
-        
         std::cout << "Closest index with KD tree: " << closestOrder << " Distance: " << closestDistance
                   << " Pickup: " << isPickup << "\n\n";
-        
-        ////////////////////////////////////////////////////////////////////////
-        
+
         //If the last path was to a pick-up, the current path is from the pick up, so pick up the package
         if (prevPathIsPickUp) {
             nextPath.pickUp_indices.push_back(pickUpOrderNum);
