@@ -28,5 +28,8 @@ std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries
 //
 double percentFull(double maxWeight, double currentWeight); 
 
+//Returns the total time of a path
+double findTotalPathTime(const std::vector<CourierSubpath> subPaths, const double turn_penalty);
+
 #endif /* M4HELPERS_H */
 

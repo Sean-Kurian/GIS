@@ -50,3 +50,12 @@ std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries
         
         //Determine the closest pickup location from start intersection
 }
+
+//Returns the total time of a path
+double findTotalPathTime(const std::vector<CourierSubpath> subPaths, const double turn_penalty) {
+    double totalTime = 0;
+    for (int pathNum = 0; pathNum < subPaths.size(); ++pathNum) {
+        totalTime += compute_path_travel_time(subPaths[pathNum].subpath, turn_penalty);
+    }
+    return totalTime;
+}
