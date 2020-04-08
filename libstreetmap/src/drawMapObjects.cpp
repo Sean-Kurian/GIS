@@ -436,7 +436,7 @@ std::vector<unsigned> buildings = gData.getIndexesOfBuildingType(type);
     }
     rend->free_surface(test); 
 }
-
+/*
 //
 //void PrintTTCVehicleInfo30(ptree &ptRoot, ezgl::renderer* rend) {
 //    string busName;
