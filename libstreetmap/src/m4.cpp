@@ -80,31 +80,28 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     auto endKD = std::chrono::high_resolution_clock::now();
     std::cout << "Time taken to make KD tree: " 
               << std::chrono::duration_cast<std::chrono::microseconds>(endKD - startKD).count() << " us\n";
-    
-    while (numCompleted < NUM_TO_COMPLETE) {
-        CourierSubpath toPickup, toDropoff, nextPath;
         
-        auto startFind = std::chrono::high_resolution_clock::now();
-        
-        //Determine the closest pickup location from current intersection
-        //Determine starting depot - depot that is closest to a start point
-        double closestDistanceToDepot = std::numeric_limits<double>::max();
-        unsigned closestDepot = depots[0];
-        unsigned closestOrderFromDepot = 0;
-        for (unsigned depotNum = 0; depotNum < depots.size(); ++depotNum) {
-            for (unsigned orderNum = 0; orderNum < NUM_TO_COMPLETE; ++orderNum) {
-                double distToOrder = find_distance_between_two_points(std::make_pair(
-                                         getIntersectionPosition(depots[depotNum]),
-                                         getIntersectionPosition(deliveries[orderNum].pickUp)));
+    auto startFind = std::chrono::high_resolution_clock::now();
 
-                if (distToOrder < closestDistanceToDepot) {
-                    closestDistanceToDepot = distToOrder;
-                    closestOrderFromDepot = orderNum;
-                    closestDepot = depotNum;
-                }
+    //Determine the closest pickup location from current intersection
+    //Determine starting depot - depot that is closest to a start point
+    double closestDistanceToDepot = std::numeric_limits<double>::max();
+    unsigned closestDepot = depots[0];
+    unsigned closestOrderFromDepot = 0;
+    for (unsigned depotNum = 0; depotNum < depots.size(); ++depotNum) {
+        for (unsigned orderNum = 0; orderNum < NUM_TO_COMPLETE; ++orderNum) {
+            double distToOrder = find_distance_between_two_points(std::make_pair(
+                                     getIntersectionPosition(depots[depotNum]),
+                                     getIntersectionPosition(deliveries[orderNum].pickUp)));
+
+            if (distToOrder < closestDistanceToDepot) {
+                closestDistanceToDepot = distToOrder;
+                closestOrderFromDepot = orderNum;
+                closestDepot = depotNum;
             }
         }
-    
+    }
+
     //Construct the first sub path
     CourierSubpath initialPath;
     currentInt = depots[closestDepot];
@@ -115,23 +112,23 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     result.push_back(initialPath);
     currentInt = initialPath.end_intersection;
     bool isFirstPath = true;
-    
+
 
     while (numCompleted < NUM_TO_COMPLETE) {
         CourierSubpath toPickup, toDropoff, nextPath;
-        
+
         if (isFirstPath) {
             nextPath.pickUp_indices.push_back(pickUpOrderNum);
             truck.packages.insert(std::make_pair(pickUpOrderNum, pickUpOrderNum));
             isFirstPath = false;
             prevPathIsPickUp = false;
         }
-        
+
         //Determine the closest pickup or drop off location from current intersection
         double closestDistance = std::numeric_limits<double>::max();
         unsigned closestOrder = 0;
         bool isPickUp = true;
-        
+
         for (unsigned orderNum = 0; orderNum < NUM_TO_COMPLETE; ++orderNum) {
             double distToOrder = std::numeric_limits<double>::max();
             bool pickUp;
@@ -140,7 +137,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                 if (!truck.packages.count(orderNum)) {
                     //First ensure there is room on the truck to possibly pick up the package
                     float currentWeight = 0;//getCurrentWeight(deliveries, truck.packages);
-                    
+
                     if (currentWeight + deliveries[orderNum].itemWeight < truck.capacity) {
                         distToOrder = find_distance_between_two_points(std::make_pair(
                                      getIntersectionPosition(currentInt),
@@ -148,7 +145,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                         pickUp = true;
                     }
                 }
-                
+
                 //Otherwise order is on truck, so find it's drop off distance
                 else {
                     distToOrder = find_distance_between_two_points(std::make_pair(
@@ -156,7 +153,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                      getIntersectionPosition(deliveries[orderNum].dropOff)));
                     pickUp = false;
                 }
-                
+
                 if (distToOrder < closestDistance) {
                     closestDistance = distToOrder;
                     closestOrder = orderNum;
@@ -167,31 +164,31 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         auto endFind = std::chrono::high_resolution_clock::now();
         std::cout << "Time taken to brute force nearest pickup: " 
                   << std::chrono::duration_cast<std::chrono::microseconds>(endFind - startFind).count() << " us\n";
-        
+
         std::cout << "Closest index with brute force: " << closestOrder << "\n";
-        
+
         auto startFindKD = std::chrono::high_resolution_clock::now();
-        
+
         LatLon currentPos = getIntersectionPosition(currentInt);
         const double queryPoint[2] = {xFromLon(currentPos.lon()), yFromLat(currentPos.lat())};
         size_t numResults = 1;
         std::vector<size_t> resIndexes(numResults);
         std::vector<double> resDists(numResults);
         numResults = index.knnSearch(&queryPoint[0], numResults, &resIndexes[0], &resDists[0]);
-        
+
         auto endFindKD = std::chrono::high_resolution_clock::now();
         std::cout << "Time taken to find nearest pickup with KD tree: " 
                   << std::chrono::duration_cast<std::chrono::microseconds>(endFindKD - startFindKD).count() << " us\n";
-        
+
         std::cout << "Closest index with KD tree: " << resIndexes[0] << "\n";
-        
+
         //If the last path was to a pick-up, the current path is from the pick up, so pick up the package
         if (prevPathIsPickUp) {
             nextPath.pickUp_indices.push_back(pickUpOrderNum);
             truck.packages.insert(std::make_pair(pickUpOrderNum, pickUpOrderNum));
             prevPathIsPickUp = false;
         }
-        
+
         //Construct the courier sub-path from current intersection to next location
         nextPath.start_intersection = currentInt;
         if (isPickUp) {
@@ -204,33 +201,35 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
             orderComplete[closestOrder] = true;
             numCompleted++;
         }
-        
+
 
         nextPath.subpath = find_path_between_intersections(nextPath.start_intersection, nextPath.end_intersection, turn_penalty);
         result.push_back(nextPath);
-        
-//        toPickup.start_intersection = currentInt;
-//        toPickup.end_intersection = deliveries[closestOrder].pickUp;
-//        toPickup.subpath = find_path_between_intersections(currentInt, 
-//                                                           deliveries[closestOrder].pickUp, 
-//                                                           turn_penalty);
-//        result.push_back(toPickup);
-//        
-//        toDropoff.start_intersection = deliveries[closestOrder].pickUp;
-//        toDropoff.end_intersection = deliveries[closestOrder].dropOff;
-//        toDropoff.subpath = find_path_between_intersections(deliveries[closestOrder].pickUp,
-//                                                            deliveries[closestOrder].dropOff,
-//                                                            turn_penalty);
-//        toDropoff.pickUp_indices.push_back(closestOrder);
-//        result.push_back(toDropoff);
-        
-//        orderComplete[closestOrder] = true;
+
+    //        toPickup.start_intersection = currentInt;
+    //        toPickup.end_intersection = deliveries[closestOrder].pickUp;
+    //        toPickup.subpath = find_path_between_intersections(currentInt, 
+    //                                                           deliveries[closestOrder].pickUp, 
+    //                                                           turn_penalty);
+    //        result.push_back(toPickup);
+    //        
+    //        toDropoff.start_intersection = deliveries[closestOrder].pickUp;
+    //        toDropoff.end_intersection = deliveries[closestOrder].dropOff;
+    //        toDropoff.subpath = find_path_between_intersections(deliveries[closestOrder].pickUp,
+    //                                                            deliveries[closestOrder].dropOff,
+    //                                                            turn_penalty);
+    //        toDropoff.pickUp_indices.push_back(closestOrder);
+    //        result.push_back(toDropoff);
+
+    //        orderComplete[closestOrder] = true;
         currentInt = nextPath.end_intersection;
-//        numCompleted++;
+    //        numCompleted++;
     }
+    
+    //Last stop to Depot
     CourierSubpath toDepot;
     toDepot.start_intersection = currentInt;
-    
+
     //Determine closest depot to go to
     double closestDepotDistance = std::numeric_limits<double>::max();
     closestDepot = 0;
@@ -249,5 +248,5 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                                       turn_penalty);
     result.push_back(toDepot);
     return result;
-}   
+
 }
