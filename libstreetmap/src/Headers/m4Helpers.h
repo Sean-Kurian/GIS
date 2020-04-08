@@ -10,10 +10,11 @@
 struct Truck {
     //Defines attributes about the truck and its current status
     
-    Truck(float weight)
-            : capacity(weight) {}
+    Truck(float weight, float total)
+            : capacity(weight), curWeight(total) {}
     
     float capacity;
+    float curWeight; 
     
     std::unordered_map<unsigned, unsigned> packages;
 };
@@ -26,6 +27,10 @@ double percentFull(double maxWeight, double currentWeight);
 
 //Returns the current weight on the truck
 float getCurrentWeight(const std::vector<DeliveryInfo>& deliveries, std::unordered_map<unsigned, unsigned> deliveryIndices);
+
+float updateWeight(float newWeight); 
+
+void emptyTruck(); 
 
 std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, const std::vector<bool>& orderComplete, unsigned startDepot);
 
