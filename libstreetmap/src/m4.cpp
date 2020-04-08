@@ -83,6 +83,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     
     ///////////////////////////////////////////// THREAD STARTS /////////////////////////////////////////////
     unsigned threadCount = 0;
+#pragma OMP parallel for
     for (auto mapItr = depotsByDistToStart.begin(); 
               mapItr != depotsByDistToStart.end() && threadCount < NUM_THREADS;
               mapItr++, threadCount++) {
@@ -209,16 +210,16 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                                           turn_penalty);
         threadBest.push_back(toDepot);
         
-        
-        
         //Determine if threadBest is better than result
         double threadTime = findTotalPathTime(threadBest, turn_penalty);
-        if (threadTime < timeOfResult) {
-            timeOfResult = threadTime;
-            result = threadBest;
+#pragma OMP critical
+        {
+            if (threadTime < timeOfResult) {
+                timeOfResult = threadTime;
+                result = threadBest;
+            }
         }
     }
 //    std::cout << "Truck at end: Num Packages: " << truck.packages.size() << " Weight: " << truck.curWeight << "\n";
-    
     return result;
 }
