@@ -47,7 +47,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     std::vector<CourierSubpath> result;
     double timeOfResult = std::numeric_limits<double>::max();
     
-    const unsigned NUM_STARTS = 3;
+    const unsigned NUM_THREADS = 3;
     const unsigned NUM_TO_COMPLETE = deliveries.size();
     const size_t NUM_NEIGHBORS_TO_FIND = 3;
     
@@ -82,8 +82,10 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     }
     
     ///////////////////////////////////////////// THREAD STARTS /////////////////////////////////////////////
-    
-    for (unsigned startNum = 0; startNum < NUM_STARTS; ++startNum) {
+    unsigned threadCount = 0;
+    for (auto mapItr = depotsByDistToStart.begin(); 
+              mapItr != depotsByDistToStart.end() && threadCount < NUM_THREADS;
+              mapItr++, threadCount++) {
         std::vector<CourierSubpath> threadBest;
         
         KDTreeType threadIndex(2, pointData, KDTreeSingleIndexAdaptorParams(5));
