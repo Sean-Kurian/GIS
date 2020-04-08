@@ -46,7 +46,7 @@ TEST(easy_toronto_canada) {
     truck_capacity = 2427.750000000; 
     {
 
-            result_path = traveling_courierv2(deliveries, depots, turn_penalty, truck_capacity);
+            result_path = traveling_courier(deliveries, depots, turn_penalty, truck_capacity);
     }
 
 }
