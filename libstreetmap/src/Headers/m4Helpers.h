@@ -28,7 +28,9 @@ double percentFull(double maxWeight, double currentWeight);
 //Returns the current weight on the truck
 float getCurrentWeight(const std::vector<DeliveryInfo>& deliveries, std::unordered_map<unsigned, unsigned> deliveryIndices);
 
-float updateWeight(float newWeight); 
+void updateWeight(float newWeight); 
+
+float getWeight(); 
 
 void emptyTruck(); 
 
