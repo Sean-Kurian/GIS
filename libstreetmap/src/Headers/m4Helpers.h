@@ -5,6 +5,7 @@
 #include "m4.h"
 
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 struct Truck {
@@ -17,6 +18,7 @@ struct Truck {
     float curWeight; 
     
     std::unordered_map<unsigned, unsigned> packages;
+    std::unordered_set<unsigned> packagesv2;
 };
 
 //
