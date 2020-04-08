@@ -15,6 +15,7 @@
 #include <unordered_set>
 #include <stdio.h>
 #include <chrono>
+#include <bits/unordered_set.h>
 
 using namespace nanoflann;
 
@@ -71,6 +72,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     //Determine number of deliveries needed to be completed
     unsigned currentInt = depots[0];
     unsigned numCompleted = 0;
+    unsigned numPickuped = 0;
     Truck truck(truck_capacity);
     
     bool prevPathIsPickUp = true;
@@ -86,17 +88,21 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     
     //Determine the closest pickup location from current intersection
     //Determine starting depot - depot that is closest to a start point
+    
 //    size_t depotResIdx[1];
 //    double depotResDists[1];
 //    KNNResultSet<double> depotResultSet(1);
 //    
 //    for (const int& depot : depots) {
 //        LatLon currentPos = getIntersectionPosition(depot);
-//        const double queryPoint[2] = {currentPos.lon(), currentPos.lat()};
-//        resultSet.init(depotResIdx, depotResDists);
-//        index.findNeighbors(resultSet, queryPoint, nanoflann::SearchParams(5));
+//        const double queryPoint[2] = {xFromLon(currentPos.lon()), yFromLat(currentPos.lat())};
+//        depotResultSet.init(depotResIdx, depotResDists);
+//        index.findNeighbors(depotResultSet, queryPoint, nanoflann::SearchParams(5));
+//        double distToOrder = find_distance_between_two_points(std::make_pair(
+//                                     getIntersectionPosition(depot),
+//                                     getIntersectionPosition(deliveries[depotResIdx[0]].pickUp)));
 //    }
-    
+//    
     double closestDistanceToDepot = std::numeric_limits<double>::max();
     unsigned closestDepot = depots[0];
     unsigned closestOrderFromDepot = 0;
@@ -133,6 +139,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         if (isFirstPath) {
             nextPath.pickUp_indices.push_back(pickUpOrderNum);
             truck.addPackage(pickUpOrderNum, deliveries[pickUpOrderNum].itemWeight);
+            numPickuped++;
             isFirstPath = false;
             prevPathIsPickUp = false;
         }
@@ -142,23 +149,23 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         double closestDistance = std::numeric_limits<double>::max();
         
 //        auto startFindKD = std::chrono::high_resolution_clock::now();
+        
+        if (numPickuped < NUM_TO_COMPLETE) {
+            LatLon currentPos = getIntersectionPosition(currentInt);
+            const double queryPoint[2] = {xFromLon(currentPos.lon()), yFromLat(currentPos.lat())};//{(currentPos.lon()), (currentPos.lat())};
+            resultSet.init(resIndexes, resDists);
+            index.findNeighbors(resultSet, queryPoint, nanoflann::SearchParams(5));
 
-        LatLon currentPos = getIntersectionPosition(currentInt);
-        const double queryPoint[2] = {xFromLon(currentPos.lon()), yFromLat(currentPos.lat())};//{(currentPos.lon()), (currentPos.lat())};
-        resultSet.init(resIndexes, resDists);
-        
-        index.findNeighbors(resultSet, queryPoint, nanoflann::SearchParams(5));
-        
-        for (unsigned neighbor = 0; neighbor < NUM_NEIGHBORS_TO_FIND; ++neighbor) {
-            if (truck.curWeight + deliveries[resIndexes[neighbor]].itemWeight < truck.capacity) {
-                closestOrder = resIndexes[neighbor];
-                closestDistance = find_distance_between_two_points(std::make_pair(
-                                       getIntersectionPosition(currentInt),
-                                       getIntersectionPosition(deliveries[closestOrder].pickUp)));
-                break;
+            for (unsigned neighbor = 0; neighbor < NUM_NEIGHBORS_TO_FIND; ++neighbor) {
+                if (truck.curWeight + deliveries[resIndexes[neighbor]].itemWeight < truck.capacity) {
+                    closestOrder = resIndexes[neighbor];
+                    closestDistance = find_distance_between_two_points(std::make_pair(
+                                           getIntersectionPosition(currentInt),
+                                           getIntersectionPosition(deliveries[closestOrder].pickUp)));
+                    break;
+                }
             }
         }
-        
         for (const unsigned& orderNum : truck.packages) {
             double distToOrder = find_distance_between_two_points(std::make_pair(
                                     getIntersectionPosition(currentInt),
@@ -172,7 +179,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         
         if (closestOrder == -1) {
             std::cout << "\nWeight: " << truck.curWeight << " Capacity: " << truck.capacity << " Num Packages: " << truck.packages.size()
-                      << " NumCompleted: " << numCompleted << "\nNeighbors: ";
+                      << " NumPickuped: " << numPickuped << " NumCompleted: " << numCompleted << "\nNeighbors: ";
             for (unsigned neighbor = 0; neighbor < NUM_NEIGHBORS_TO_FIND; ++neighbor)
                 std:: cout << resIndexes[neighbor] << "  ";
             std::cout << "\n\n";
@@ -200,6 +207,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
             pickUpOrderNum = closestOrder;
             truck.addPackage(pickUpOrderNum, deliveries[pickUpOrderNum].itemWeight);
             index.removePoint(pickUpOrderNum);
+            numPickuped++;
         }
         else {
             nextPath.end_intersection = deliveries[closestOrder].dropOff;
@@ -211,7 +219,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
 
         currentInt = nextPath.end_intersection;
     }
-    
+
     //Last stop to Depot
     CourierSubpath toDepot;
     toDepot.start_intersection = currentInt;
@@ -234,7 +242,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                                       turn_penalty);
     result.push_back(toDepot);
     
-    std::cout << "Truck at end: Num Packages: " << truck.packages.size() << " weight: " << truck.curWeight << "\n";
+    std::cout << "Truck at end: Num Packages: " << truck.packages.size() << " Weight: " << truck.curWeight << "\n";
     
     return result;
 }
