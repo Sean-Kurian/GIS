@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <chrono>
 #include <bits/unordered_set.h>
+#include <omp.h>
 
 using namespace nanoflann;
 
@@ -46,12 +47,11 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                               const float truck_capacity) {
     std::vector<CourierSubpath> result;
     double timeOfResult = std::numeric_limits<double>::max();
-    
-    const unsigned NUM_THREADS = 3;
+
     const unsigned NUM_TO_COMPLETE = deliveries.size();
     const size_t NUM_NEIGHBORS_TO_FIND = 3;
     
-//    std::cout << "Number of packages: " << NUM_TO_COMPLETE << "\n";
+    std::cout << "Number of packages: " << NUM_TO_COMPLETE << " Number of depots: " << depots.size() << "\n";
 
     PointVec pointData;
     pointData.points.resize(NUM_TO_COMPLETE);
@@ -82,11 +82,17 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     }
     
     ///////////////////////////////////////////// THREAD STARTS /////////////////////////////////////////////
-    unsigned threadCount = 0;
-#pragma OMP parallel for
-    for (auto mapItr = depotsByDistToStart.begin(); 
-              mapItr != depotsByDistToStart.end() && threadCount < NUM_THREADS;
-              mapItr++, threadCount++) {
+#pragma omp parallel
+{
+    size_t count = 0;
+    int threadID = omp_get_thread_num();
+    int numThreads = omp_get_num_threads();
+    for (auto mapItr = depotsByDistToStart.begin(); mapItr != depotsByDistToStart.end(); ++mapItr, ++count) {
+        if (count % numThreads != threadID)
+            continue;
+        
+        std::cout << "Testingsnkdsnkdks";
+        
         std::vector<CourierSubpath> threadBest;
         
         KDTreeType threadIndex(2, pointData, KDTreeSingleIndexAdaptorParams(5));
@@ -101,8 +107,8 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         
         //Construct the first sub path
         CourierSubpath initialPath;
-        unsigned currentInt = depotsByDistToStart.begin()->second.first;
-        unsigned pickUpOrderNum = depotsByDistToStart.begin()->second.second;
+        unsigned currentInt = mapItr->second.first;
+        unsigned pickUpOrderNum = mapItr->second.second;
         initialPath.start_intersection = currentInt;
         initialPath.end_intersection = deliveries[pickUpOrderNum].pickUp;
         initialPath.subpath = find_path_between_intersections(initialPath.start_intersection, initialPath.end_intersection, turn_penalty);
@@ -212,14 +218,16 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         
         //Determine if threadBest is better than result
         double threadTime = findTotalPathTime(threadBest, turn_penalty);
-#pragma OMP critical
+#pragma omp critical
         {
+            std::cout << "Thread time: " << threadTime << " Best time: " << timeOfResult << "\n";
             if (threadTime < timeOfResult) {
                 timeOfResult = threadTime;
                 result = threadBest;
             }
         }
     }
+}
 //    std::cout << "Truck at end: Num Packages: " << truck.packages.size() << " Weight: " << truck.curWeight << "\n";
     return result;
 }
