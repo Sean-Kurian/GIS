@@ -109,9 +109,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                 //Determine if order is not on truck, then find it's pickup distance
                 if (!truck.packages.count(orderNum)) {
                     //First ensure there is room on the truck to possibly pick up the package
-                    float currentWeight = getCurrentWeight(deliveries, truck.packages);
-
-                    if (currentWeight + deliveries[orderNum].itemWeight < truck.capacity) {
+                    if (truck.curWeight + deliveries[orderNum].itemWeight < truck.capacity) {
                         distToOrder = find_distance_between_two_points(std::make_pair(
                                      getIntersectionPosition(currentInt),
                                      getIntersectionPosition(deliveries[orderNum].pickUp)));
@@ -134,9 +132,9 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                 }
             }
         }
-        auto endFind = std::chrono::high_resolution_clock::now();
-        std::cout << "Time taken to brute force nearest pickup: " 
-                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFind - startFind).count() << " ns\n";
+//        auto endFind = std::chrono::high_resolution_clock::now();
+//        std::cout << "Time taken to brute force nearest pickup: " 
+//                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFind - startFind).count() << " ns\n";
 
         std::cout << "Closest index with brute force: " << closestOrder << "\n";
 
@@ -187,7 +185,6 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                                       turn_penalty);
     result.push_back(toDepot);
     return result;
-
 }
 
 std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>& deliveries,
@@ -202,7 +199,6 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
     auto timeKDTree = std::chrono::nanoseconds(0);
     
     //Determine number of deliveries needed to be completed
-    //unsigned randDepot = std::rand() % depots.size();
     unsigned currentInt = depots[0];
     std::vector<bool> orderComplete;
     orderComplete.resize(deliveries.size(), false);
@@ -217,17 +213,12 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
     auto startKD = std::chrono::high_resolution_clock::now();
     
     PointVec pointData;
-    pointData.points.resize(NUM_TO_COMPLETE + depots.size());
+    pointData.points.resize(NUM_TO_COMPLETE);
     for (unsigned orderNum = 0; orderNum < NUM_TO_COMPLETE; ++orderNum) {
         LatLon orderPos = getIntersectionPosition(deliveries[orderNum].pickUp);
         pointData.points[orderNum].x = xFromLon(orderPos.lon());
         pointData.points[orderNum].y = yFromLat(orderPos.lat());
     }
-//    for (unsigned depotNum = 0; depotNum < depots.size(); ++depotNum) {
-//        LatLon depotPos = getIntersectionPosition(depots[depotNum]);
-//        pointData.points[NUM_TO_COMPLETE + depotNum].x = xFromLon(depotPos.lon());
-//        pointData.points[NUM_TO_COMPLETE + depotNum].y = yFromLat(depotPos.lat());
-//    }
     
     typedef KDTreeSingleIndexDynamicAdaptor<L2_Simple_Adaptor<double, PointVec>,
                                             PointVec, 2> KDTreeType;
@@ -236,9 +227,8 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
     index.addPoints(0, NUM_TO_COMPLETE - 1);
     
     auto endKD = std::chrono::high_resolution_clock::now();
-    std::cout << "Time taken to make KD tree: " 
-              << std::chrono::duration_cast<std::chrono::microseconds>(endKD - startKD).count() << " us\n";
-    
+//    std::cout << "Time taken to make KD tree: " 
+//              << std::chrono::duration_cast<std::chrono::microseconds>(endKD - startKD).count() << " us\n";
     
     size_t resIndexes[NUM_NEIGHBORS_TO_FIND];
     double resDists[NUM_NEIGHBORS_TO_FIND];
@@ -327,8 +317,8 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
             }
         }
         auto endFind = std::chrono::high_resolution_clock::now();
-        std::cout << "Time taken to brute force nearest pickup: " 
-                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFind - startFind).count() << " ns\n";
+//        std::cout << "Time taken to brute force nearest pickup: " 
+//                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFind - startFind).count() << " ns\n";
         
         timeBruteForce += std::chrono::duration_cast<std::chrono::nanoseconds>(endFind - startFind);
         
@@ -336,6 +326,10 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
                   << " Pickup: " << isPickUp << "\n";
         
         /////////////////////////// KD START ///////////////////////////////////
+        bool isPickupv2 = true;
+        int closestOrderv2 = -1;
+        double closestDistancev2 = std::numeric_limits<double>::max();
+        
         auto startFindKD = std::chrono::high_resolution_clock::now();
 
         LatLon currentPos = getIntersectionPosition(currentInt);
@@ -344,12 +338,8 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
         
         index.findNeighbors(resultSet, queryPoint, nanoflann::SearchParams(5));
         
-        bool isPickupv2 = true;
-        int closestOrderv2 = -1;
-        double closestDistancev2 = std::numeric_limits<double>::max();
         for (unsigned neighbor = 0; neighbor < NUM_NEIGHBORS_TO_FIND; ++neighbor) {
-            if (getCurrentWeight(deliveries, truck.packages) 
-                        + deliveries[resIndexes[neighbor]].itemWeight < truck_capacity) {
+            if (truck.curWeight + deliveries[resIndexes[neighbor]].itemWeight < truck.capacity) {
                 closestOrderv2 = resIndexes[neighbor];
                 closestDistancev2 = find_distance_between_two_points(std::make_pair(
                                        getIntersectionPosition(currentInt),
@@ -370,10 +360,11 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
         }
         
         auto endFindKD = std::chrono::high_resolution_clock::now();
-        std::cout << "Time taken to find nearest pickup with KD tree: " 
-                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD).count() << " ns\n";
         
         timeKDTree += std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD);
+        
+//        std::cout << "Time taken to find nearest pickup with KD tree: " 
+//                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD).count() << " ns\n";
         
         std::cout << "Closest index with KD tree: " << closestOrderv2 << " Distance: " << closestDistancev2
                   << " Pickup: " << isPickupv2 << "\n\n";
@@ -383,8 +374,7 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
         //If the last path was to a pick-up, the current path is from the pick up, so pick up the package
         if (prevPathIsPickUp) {
             nextPath.pickUp_indices.push_back(pickUpOrderNum);
-            truck.packages.insert(std::make_pair(pickUpOrderNum, pickUpOrderNum));
-            truck.packagesv2.insert(pickUpOrderNum);
+            truck.addPackage(pickUpOrderNum, deliveries[pickUpOrderNum].itemWeight);
             index.removePoint(pickUpOrderNum);
             prevPathIsPickUp = false;
         }
@@ -398,8 +388,7 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
         } 
         else {
             nextPath.end_intersection = deliveries[closestOrder].dropOff;
-            truck.packages.erase(closestOrder);
-            truck.packagesv2.erase(closestOrder);
+            truck.removePackage(closestOrder, deliveries[closestOrder].itemWeight);
             orderComplete[closestOrder] = true;
             numCompleted++;
         }
@@ -431,9 +420,6 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
                                                       depots[closestDepot],
                                                       turn_penalty);
     result.push_back(toDepot);
-    
-    std::cout << "Total time using brute force: " << timeBruteForce.count() << " ns\n"
-              << "Total time using KD tree:     " << timeKDTree.count() << " ns\n";
     
     return result;
 }
