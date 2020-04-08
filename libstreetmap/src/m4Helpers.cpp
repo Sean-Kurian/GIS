@@ -7,7 +7,6 @@
 #include <limits>
 #include <algorithm> 
 
-Truck delivVehicle; 
 double percentFull(double maxWeight, double currentWeight) {
     return (currentWeight/maxWeight * 100); 
 }
@@ -53,10 +52,13 @@ void getWeight(Truck& delivVehicle){
     return delivVehicle.curWeight; 
 }
 
-void updateWeight(Truck& delivVehicle, float newWeight){
+void addWeight(Truck& delivVehicle, float newWeight){
     delivVehicle.curWeight += newWeight; 
 }
 
+void removeWeight(Truck& delivVehicle, float newWeight){
+    delivVehicle.curWeight -= newWeight; 
+}
 void emptyTruck(Truck& delivVehicle){
     delivVehicle.curWeight = 0; 
 }
