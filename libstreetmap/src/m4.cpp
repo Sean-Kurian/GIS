@@ -194,29 +194,14 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     const unsigned NUM_TO_COMPLETE = deliveries.size();
     const size_t NUM_NEIGHBORS_TO_FIND = 3;
     
-    auto timeKDTree = std::chrono::nanoseconds(0);
-    
-    //Determine number of deliveries needed to be completed
-    unsigned currentInt = depots[0];
-    std::vector<bool> orderComplete;
-    orderComplete.resize(deliveries.size(), false);
-    
-    unsigned numCompleted = 0;
-    Truck truck(truck_capacity);
-    
-    bool prevPathIsPickUp = true;
-    unsigned pickUpOrderNum = 0;
-    
-    std::cout << "Number of packages: " << NUM_TO_COMPLETE << "\n";
-    
-    auto startKD = std::chrono::high_resolution_clock::now();
+//    auto timeKDTree = std::chrono::nanoseconds(0);
     
     PointVec pointData;
     pointData.points.resize(NUM_TO_COMPLETE);
     for (unsigned orderNum = 0; orderNum < NUM_TO_COMPLETE; ++orderNum) {
         LatLon orderPos = getIntersectionPosition(deliveries[orderNum].pickUp);
-        pointData.points[orderNum].x = xFromLon(orderPos.lon());
-        pointData.points[orderNum].y = yFromLat(orderPos.lat());
+        pointData.points[orderNum].x = orderPos.lon();//xFromLon(orderPos.lon());
+        pointData.points[orderNum].y = orderPos.lat();//yFromLat(orderPos.lat());
     }
     
     typedef KDTreeSingleIndexDynamicAdaptor<L2_Simple_Adaptor<double, PointVec>,
@@ -225,16 +210,34 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     KDTreeType index(2, pointData, KDTreeSingleIndexAdaptorParams(5));
     index.addPoints(0, NUM_TO_COMPLETE - 1);
     
-    auto endKD = std::chrono::high_resolution_clock::now();
-    std::cout << "Time taken to make KD tree: " 
-              << std::chrono::duration_cast<std::chrono::microseconds>(endKD - startKD).count() << " us\n";
-    
     size_t resIndexes[NUM_NEIGHBORS_TO_FIND];
     double resDists[NUM_NEIGHBORS_TO_FIND];
     KNNResultSet<double> resultSet(NUM_NEIGHBORS_TO_FIND);
     
+    //Determine number of deliveries needed to be completed
+    unsigned currentInt = depots[0];
+    unsigned numCompleted = 0;
+    Truck truck(truck_capacity);
+    
+    bool prevPathIsPickUp = true;
+    unsigned pickUpOrderNum = 0;
+    
+//    std::cout << "Number of packages: " << NUM_TO_COMPLETE << "\n";
+    
+//    auto startKD = std::chrono::high_resolution_clock::now();
+    
+//    auto endKD = std::chrono::high_resolution_clock::now();
+//    std::cout << "Time taken to make KD tree: " 
+//              << std::chrono::duration_cast<std::chrono::microseconds>(endKD - startKD).count() << " us\n";
+    
     //Determine the closest pickup location from current intersection
     //Determine starting depot - depot that is closest to a start point
+    size_t depotResIdx[1];
+    double depotResDists[1];
+    KNNResultSet<double> depotResultSet(1);
+    
+    
+    
     double closestDistanceToDepot = std::numeric_limits<double>::max();
     unsigned closestDepot = depots[0];
     unsigned closestOrderFromDepot = 0;
@@ -279,10 +282,10 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         int closestOrder = -1;
         double closestDistance = std::numeric_limits<double>::max();
         
-        auto startFindKD = std::chrono::high_resolution_clock::now();
+//        auto startFindKD = std::chrono::high_resolution_clock::now();
 
         LatLon currentPos = getIntersectionPosition(currentInt);
-        const double queryPoint[2] = {xFromLon(currentPos.lon()), yFromLat(currentPos.lat())};
+        const double queryPoint[2] = {(currentPos.lon()), (currentPos.lat())};//xFromLon(currentPos.lon()), yFromLat(currentPos.lat())};
         resultSet.init(resIndexes, resDists);
         
         index.findNeighbors(resultSet, queryPoint, nanoflann::SearchParams(5));
@@ -308,12 +311,12 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
             }
         }
         
-        auto endFindKD = std::chrono::high_resolution_clock::now();
-        timeKDTree += std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD);
+//        auto endFindKD = std::chrono::high_resolution_clock::now();
+//        timeKDTree += std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD);
 //        std::cout << "Time taken to find nearest pickup with KD tree: " 
 //                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD).count() << " ns\n";
         std::cout << "Closest index with KD tree: " << closestOrder << " Distance: " << closestDistance
-                  << " Pickup: " << isPickup << "\n\n";
+                  << " Pickup: " << isPickup << "\n";
 
         //If the last path was to a pick-up, the current path is from the pick up, so pick up the package
         if (prevPathIsPickUp) {
@@ -333,10 +336,8 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         else {
             nextPath.end_intersection = deliveries[closestOrder].dropOff;
             truck.removePackage(closestOrder, deliveries[closestOrder].itemWeight);
-            orderComplete[closestOrder] = true;
             numCompleted++;
         }
-
         nextPath.subpath = find_path_between_intersections(nextPath.start_intersection, nextPath.end_intersection, turn_penalty);
         result.push_back(nextPath);
 
