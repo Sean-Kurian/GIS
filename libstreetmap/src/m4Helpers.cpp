@@ -7,19 +7,27 @@
 #include <limits>
 #include <algorithm> 
 
+void Truck::addPackage(const unsigned package, const float weight) {
+    packages.insert(std::make_pair(package, package));
+    packagesv2.insert(package);
+    curWeight += weight;
+}
+void Truck::removePackage(const unsigned package, const float weight) {
+    packages.erase(package);
+    packagesv2.erase(package);
+    curWeight -= weight;
+}
+void Truck::emptyTruck() {
+    curWeight = 0;
+    packages.clear();
+    packagesv2.clear();
+}
+
 double percentFull(double maxWeight, double currentWeight) {
     return (currentWeight/maxWeight * 100); 
 }
 
-/*float getCurrentWeight(const std::vector<DeliveryInfo>& deliveries, std::unordered_map<unsigned, unsigned> deliveryIndices){
-    float weight = 0; 
-    for (int i = 0; i < deliveryIndices.size(); i++){
-        weight += deliveries[deliveryIndices[i]].itemWeight; 
-    }
-    return weight; 
-}*/
-
-std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, const std::vector<bool>& orderComplete, unsigned startDepot){
+std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, std::vector<bool>& orderComplete, unsigned startDepot) {
 
     std::vector<int> closestInts;
     long unsigned constantNumNoReason = 5; 
@@ -44,21 +52,4 @@ std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries
         return closestInts;
         
         //Determine the closest pickup location from start intersection
-
-        
-}
-
-void getWeight(Truck& delivVehicle){
-    return delivVehicle.curWeight; 
-}
-
-void addWeight(Truck& delivVehicle, float newWeight){
-    delivVehicle.curWeight += newWeight; 
-}
-
-void removeWeight(Truck& delivVehicle, float newWeight){
-    delivVehicle.curWeight -= newWeight; 
-}
-void emptyTruck(Truck& delivVehicle){
-    delivVehicle.curWeight = 0; 
 }

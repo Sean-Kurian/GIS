@@ -8,17 +8,19 @@
 #include <unordered_set>
 #include <vector>
 
+//Defines attributes about the truck and its current status
 struct Truck {
-    //Defines attributes about the truck and its current status
-    
-    Truck(float weight, float total)
-            : capacity(weight), curWeight(total) {}
+    Truck(float _capacity) : capacity(_capacity), curWeight(0) {}
     
     float capacity;
     float curWeight; 
     
     std::unordered_map<unsigned, unsigned> packages;
     std::unordered_set<unsigned> packagesv2;
+    
+    void addPackage(const unsigned package, const float weight);
+    void removePackage(const unsigned package, const float weight);
+    void emptyTruck();
 };
 
 //
@@ -26,19 +28,6 @@ std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries
 
 //
 double percentFull(double maxWeight, double currentWeight); 
-
-//Returns the current weight on the truck
-float getCurrentWeight(const std::vector<DeliveryInfo>& deliveries, std::unordered_map<unsigned, unsigned> deliveryIndices);
-
-void addWeight(Truck& delivVechicle, float newWeight); 
-
-void removeWeight(Truck& delivVehicle, float newWeight); 
-
-float getWeight(Truck& delivVehicle); 
-
-void emptyTruck(Truck& delivVehicle); 
-
-std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, const std::vector<bool>& orderComplete, unsigned startDepot);
 
 #endif /* M4HELPERS_H */
 
