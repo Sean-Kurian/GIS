@@ -45,6 +45,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                               const float turn_penalty,
                                               const float truck_capacity) {
     std::vector<CourierSubpath> result;
+    double timeOfResult = std::numeric_limits<double>::max();
     
     const unsigned NUM_STARTS = 3;
     const unsigned NUM_TO_COMPLETE = deliveries.size();
@@ -205,6 +206,15 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                                           depots[closestDepot],
                                                           turn_penalty);
         threadBest.push_back(toDepot);
+        
+        
+        
+        //Determine if threadBest is better than result
+        double threadTime = findTotalPathTime(threadBest, turn_penalty);
+        if (threadTime < timeOfResult) {
+            timeOfResult = threadTime;
+            result = threadBest;
+        }
     }
 //    std::cout << "Truck at end: Num Packages: " << truck.packages.size() << " Weight: " << truck.curWeight << "\n";
     
