@@ -59,15 +59,12 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     }
     typedef KDTreeSingleIndexDynamicAdaptor<L2_Simple_Adaptor<double, PointVec>,
                                             PointVec, 2> KDTreeType;
-    KDTreeType index(2, pointData, KDTreeSingleIndexAdaptorParams(5));
-    index.addPoints(0, NUM_TO_COMPLETE - 1);
+    KDTreeType mainIndex(2, pointData, KDTreeSingleIndexAdaptorParams(5));
+    mainIndex.addPoints(0, NUM_TO_COMPLETE - 1);
     size_t resIndexes[NUM_NEIGHBORS_TO_FIND];
     double resDists[NUM_NEIGHBORS_TO_FIND];
     KNNResultSet<double> resultSet(NUM_NEIGHBORS_TO_FIND);
-    
-    bool prevPathIsPickUp = true;
-    unsigned pickUpOrderNum = 0;
-    
+
 //    std::cout << "Number of packages: " << NUM_TO_COMPLETE << "\n";
 
     //Determine the closest pickup location from every depot
@@ -87,21 +84,21 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     }
     
     for (unsigned startNum = 0; startNum < NUM_STARTS; ++startNum) {
+        std::vector<CourierSubpath> threadBest;
         //Determine number of deliveries needed to be completed
-        unsigned numCompleted = 0;
-        unsigned numPickedup = 0;
+        unsigned numCompleted = 0, numPickedup = 0;
         Truck truck(truck_capacity);
         
         //Construct the first sub path
         CourierSubpath initialPath;
         unsigned currentInt = depotsByDistToStart.begin()->second.first;
+        unsigned pickUpOrderNum = depotsByDistToStart.begin()->second.second;
         initialPath.start_intersection = currentInt;
-        initialPath.end_intersection = deliveries[depotsByDistToStart.begin()->second.second].pickUp;
+        initialPath.end_intersection = deliveries[pickUpOrderNum].pickUp;
         initialPath.subpath = find_path_between_intersections(initialPath.start_intersection, initialPath.end_intersection, turn_penalty);
-        pickUpOrderNum = depotsByDistToStart.begin()->second.second;
-        result.push_back(initialPath);
+        threadBest.push_back(initialPath);
         currentInt = initialPath.end_intersection;
-        bool isFirstPath = true;
+        bool isFirstPath = true, prevPathIsPickUp = true;
 
         while (numCompleted < NUM_TO_COMPLETE) {
             CourierSubpath toPickup, toDropoff, nextPath;
@@ -146,14 +143,6 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                 }
             }
 
-            if (closestOrder == -1) {
-                std::cout << "\nWeight: " << truck.curWeight << " Capacity: " << truck.capacity << " Num Packages: " << truck.packages.size()
-                          << " NumPickuped: " << numPickedup << " NumCompleted: " << numCompleted << " Num to Complete: " << NUM_TO_COMPLETE << "\nNeighbors: ";
-                for (unsigned neighbor = 0; neighbor < NUM_NEIGHBORS_TO_FIND; ++neighbor)
-                    std:: cout << resIndexes[neighbor] << "  ";
-                std::cout << "\n\n";
-            }
-
     //        auto endFindKD = std::chrono::high_resolution_clock::now();
     //        timeKDTree += std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD);
     //        std::cout << "Time taken to find nearest pickup with KD tree: " 
@@ -184,7 +173,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                 numCompleted++;
             }
             nextPath.subpath = find_path_between_intersections(nextPath.start_intersection, nextPath.end_intersection, turn_penalty);
-            result.push_back(nextPath);
+            threadBest.push_back(nextPath);
 
             currentInt = nextPath.end_intersection;
         }
@@ -209,7 +198,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         toDepot.subpath = find_path_between_intersections(currentInt,
                                                           depots[closestDepot],
                                                           turn_penalty);
-        result.push_back(toDepot);
+        threadBest.push_back(toDepot);
     }
 //    std::cout << "Truck at end: Num Packages: " << truck.packages.size() << " Weight: " << truck.curWeight << "\n";
     
