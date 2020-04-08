@@ -49,14 +49,14 @@ std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries
         
 }
 
-void getWeight(){
+void getWeight(Truck& delivVehicle){
     return delivVehicle.curWeight; 
 }
 
-void updateWeight(float newWeight){
+void updateWeight(Truck& delivVehicle, float newWeight){
     delivVehicle.curWeight += newWeight; 
 }
 
-void emptyTruck(){
+void emptyTruck(Truck& delivVehicle){
     delivVehicle.curWeight = 0; 
 }
