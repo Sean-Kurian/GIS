@@ -89,44 +89,28 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     //Determine the closest pickup location from current intersection
     //Determine starting depot - depot that is closest to a start point
     
-//    size_t depotResIdx[1];
-//    double depotResDists[1];
-//    KNNResultSet<double> depotResultSet(1);
-//    
-//    for (const int& depot : depots) {
-//        LatLon currentPos = getIntersectionPosition(depot);
-//        const double queryPoint[2] = {xFromLon(currentPos.lon()), yFromLat(currentPos.lat())};
-//        depotResultSet.init(depotResIdx, depotResDists);
-//        index.findNeighbors(depotResultSet, queryPoint, nanoflann::SearchParams(5));
-//        double distToOrder = find_distance_between_two_points(std::make_pair(
-//                                     getIntersectionPosition(depot),
-//                                     getIntersectionPosition(deliveries[depotResIdx[0]].pickUp)));
-//    }
-//    
-    double closestDistanceToDepot = std::numeric_limits<double>::max();
-    unsigned closestDepot = depots[0];
-    unsigned closestOrderFromDepot = 0;
-    for (unsigned depotNum = 0; depotNum < depots.size(); ++depotNum) {
-        for (unsigned orderNum = 0; orderNum < NUM_TO_COMPLETE; ++orderNum) {
-            double distToOrder = find_distance_between_two_points(std::make_pair(
-                                     getIntersectionPosition(depots[depotNum]),
-                                     getIntersectionPosition(deliveries[orderNum].pickUp)));
-
-            if (distToOrder < closestDistanceToDepot) {
-                closestDistanceToDepot = distToOrder;
-                closestOrderFromDepot = orderNum;
-                closestDepot = depotNum;
-            }
-        }
+    size_t depotResIdx[1];
+    double depotResDists[1];
+    KNNResultSet<double> depotResultSet(1);
+    std::map<double, std::pair<int, int>> depotsByDistToStart;
+    for (const int& depot : depots) {
+        LatLon currentPos = getIntersectionPosition(depot);
+        const double queryPoint[2] = {xFromLon(currentPos.lon()), yFromLat(currentPos.lat())};
+        depotResultSet.init(depotResIdx, depotResDists);
+        index.findNeighbors(depotResultSet, queryPoint, nanoflann::SearchParams(5));
+        double distToOrder = find_distance_between_two_points(std::make_pair(
+                                     getIntersectionPosition(depot),
+                                     getIntersectionPosition(deliveries[depotResIdx[0]].pickUp)));
+        depotsByDistToStart.insert(std::make_pair(distToOrder, std::make_pair(depot, depotResIdx[0])));
     }
 
     //Construct the first sub path
     CourierSubpath initialPath;
-    currentInt = depots[closestDepot];
+    currentInt = depotsByDistToStart.begin()->second.first;
     initialPath.start_intersection = currentInt;
-    initialPath.end_intersection = deliveries[closestOrderFromDepot].pickUp;
+    initialPath.end_intersection = deliveries[depotsByDistToStart.begin()->second.second].pickUp;
     initialPath.subpath = find_path_between_intersections(initialPath.start_intersection, initialPath.end_intersection, turn_penalty);
-    pickUpOrderNum = closestOrderFromDepot;
+    pickUpOrderNum = depotsByDistToStart.begin()->second.second;
     result.push_back(initialPath);
     currentInt = initialPath.end_intersection;
     bool isFirstPath = true;
@@ -188,9 +172,9 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
 //        timeKDTree += std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD);
 //        std::cout << "Time taken to find nearest pickup with KD tree: " 
 //                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD).count() << " ns\n";
-        std::cout << "Closest index with KD tree: " << closestOrder << " Distance: " << closestDistance
-                  << " Pickup: " << (isPickup ? "Yes" : "No")
-                  << " Current weight: " << truck.curWeight << " Package size: " << deliveries[closestOrder].itemWeight << "\n";
+//        std::cout << "Closest index with KD tree: " << closestOrder << " Distance: " << closestDistance
+//                  << " Pickup: " << (isPickup ? "Yes" : "No")
+//                  << " Current weight: " << truck.curWeight << " Package size: " << deliveries[closestOrder].itemWeight << "\n";
 
         //If the last path was to a pick-up, the current path is from the pick up, so pick up the package
         if (prevPathIsPickUp) {
@@ -225,7 +209,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
 
     //Determine closest depot to go to
     double closestDepotDistance = std::numeric_limits<double>::max();
-    closestDepot = 0;
+    unsigned closestDepot = 0;
     for (unsigned depotNum = 0; depotNum < depots.size(); ++depotNum) {
         double distToDepot = find_distance_between_two_points(std::make_pair(
                                      getIntersectionPosition(currentInt),
@@ -241,7 +225,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                                       turn_penalty);
     result.push_back(toDepot);
     
-    std::cout << "Truck at end: Num Packages: " << truck.packages.size() << " Weight: " << truck.curWeight << "\n";
+//    std::cout << "Truck at end: Num Packages: " << truck.packages.size() << " Weight: " << truck.curWeight << "\n";
     
     return result;
 }
