@@ -7,7 +7,7 @@
 #include <limits>
 #include <algorithm> 
 
-
+Truck delivVehicle; 
 double percentFull(double maxWeight, double currentWeight) {
     return (currentWeight/maxWeight * 100); 
 }
@@ -47,4 +47,16 @@ std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries
         //Determine the closest pickup location from start intersection
 
         
+}
+
+void getWeight(){
+    return delivVehicle.curWeight; 
+}
+
+void updateWeight(float newWeight){
+    delivVehicle.curWeight += newWeight; 
+}
+
+void emptyTruck(){
+    delivVehicle.curWeight = 0; 
 }
