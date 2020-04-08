@@ -136,7 +136,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                 //Determine if order is not on truck, then find it's pickup distance
                 if (!truck.packages.count(orderNum)) {
                     //First ensure there is room on the truck to possibly pick up the package
-                    float currentWeight = 0;//getCurrentWeight(deliveries, truck.packages);
+                    float currentWeight = getCurrentWeight(deliveries, truck.packages);
 
                     if (currentWeight + deliveries[orderNum].itemWeight < truck.capacity) {
                         distToOrder = find_distance_between_two_points(std::make_pair(
