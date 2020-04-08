@@ -15,8 +15,7 @@ struct Truck {
     float capacity;
     float curWeight; 
     
-    std::unordered_map<unsigned, unsigned> packages;
-    std::unordered_set<unsigned> packagesv2;
+    std::unordered_set<unsigned> packages;
     
     void addPackage(const unsigned package, const float weight);
     void removePackage(const unsigned package, const float weight);

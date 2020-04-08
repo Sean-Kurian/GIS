@@ -8,19 +8,16 @@
 #include <algorithm> 
 
 void Truck::addPackage(const unsigned package, const float weight) {
-    packages.insert(std::make_pair(package, package));
-    packagesv2.insert(package);
+    packages.insert(package);
     curWeight += weight;
 }
 void Truck::removePackage(const unsigned package, const float weight) {
     packages.erase(package);
-    packagesv2.erase(package);
     curWeight -= weight;
 }
 void Truck::emptyTruck() {
     curWeight = 0;
     packages.clear();
-    packagesv2.clear();
 }
 
 double percentFull(double maxWeight, double currentWeight) {

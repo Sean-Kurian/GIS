@@ -91,7 +91,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
 
         if (isFirstPath) {
             nextPath.pickUp_indices.push_back(pickUpOrderNum);
-            truck.packages.insert(std::make_pair(pickUpOrderNum, pickUpOrderNum));
+            truck.addPackage(pickUpOrderNum, deliveries[pickUpOrderNum].itemWeight);
             isFirstPath = false;
             prevPathIsPickUp = false;
         }
@@ -116,8 +116,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                         pickUp = true;
                     }
                 }
-
-                //Otherwise order is on truck, so find it's drop off distance
+                // Otherwise order is on truck, so find it's drop off distance
                 else {
                     distToOrder = find_distance_between_two_points(std::make_pair(
                                      getIntersectionPosition(currentInt),
@@ -141,7 +140,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         //If the last path was to a pick-up, the current path is from the pick up, so pick up the package
         if (prevPathIsPickUp) {
             nextPath.pickUp_indices.push_back(pickUpOrderNum);
-            truck.packages.insert(std::make_pair(pickUpOrderNum, pickUpOrderNum));
+            truck.addPackage(pickUpOrderNum, deliveries[pickUpOrderNum].itemWeight);
             prevPathIsPickUp = false;
         }
 
@@ -153,7 +152,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
             pickUpOrderNum = closestOrder;
         } else {
             nextPath.end_intersection = deliveries[closestOrder].dropOff;
-            truck.packages.erase(closestOrder);
+            truck.removePackage(closestOrder, deliveries[closestOrder].itemWeight);
             orderComplete[closestOrder] = true;
             numCompleted++;
         }
@@ -193,6 +192,7 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
                                               const float truck_capacity) {
     std::vector<CourierSubpath> result;
     
+    const unsigned NUM_TO_COMPLETE = deliveries.size();
     const size_t NUM_NEIGHBORS_TO_FIND = 3;
     
     auto timeBruteForce = std::chrono::nanoseconds(0);
@@ -202,9 +202,10 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
     unsigned currentInt = depots[0];
     std::vector<bool> orderComplete;
     orderComplete.resize(deliveries.size(), false);
-    const unsigned NUM_TO_COMPLETE = deliveries.size();
+    
     unsigned numCompleted = 0;
     Truck truck(truck_capacity);
+    
     bool prevPathIsPickUp = true;
     unsigned pickUpOrderNum = 0;
     
@@ -232,7 +233,7 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
     
     size_t resIndexes[NUM_NEIGHBORS_TO_FIND];
     double resDists[NUM_NEIGHBORS_TO_FIND];
-    nanoflann::KNNResultSet<double> resultSet(NUM_NEIGHBORS_TO_FIND);
+    KNNResultSet<double> resultSet(NUM_NEIGHBORS_TO_FIND);
     
     //Determine the closest pickup location from current intersection
     //Determine starting depot - depot that is closest to a start point
@@ -271,8 +272,7 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
 
         if (isFirstPath) {
             nextPath.pickUp_indices.push_back(pickUpOrderNum);
-            truck.packages.insert(std::make_pair(pickUpOrderNum, pickUpOrderNum));
-            truck.packagesv2.insert(pickUpOrderNum);
+            truck.addPackage(pickUpOrderNum, deliveries[pickUpOrderNum].itemWeight);
             isFirstPath = false;
             prevPathIsPickUp = false;
         }
@@ -348,7 +348,7 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
             }
         }
         
-        for (const unsigned& orderNum : truck.packagesv2) {
+        for (const unsigned& orderNum : truck.packages) {
             double distToOrder = find_distance_between_two_points(std::make_pair(
                                     getIntersectionPosition(currentInt),
                                     getIntersectionPosition(deliveries[orderNum].dropOff)));
@@ -411,9 +411,9 @@ std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>&
                                      getIntersectionPosition(currentInt),
                                      getIntersectionPosition(depots[depotNum])));
         if (distToDepot < closestDepotDistance) {
-                    closestDepotDistance = distToDepot;
-                    closestDepot = depotNum;
-                }
+            closestDepotDistance = distToDepot;
+            closestDepot = depotNum;
+        }
     }
     toDepot.end_intersection = depots[closestDepot];
     toDepot.subpath = find_path_between_intersections(currentInt,
