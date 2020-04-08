@@ -95,12 +95,12 @@ struct CourierSubpath {
 //
 // If no valid route to make *all* the deliveries exists, this routine must
 // return an empty (size == 0) vector.
-std::vector<CourierSubpath> traveling_courierv2(const std::vector<DeliveryInfo>& deliveries,
+std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& deliveries,
                                               const std::vector<int>& depots,
                                               const float turn_penalty,
                                               const float truck_capacity);
 
-std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& deliveries,
+std::vector<CourierSubpath> v2traveling_courier(const std::vector<DeliveryInfo>& deliveries,
                                               const std::vector<int>& depots,
                                               const float turn_penalty,
                                               const float truck_capacity);
