@@ -28,11 +28,11 @@ double percentFull(double maxWeight, double currentWeight);
 //Returns the current weight on the truck
 float getCurrentWeight(const std::vector<DeliveryInfo>& deliveries, std::unordered_map<unsigned, unsigned> deliveryIndices);
 
-void updateWeight(float newWeight); 
+void updateWeight(Truck& delivVechicle, float newWeight); 
 
-float getWeight(); 
+float getWeight(Truck& delivVehicle); 
 
-void emptyTruck(); 
+void emptyTruck(Truck& delivVehicle); 
 
 std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, const std::vector<bool>& orderComplete, unsigned startDepot);
 
