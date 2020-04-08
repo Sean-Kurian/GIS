@@ -183,7 +183,8 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
 //        std::cout << "Time taken to find nearest pickup with KD tree: " 
 //                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD).count() << " ns\n";
         std::cout << "Closest index with KD tree: " << closestOrder << " Distance: " << closestDistance
-                  << " Pickup: " << isPickup << "\n";
+                  << " Pickup: " << (isPickup ? "Yes" : "No")
+                  << " Current weight: " << truck.curWeight << " Package size: " << deliveries[closestOrder].itemWeight << "\n";
 
         //If the last path was to a pick-up, the current path is from the pick up, so pick up the package
         if (prevPathIsPickUp) {
