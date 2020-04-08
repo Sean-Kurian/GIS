@@ -91,8 +91,6 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         if (count % numThreads != threadID)
             continue;
         
-        std::cout << "Testingsnkdsnkdks";
-        
         std::vector<CourierSubpath> threadBest;
         
         KDTreeType threadIndex(2, pointData, KDTreeSingleIndexAdaptorParams(5));
@@ -220,7 +218,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         double threadTime = findTotalPathTime(threadBest, turn_penalty);
 #pragma omp critical
         {
-            std::cout << "Thread time: " << threadTime << " Best time: " << timeOfResult << "\n";
+//            std::cout << "Thread time: " << threadTime << " Best time: " << timeOfResult << "\n";
             if (threadTime < timeOfResult) {
                 timeOfResult = threadTime;
                 result = threadBest;
