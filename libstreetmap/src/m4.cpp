@@ -179,7 +179,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         
         if (closestOrder == -1) {
             std::cout << "\nWeight: " << truck.curWeight << " Capacity: " << truck.capacity << " Num Packages: " << truck.packages.size()
-                      << " NumPickuped: " << numPickuped << " NumCompleted: " << numCompleted << "\nNeighbors: ";
+                      << " NumPickuped: " << numPickuped << " NumCompleted: " << numCompleted << " Num to Complete: " << NUM_TO_COMPLETE << "\nNeighbors: ";
             for (unsigned neighbor = 0; neighbor < NUM_NEIGHBORS_TO_FIND; ++neighbor)
                 std:: cout << resIndexes[neighbor] << "  ";
             std::cout << "\n\n";
