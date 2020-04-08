@@ -72,7 +72,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     //Determine number of deliveries needed to be completed
     unsigned currentInt = depots[0];
     unsigned numCompleted = 0;
-    unsigned numPickuped = 0;
+    unsigned numPickedup = 0;
     Truck truck(truck_capacity);
     
     bool prevPathIsPickUp = true;
@@ -131,15 +131,14 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     currentInt = initialPath.end_intersection;
     bool isFirstPath = true;
     
-    index.removePoint(pickUpOrderNum);
-    
     while (numCompleted < NUM_TO_COMPLETE) {
         CourierSubpath toPickup, toDropoff, nextPath;
 
         if (isFirstPath) {
             nextPath.pickUp_indices.push_back(pickUpOrderNum);
             truck.addPackage(pickUpOrderNum, deliveries[pickUpOrderNum].itemWeight);
-            numPickuped++;
+            index.removePoint(pickUpOrderNum);
+            numPickedup++;
             isFirstPath = false;
             prevPathIsPickUp = false;
         }
@@ -150,13 +149,13 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         
 //        auto startFindKD = std::chrono::high_resolution_clock::now();
         
-        if (numPickuped < NUM_TO_COMPLETE) {
+        if (numPickedup < NUM_TO_COMPLETE) {
             LatLon currentPos = getIntersectionPosition(currentInt);
             const double queryPoint[2] = {xFromLon(currentPos.lon()), yFromLat(currentPos.lat())};//{(currentPos.lon()), (currentPos.lat())};
             resultSet.init(resIndexes, resDists);
             index.findNeighbors(resultSet, queryPoint, nanoflann::SearchParams(5));
-
-            for (unsigned neighbor = 0; neighbor < NUM_NEIGHBORS_TO_FIND; ++neighbor) {
+            unsigned minNeighbor = std::min((unsigned)NUM_NEIGHBORS_TO_FIND, (NUM_TO_COMPLETE - numPickedup));
+            for (unsigned neighbor = 0; neighbor < minNeighbor; ++neighbor) {
                 if (truck.curWeight + deliveries[resIndexes[neighbor]].itemWeight < truck.capacity) {
                     closestOrder = resIndexes[neighbor];
                     closestDistance = find_distance_between_two_points(std::make_pair(
@@ -179,7 +178,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         
         if (closestOrder == -1) {
             std::cout << "\nWeight: " << truck.curWeight << " Capacity: " << truck.capacity << " Num Packages: " << truck.packages.size()
-                      << " NumPickuped: " << numPickuped << " NumCompleted: " << numCompleted << " Num to Complete: " << NUM_TO_COMPLETE << "\nNeighbors: ";
+                      << " NumPickuped: " << numPickedup << " NumCompleted: " << numCompleted << " Num to Complete: " << NUM_TO_COMPLETE << "\nNeighbors: ";
             for (unsigned neighbor = 0; neighbor < NUM_NEIGHBORS_TO_FIND; ++neighbor)
                 std:: cout << resIndexes[neighbor] << "  ";
             std::cout << "\n\n";
@@ -207,7 +206,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
             pickUpOrderNum = closestOrder;
             truck.addPackage(pickUpOrderNum, deliveries[pickUpOrderNum].itemWeight);
             index.removePoint(pickUpOrderNum);
-            numPickuped++;
+            numPickedup++;
         }
         else {
             nextPath.end_intersection = deliveries[closestOrder].dropOff;
