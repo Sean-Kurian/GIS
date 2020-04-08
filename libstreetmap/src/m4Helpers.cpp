@@ -11,13 +11,13 @@ double percentFull(double maxWeight, double currentWeight) {
     return (currentWeight/maxWeight * 100); 
 }
 
-float getCurrentWeight(const std::vector<DeliveryInfo>& deliveries, std::unordered_map<unsigned, unsigned> deliveryIndices){
+/*float getCurrentWeight(const std::vector<DeliveryInfo>& deliveries, std::unordered_map<unsigned, unsigned> deliveryIndices){
     float weight = 0; 
     for (int i = 0; i < deliveryIndices.size(); i++){
         weight += deliveries[deliveryIndices[i]].itemWeight; 
     }
     return weight; 
-}
+}*/
 
 std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, const std::vector<bool>& orderComplete, unsigned startDepot){
 
