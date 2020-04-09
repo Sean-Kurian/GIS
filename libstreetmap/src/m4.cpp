@@ -111,13 +111,10 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     for (auto mapItr = depotsByDistToStart.begin(); mapItr != depotsByDistToStart.end(); ++mapItr, ++count) {
         if (count % numThreads != threadID)
             continue;
-        
-        std::cout << "Testingsnkdsnkdks";
-        
         std::vector<CourierSubpath> threadBest;
         double threadBestTime;
         
-        std::cout << " TEST ";
+        std::cout << " TEST " << threadID << " ";
         
         CourierSubpath initialPath;
         unsigned initialOrderNum = mapItr->second.second;
@@ -154,9 +151,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         }
     }
 }
-    
     auto endTime = std::chrono::high_resolution_clock::now();
-    
     std::cout << "Total time to find result: " << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << " ms\n";
     
     return result;
@@ -337,7 +332,7 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
             for (unsigned neighbor = 0; neighbor < minNeighbor; ++neighbor) {
                 if (truck.curWeight + deliveries[resIndexes[neighbor]].itemWeight < truck.capacity) {
                     if (currentInt == deliveries[resIndexes[neighbor]].pickUp) {
-                        zeroDistOrder = currentInt;
+                        zeroDistOrder = resIndexes[neighbor];
                         zeroDistPickup = true;
                         break;
                     }
@@ -349,7 +344,7 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
         if (zeroDistOrder == -1) {
             for (const unsigned& orderNum : truck.packages) {
                 if (currentInt == deliveries[orderNum].dropOff) {
-                    zeroDistOrder = currentInt;
+                    zeroDistOrder = orderNum;
                     zeroDistPickup = false;
                     break;
                 }
@@ -358,8 +353,8 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
             }
         }
         
-        int nextOrder = -1;
-        bool isPickup = true;
+        int nextOrder;
+        bool isPickup;
         if (zeroDistOrder != -1) {
             nextOrder = zeroDistOrder;
             isPickup = zeroDistPickup;
