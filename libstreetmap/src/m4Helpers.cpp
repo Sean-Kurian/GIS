@@ -20,6 +20,7 @@ void Truck::emptyTruck() {
     packages.clear();
 }
 
+//Return filled percentage of truck
 double percentFull(double maxWeight, double currentWeight) {
     return (currentWeight/maxWeight * 100); 
 }

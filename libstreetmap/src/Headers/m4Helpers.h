@@ -22,10 +22,10 @@ struct Truck {
     void emptyTruck();
 };
 
-//
+//Returns 5 nearest deliveries or drop off points
 std::vector<int> nearestDelivOrDrops(const std::vector<DeliveryInfo>& deliveries, std::vector<bool>& orderComplete, unsigned startDepot); 
 
-//
+//Returns total weight as a percentage of max weight in a truck
 double percentFull(double maxWeight, double currentWeight); 
 
 //Returns the total time of a path
