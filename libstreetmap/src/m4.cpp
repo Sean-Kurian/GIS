@@ -66,8 +66,8 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     mainIndex.addPoints(0, NUM_TO_COMPLETE - 1);
 
     //Determine the closest pickup location from every depot
-    size_t depotResIdx[1];
-    double depotResDists[1];
+    size_t depotResIdx[4];
+    double depotResDists[4];
     KNNResultSet<double> depotResultSet(1);
     std::map<double, std::pair<int, int>> depotsByDistToStart;
     for (const int& depot : depots) {
@@ -90,6 +90,8 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     for (auto mapItr = depotsByDistToStart.begin(); mapItr != depotsByDistToStart.end(); ++mapItr, ++count) {
         if (count % numThreads != threadID)
             continue;
+        
+        std::cout << "Testingsnkdsnkdks";
         
         std::vector<CourierSubpath> threadBest;
         
@@ -157,14 +159,6 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                 }
             }
 
-    //        auto endFindKD = std::chrono::high_resolution_clock::now();
-    //        timeKDTree += std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD);
-    //        std::cout << "Time taken to find nearest pickup with KD tree: " 
-    //                  << std::chrono::duration_cast<std::chrono::nanoseconds>(endFindKD - startFindKD).count() << " ns\n";
-    //        std::cout << "Closest index with KD tree: " << closestOrder << " Distance: " << closestDistance
-    //                  << " Pickup: " << (isPickup ? "Yes" : "No")
-    //                  << " Current weight: " << truck.curWeight << " Package size: " << deliveries[closestOrder].itemWeight << "\n";
-
             //If the last path was to a pick-up, the current path is from the pick up, so pick up the package
             if (prevPathIsPickUp) {
                 nextPath.pickUp_indices.push_back(pickUpOrderNum);
@@ -218,7 +212,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         double threadTime = findTotalPathTime(threadBest, turn_penalty);
 #pragma omp critical
         {
-//            std::cout << "Thread time: " << threadTime << " Best time: " << timeOfResult << "\n";
+            std::cout << "Thread time: " << threadTime << " Best time: " << timeOfResult << "\n";
             if (threadTime < timeOfResult) {
                 timeOfResult = threadTime;
                 result = threadBest;
