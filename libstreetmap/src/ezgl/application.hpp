@@ -65,6 +65,13 @@ using mouse_callback_fn = void (*)(application *app, GdkEventButton *event, doub
  */
 using key_callback_fn = void (*)(application *app, GdkEventKey *event, char *key_name);
 
+
+#pragma GCC diagnostic ignored "-Wunused-function"
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
+
+
 /**
  * The core application.
  *
