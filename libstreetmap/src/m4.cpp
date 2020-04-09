@@ -87,8 +87,8 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
     mainIndex.addPoints(0, NUM_TO_COMPLETE - 1);
 
     //Determine the closest pickup location from every depot
-    size_t depotResIdx[4];
-    double depotResDists[4];
+    size_t depotResIdx[1];
+    double depotResDists[1];
     KNNResultSet<double> depotResultSet(1);
     std::map<double, std::pair<int, int>> depotsByDistToStart;
     for (const int& depot : depots) {
@@ -114,7 +114,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         std::vector<CourierSubpath> threadBest;
         double threadBestTime;
         
-        std::cout << " TEST " << threadID << " ";
+//        std::cout << " Thread " << threadID << " Going to " << count << "\n";
         
         CourierSubpath initialPath;
         unsigned initialOrderNum = mapItr->second.second;
@@ -126,7 +126,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                   pointData, initialPath, initialOrderNum);
         threadBestTime = findTotalPathTime(threadBest, turn_penalty);
         
-        auto breakTime = startTime + std::chrono::milliseconds(20000);
+        auto breakTime = startTime + std::chrono::milliseconds(30000);
         
         ////////////////////////////////////// RANDOM STARTS //////////////////////////////////////
         
@@ -134,8 +134,9 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
             std::vector<CourierSubpath> threadTry = findRandomisedPath(deliveries, depots, turn_penalty, truck_capacity, 
                                                                        pointData, initialPath, initialOrderNum);
             double tryTime = findTotalPathTime(threadTry, turn_penalty);
-            std::cout << "Try time: " << tryTime << " Thread best time: " << threadBestTime << "\n";
+//            std::cout << "Try time: " << tryTime << " Thread " << threadID << " best time: " << threadBestTime << "\n";
             if (findTotalPathTime(threadTry, turn_penalty) < threadBestTime) {
+                std::cout << "Random time faster than base!\n";
                 threadBest = threadTry;
                 threadBestTime = tryTime;
             }
@@ -143,7 +144,7 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
         //Determine if threadBest is better than result
 #pragma omp critical
         {
-            std::cout << "Thread best: " << threadBestTime << " Best time: " << timeOfResult << "\n";
+            std::cout << "Thread " << threadID << " best: " << threadBestTime << " Best time: " << timeOfResult << "\n";
             if (threadBestTime < timeOfResult) {
                 timeOfResult = threadBestTime;
                 result = threadBest;
@@ -165,6 +166,8 @@ std::vector<CourierSubpath> findBasePath(const std::vector<DeliveryInfo>& delive
                                          const PointVec& pointData,
                                          const CourierSubpath& initialPath,
                                          const unsigned initialOrderNum) {
+    auto startTime = std::chrono::high_resolution_clock::now();
+    
     std::vector<CourierSubpath> threadCurrent;
     
     const unsigned NUM_TO_COMPLETE = deliveries.size();
@@ -277,6 +280,10 @@ std::vector<CourierSubpath> findBasePath(const std::vector<DeliveryInfo>& delive
                                                       depots[closestDepot],
                                                       turn_penalty);
     threadCurrent.push_back(toDepot);
+    
+    auto endTime = std::chrono::high_resolution_clock::now();
+    std::cout << "Total time to find base: " << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << " ms\n";
+    
     return threadCurrent;
 }
 
@@ -288,6 +295,8 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
                                                const CourierSubpath& initialPath,
                                                const unsigned initialOrderNum) {
     std::vector<CourierSubpath> threadCurrent;
+    
+    auto startTime = std::chrono::high_resolution_clock::now();
     
     const unsigned NUM_TO_COMPLETE = deliveries.size();
     const size_t NUM_NEIGHBORS_TO_FIND = 3;
@@ -319,7 +328,9 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
             isFirstPath = false;
             prevPathIsPickUp = false;
         }
-        std::vector<std::pair<unsigned, bool>> options;
+        std::pair<unsigned, bool> option1, option2;
+        double dist1 = std::numeric_limits<double>::max();
+        double dist2 = std::numeric_limits<double>::max();
         int zeroDistOrder = -1;
         bool zeroDistPickup = false;
 
@@ -336,8 +347,17 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
                         zeroDistPickup = true;
                         break;
                     }
-                    else
-                        options.push_back(std::make_pair(resIndexes[neighbor], true));
+                    double dist = find_distance_between_two_points(std::make_pair(
+                                        getIntersectionPosition(currentInt),
+                                        getIntersectionPosition(deliveries[resIndexes[neighbor]].pickUp)));
+                    if (dist < dist1) {
+                        option1.first = resIndexes[neighbor];
+                        option1.second = true;
+                    }
+                    else if (dist < dist2) {
+                        option2.first = resIndexes[neighbor];
+                        option2.second = true;
+                    }
                 }
             }
         }
@@ -348,8 +368,17 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
                     zeroDistPickup = false;
                     break;
                 }
-                else
-                    options.push_back(std::make_pair(orderNum, false));
+                double dist = find_distance_between_two_points(std::make_pair(
+                            getIntersectionPosition(currentInt),
+                            getIntersectionPosition(deliveries[orderNum].dropOff)));
+                if (dist < dist1) {
+                    option1.first = orderNum;
+                    option1.second = false;
+                }
+                else if (dist < dist2) {
+                    option2.first = orderNum;
+                    option2.second = false;
+                }
             }
         }
         
@@ -360,9 +389,15 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
             isPickup = zeroDistPickup;
         }
         else {
-            unsigned randChoice = rand() % options.size();
-            nextOrder = options[randChoice].first;
-            isPickup = options[randChoice].second;
+            unsigned randChoice = rand() % 10;
+            if (randChoice < 7) {
+                nextOrder = option1.first;
+                isPickup = option1.second;
+            }
+            else {
+                nextOrder = option2.first;
+                isPickup = option2.second;
+            }
         }
         
         
@@ -414,6 +449,10 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
                                                       depots[closestDepot],
                                                       turn_penalty);
     threadCurrent.push_back(toDepot);
+    
+    auto endTime = std::chrono::high_resolution_clock::now();
+    std::cout << "Total time to find rand path: " << std::chrono::duration_cast<std::chrono::milliseconds>(endTime - startTime).count() << " ms\n";
+    
     return threadCurrent;
 }
 
