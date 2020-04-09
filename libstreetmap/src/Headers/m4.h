@@ -99,5 +99,8 @@ std::vector<CourierSubpath> traveling_courier(const std::vector<DeliveryInfo>& d
                                               const std::vector<int>& depots,
                                               const float turn_penalty,
                                               const float truck_capacity);
+
+
+
 #endif /* M4_H */
 
