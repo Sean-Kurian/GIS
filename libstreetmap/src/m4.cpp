@@ -295,7 +295,7 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
                                                const CourierSubpath& initialPath,
                                                const unsigned initialOrderNum) {
     std::vector<CourierSubpath> threadCurrent;
-    
+    srand(10); 
     auto startTime = std::chrono::high_resolution_clock::now();
     
     const unsigned NUM_TO_COMPLETE = deliveries.size();
@@ -317,6 +317,7 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
     unsigned pickUpOrderNum = initialOrderNum;
     threadCurrent.push_back(initialPath);
     bool isFirstPath = true, prevPathIsPickUp = true;
+    unsigned randChoice; 
 
     while (numCompleted < NUM_TO_COMPLETE) {
         CourierSubpath toPickup, toDropoff, nextPath;
@@ -389,7 +390,7 @@ std::vector<CourierSubpath> findRandomisedPath(const std::vector<DeliveryInfo>& 
             isPickup = zeroDistPickup;
         }
         else {
-            unsigned randChoice = rand() % 10;
+            randChoice = rand() % 10;
             if (randChoice < 7) {
                 nextOrder = option1.first;
                 isPickup = option1.second;
