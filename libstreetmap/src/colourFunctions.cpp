@@ -83,7 +83,7 @@ ezgl::color getFeatureColour(const FeatureType& type) {
                 case Island:
                     return DAY_BACKGROUND_COLOUR;
                 case Building:
-                    return DAY_BUILDING_COLOUR;
+                    return RG_BUILDING_COLOUR;
                 case Greenspace:
                     return DAY_GRASS_COLOUR;
                 case Golfcourse:
@@ -98,23 +98,23 @@ ezgl::color getFeatureColour(const FeatureType& type) {
                 case Unknown:
                     return ERROR_COLOUR;
                 case Park:
-                    return DAY_GRASS_COLOUR;
+                    return BY_GRASS_COLOUR;
                 case Beach:
-                    return DAY_BEACH_COLOUR;
+                    return BY_BEACH_COLOUR;
                 case Lake:
-                    return DAY_WATER_COLOUR;
+                    return BY_WATER_COLOUR;
                 case River:
-                    return DAY_WATER_COLOUR;
+                    return BY_WATER_COLOUR;
                 case Island:
                     return DAY_BACKGROUND_COLOUR;
                 case Building:
-                    return DAY_BUILDING_COLOUR;
+                    return BY_BUILDING_COLOUR;
                 case Greenspace:
-                    return DAY_GRASS_COLOUR;
+                    return BY_GRASS_COLOUR;
                 case Golfcourse:
-                    return DAY_GRASS_COLOUR;
+                    return BY_GRASS_COLOUR;
                 case Stream:
-                    return DAY_WATER_COLOUR;
+                    return BY_WATER_COLOUR;
                 default:
                     std::cerr << "Error: No matching feature type\n";
             }
