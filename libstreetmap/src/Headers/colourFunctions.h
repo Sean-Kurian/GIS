@@ -50,8 +50,8 @@
 #define NIGHT_HOSPITAL_COLOUR ezgl::color(0xC4, 0x68, 0x96)
 #define NIGHT_BUILDING_COLOUR ezgl::color(0x57, 0x64, 0x77)
 
-#define RG_SCHOOL_COLOUR ezgl::color(0x57, 0x90, 0xC5)
-#define RG_HOSPITAL_COLOUR ezgl::color(0xC4, 0x68, 0x96)
+#define RG_SCHOOL_COLOUR ezgl::color(0x3F, 0x42, 0xFC)
+#define RG_HOSPITAL_COLOUR ezgl::color(0xF5, 0x42, 0x9B)
 #define RG_BUILDING_COLOUR ezgl::color(0x74, 0x84, 0x94)
 
 #define BY_SCHOOL_COLOUR ezgl::color(0x57, 0x90, 0xC5)
