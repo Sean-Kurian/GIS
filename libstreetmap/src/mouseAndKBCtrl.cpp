@@ -94,9 +94,6 @@ void actOnMousePress(ezgl::application* app, GdkEventButton* event, double x, do
             eraseIntersectionInfo(gData.getIntersectionInfoBox());
         }
     }
-    
-   
-    
 }
 
 // Determines what to do based on which key the user pressed down
@@ -116,7 +113,10 @@ void actOnKeyPress(ezgl::application* app, GdkEventKey* event, char* key) {
         
         // Alt key force enables nightmode even if its not night time
         else if (event->keyval == GDK_KEY_Alt_L || event->keyval == GDK_KEY_Alt_R) {
-            nightMode::isOn = !nightMode::isOn;
+            if (colourMode::mode != colourMode::colourModes::totalColour)
+                colourMode::mode++;
+            else
+                colourMode::mode = colourMode::colourModes::dayMode;
             canvas->redraw();
         }
     }
