@@ -95,7 +95,12 @@ void drawStreetNames(ezgl::renderer* rend, const roadType& type, const double& p
     rend->set_horiz_text_just(ezgl::text_just::center);
     rend->set_vert_text_just(ezgl::text_just::center);
     // Sets name colour based on whether night mode is on to ensure its readable
-    rend->set_color(nightMode::isOn ? ezgl::WHITE : ezgl::BLACK);
+    ezgl::color textColour;
+    if (colourMode::mode == colourMode::nightMode)
+        textColour = ezgl::WHITE;
+    else
+        textColour = ezgl::BLACK;
+    rend->set_color(textColour);
     
     std::vector<std::pair<int, unsigned> > segs = gData.getSegsOfStreetType(type);
     // Initial declarations of variables needed to draw names

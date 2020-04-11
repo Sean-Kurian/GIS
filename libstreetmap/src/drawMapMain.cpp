@@ -57,7 +57,12 @@ void draw_map() {
 //
 void drawMainCanvas(ezgl::renderer* rend) {
     // Changes background colour based on time of day
-    rend->set_color(nightMode::isOn ? NIGHT_BACKGROUND_COLOUR : DAY_BACKGROUND_COLOUR);
+    ezgl::color bgColour;
+    if (colourMode::mode == colourMode::nightMode)
+        bgColour = NIGHT_BACKGROUND_COLOUR;
+    else
+        bgColour = DAY_BACKGROUND_COLOUR;
+    rend->set_color(bgColour);
     rend->fill_rectangle(rend->get_visible_world());
     rend->set_line_cap(ezgl::line_cap::round);
     ptree ptRoot = getRoot(); 
@@ -142,15 +147,15 @@ double pixelInMeters(ezgl::renderer* rend) {
     return screen1Meter.width();
 }
 
-//Initial setup of the application
+// Initial setup of the application
 void initialSetup(ezgl::application* app, bool) {
     // Determines if it's nighttime and if it is it enables night mode
     time_t now = time(0);
     tm* localTime = localtime(&now);
     if (localTime->tm_hour > 19 || localTime->tm_hour < 7)
-        nightMode::isOn = true;
+        colourMode::mode = colourMode::colourModes::nightMode;
     else
-        nightMode::isOn = false;
+        colourMode::mode = colourMode::colourModes::dayMode;
     
     // Sets up and connects GTK objects to our map
     connectZoomButtons(app);

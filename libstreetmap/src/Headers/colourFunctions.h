@@ -50,11 +50,32 @@
 #define NIGHT_HOSPITAL_COLOUR ezgl::color(0xC4, 0x68, 0x96)
 #define NIGHT_BUILDING_COLOUR ezgl::color(0x57, 0x64, 0x77)
 
+#define RG_SCHOOL_COLOUR ezgl::color(0x57, 0x90, 0xC5)
+#define RG_HOSPITAL_COLOUR ezgl::color(0xC4, 0x68, 0x96)
+#define RG_BUILDING_COLOUR ezgl::color(0x74, 0x84, 0x94)
+
+#define BY_SCHOOL_COLOUR ezgl::color(0x57, 0x90, 0xC5)
+#define BY_HOSPITAL_COLOUR ezgl::color(0xC4, 0x68, 0x96)
+#define BY_BUILDING_COLOUR ezgl::color(0x74, 0x84, 0x94)
+
+#define TC_SCHOOL_COLOUR ezgl::color(0x57, 0x90, 0xC5)
+#define TC_HOSPITAL_COLOUR ezgl::color(0xC4, 0x68, 0x96)
+#define TC_BUILDING_COLOUR ezgl::color(0x74, 0x84, 0x94)
+
 #define ERROR_COLOUR ezgl::color(0xFF, 0x00, 0x00)
 
 // Namespace with extern variable which controls whether night mode is enabled
-namespace nightMode {
-    extern bool isOn;
+namespace colourMode {
+    enum colourModes {
+        dayMode = 0,
+        nightMode,
+        redGreen,
+        blueYellow,
+        totalColour,
+        CM_TYPECOUNT
+    };
+    colourModes operator++(colourModes& mode, int);
+    extern colourModes mode;
 }
 
 // Returns feature colour based on feature type and whether night mode is active
