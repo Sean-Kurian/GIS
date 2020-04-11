@@ -24,6 +24,10 @@
 #define NIGHT_BEACH_COLOUR ezgl::color(0xF7, 0xF2, 0xC7)
 #define NIGHT_BACKGROUND_COLOUR ezgl::color(0x24, 0x2D, 0x37)
 
+#define BY_WATER_COLOUR ezgl::color(0xA2, 0xCD, 0xFC)
+#define BY_GRASS_COLOUR ezgl::color(0xCB, 0xE6, 0xA3)
+#define BY_BEACH_COLOUR ezgl::color(0xFF, 0xEF, 0xC3)
+
 // Road Colours
 #define DAY_HIGHWAY_COLOUR ezgl::color(0xFF, 0xF1, 0xBA)
 #define DAY_MAJOR_ROAD_COLOUR ezgl::color(0xFF, 0xFF, 0xFF)
