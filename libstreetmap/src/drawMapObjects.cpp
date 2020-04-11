@@ -390,20 +390,19 @@ void drawPOI50(ezgl::renderer* rend, const buildingType& type){
     ezgl::surface* test; 
     test = rend->load_png("./libstreetmap/resources/school2 30 30.png");
     if (type == buildingType::school){
-       
-       if (colourMode::mode == colourMode::redGreen){
-           test = rend->load_png("./libstreetmap/resources/school 50 50 RG.png");
-       }
-       else{
-           test = rend->load_png("./libstreetmap/resources/school2 50 50.png");
-       }
+        if (colourMode::mode == colourMode::redGreen){
+            test = rend->load_png("./libstreetmap/resources/school 50 50 RG.png");
+        }
+        else{
+            test = rend->load_png("./libstreetmap/resources/school2 50 50.png");
+        }
     }
     else if (type == buildingType::hospital){
-       if (colourMode::mode == colourMode::redGreen){
+       if (colourMode::mode == colourMode::redGreen){  
             test = rend->load_png("./libstreetmap/resources/hospital 50 50 RG colourblind.png"); 
        }
        else{
-            test = rend->load_png("./libstreetmap/resources/hospital2 50 50.png");           
+            test = rend->load_png("./libstreetmap/resources/hospital2 50 50.png");            
        }
     }
 
